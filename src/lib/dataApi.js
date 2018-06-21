@@ -1,10 +1,13 @@
 import request from 'request'
 
+const URL = 'https://changjinglu.info'
+
 export default class DataApi{
-  getCoins(body,callback){
+  static getCoins(body,callback){
+    var path='/app/coins';
     request(
       {
-        url: 'https://changjinglu.info/app/coins',
+        url: URL+path,
         method: "POST",
         json: true,
         body:body
@@ -13,7 +16,9 @@ export default class DataApi{
         if(body&&body.no===0){
           callback(body)
         }else {
-          console.log(body.msg)
+          console.error('error:'+error)
+          console.error('response:'+response?response.statusCode:body)
+          console.error('body:'+body?body.msg:body)
         }
       });
   }
