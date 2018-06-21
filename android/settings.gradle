@@ -1,0 +1,3 @@
+rootProject.name = 'changjingluApp'
+
+include ':app'
