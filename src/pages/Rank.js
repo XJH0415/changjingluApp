@@ -10,7 +10,6 @@ export default class Rank extends Component{
   render() {
     return (
       <View style={styles.root}>
-        <View>1111</View>
         <CoinItem/>
       </View>
     );
