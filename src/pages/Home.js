@@ -11,7 +11,7 @@ export default class Home extends Component{
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.root}>
-        <Text>首页</Text>
+        <Text onPress={()=> navigate('CoinDetail', { name: 'Brent' })}>首页</Text>
       </View>
     );
   }
@@ -20,5 +20,6 @@ export default class Home extends Component{
 const styles = StyleSheet.create({
   root:{
     flex:1,
+    paddingTop:10
   }
 });

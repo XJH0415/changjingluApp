@@ -7,7 +7,7 @@ import {
 
 export default class CoinDetail extends Component{
   static navigationOptions=(options)=>({
-    headerTitle:'111111'
+    headerTitle:'币详情',
   })
   render() {
     return (
