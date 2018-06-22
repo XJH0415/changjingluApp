@@ -82,12 +82,14 @@ const styles=StyleSheet.create({
     fontSize:10,
     color:'#75C1AF',
     marginBottom:2,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    textAlign:'center'
   },
   textTouch:{
     fontSize:10,
     color:'#8a8a8a',
-    marginBottom:2
+    marginBottom:2,
+    textAlign:'center',
   }
 })
 

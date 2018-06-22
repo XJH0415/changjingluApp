@@ -4,12 +4,14 @@ import {
   Text,
   View
 } from 'react-native';
+import CoinItem from '../components/CoinItem'
 
 export default class Rank extends Component{
   render() {
     return (
       <View style={styles.root}>
-        <Text>排行榜</Text>
+        <View>1111</View>
+        <CoinItem/>
       </View>
     );
   }
