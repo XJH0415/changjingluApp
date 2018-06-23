@@ -6,21 +6,29 @@ import {
   FlatList,
 } from 'react-native';
 import NewItem from '../components/NewItem';
+import Separator from '../components/Separator';
 
 export default class New extends Component {
-  render() {
-    var data = [{
-      title: '12321',
-      writer: 'zuoz12he',
-      time: '2018-621-22',
-      clickRate: '112002',
+  state={
+    data:[{
+      title: '标题',
+      writer: '作者',
+      time: 'yyyy-MM-dd',
+      clickRate: 0,
       imtUrl: 'https://changjinglu.info/asset/img/default.ads0.jpg'
-    }];
-    var separator;
+    },
+      {
+        title: '标题',
+        writer: '作者',
+        time: 'yyyy-MM-dd',
+        clickRate: 0,
+        imtUrl: 'https://changjinglu.info/asset/img/default.ads0.jpg'
+      }]
+  }
+
+  render() {
+    var data=this.state.data;
     return (
-      separator = () => {
-        return <View style={{height: 0.3, backgroundColor: '#8F8F8F'}}/>;
-      },
         <View>
           <View style={styles.root}>
             <Text>资讯</Text>
@@ -28,7 +36,7 @@ export default class New extends Component {
 
           <View style={styles.container}>
             <FlatList
-              ItemSeparatorComponent={separator}
+              ItemSeparatorComponent={()=><Separator/>}
               keyExtractor={(item, index) => item.title}
               data={data}
               renderItem={({item}) => <NewItem data={item}/>}

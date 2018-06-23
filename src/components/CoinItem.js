@@ -1,31 +1,82 @@
 import React, {Component} from 'react'
 import {View, StyleSheet, Image, Text} from 'react-native';
+import NumUtils from '../utils/NumUtils';
 
 export default class CoinItem extends Component {
+  static defaultProps={
+    sort:'va',
+    coin:{
+      coin_id: null,
+      url: null,
+      icon: null,
+      code: null,
+      name_en: null,
+      name_cn: null,
+      price: null,
+      circulation: null,
+      vol_24h: null,
+      gains_pct_1d: null
+    },
+    no:1,
+  }
+
   render() {
+    var {sort,no,coin:{code,price,name_cn,icon,name_en}}=this.props;
+    var text = this.getText(sort,this.props.coin);
+    price=price.toFixed(2);
+    icon='https://changjinglu.info'+icon;
     return (
       <View style={styles.root}>
-        <View style={{width:30}}><Text style={styles.text}>1</Text></View>
-        <Image style={{width:30}} />
-        <View style={{minWidth:80}}><Text style={[styles.text,{textAlign:'left'}]}>名称</Text></View>
-        <View style={{flex:1}}><Text style={[styles.text,{textAlign:'right'}]}>价格</Text></View>
-        <View style={{minWidth:80}}><Text style={[styles.text,{textAlign:'right'}]}>量</Text></View>
+        <View style={{minWidth:20}}><Text style={styles.text}>{no}</Text></View>
+        <Image style={styles.image} source={{uri:icon}}/>
+        <View style={{minWidth:80}}><Text style={[styles.text,{textAlign:'left'}]}>{code+'('+(name_cn?name_cn:name_en)+')'}</Text></View>
+        <View style={{flex:1}}><Text style={[styles.text,{textAlign:'right'}]}>{price}</Text></View>
+        <View style={{minWidth:80}}><Text style={[styles.text,{textAlign:'right'}]}>{text}</Text></View>
       </View>
     )
+  }
+  getText(sort,coin){
+    switch (sort){
+      case 'va':
+      case 'vd':
+        return NumUtils.formatNum(coin.circulation*coin.price);
+      case 'pa':
+      case 'pd':
+        return NumUtils.formatNum(coin.price);
+      case 'ca':
+      case 'cd':
+        return NumUtils.formatNum(coin.circulation);
+      case 'ta':
+      case 'td':
+        return NumUtils.formatNum(coin.vol_24h);
+      case 'ga':
+      case 'gd':
+        return coin.gains_pct_1d.toFixed(2)+'%';
+    }
   }
 }
 
 const styles = StyleSheet.create({
   root: {
-    height: 30,
+    height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems:'center',
-    backgroundColor: '#171B35',
-    paddingLeft:10,
-    paddingRight:10
+    backgroundColor: 'white',
+    paddingLeft:5,
+    paddingRight:5,
   },
   text:{
-    color:'white',
+    color:'black',
+    marginLeft:3,
+    paddingRight:3
   },
+  image:{
+    width:20,
+    height:20,
+    margin:10
+  },
+  txt:{
+
+  }
 })

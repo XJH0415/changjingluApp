@@ -9,10 +9,10 @@ import {
 export default class NewItem extends Component {
   static defaultProps={
     data:{
-      title:'123',
-      writer:'zuozhe',
-      time:'2018-6-22',
-      clickRate:'1002',
+      title:'标题',
+      writer:'作者',
+      time:'yyyy-MM-dd',
+      clickRate:'0',
       imtUrl:'https://changjinglu.info/asset/img/default.ads0.jpg'
     }
   }
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     height:90,
     borderBottomColor:'#E6E6FA',
     flexDirection:'row',
+    backgroundColor:'white'
 
   },
   image: {
@@ -66,10 +67,8 @@ const styles = StyleSheet.create({
   titleText:{
     flex:1,
     fontSize:18,
-    fontWeight:'bolder',
-    textOverflow: 'ellipsis',
+    fontWeight:'bold',
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
 
   },
   listForm:{
@@ -91,9 +90,7 @@ const styles = StyleSheet.create({
     width:16,
   },
   writerName:{
-    textOverflow: 'ellipsis',
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
   },
   text:{
     fontSize:14,
