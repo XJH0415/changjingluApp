@@ -10,7 +10,7 @@ import {Image,StyleSheet,Text} from 'react-native';
 
 import homeScreen from './pages/Home';
 import newScreen from './pages/New';
-import rankScreen from './pages/Rank';
+import coinsScreen from './pages/Coins';
 import userScreen from './pages/User';
 import exchangeScreen from './pages/Exchange';
 
@@ -48,11 +48,11 @@ export default BottomTabNavigator = createBottomTabNavigator({
       )
     }
   },
-  Rank: {
-    screen: rankScreen,
+  Coin: {
+    screen: coinsScreen,
     navigationOptions: {
       tabBarLabel: ({focused})=>(
-        <Text style={focused?styles.text:styles.textTouch}>排行榜</Text>
+        <Text style={focused?styles.text:styles.textTouch}>COIN</Text>
       ),
       tabBarIcon:({focused})=>(
         <Image  style={styles.tabIcon} source={focused?require('./resource/rank(1).png'):require('./resource/rank.png')} />

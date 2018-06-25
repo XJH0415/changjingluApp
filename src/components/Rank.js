@@ -4,21 +4,25 @@ import {
   Text,
   FlatList,
   Image,
+  TouchableOpacity,
   View
 } from 'react-native';
 import API from '../lib/dataApi'
-import CoinItem from '../components/CoinItem';
-import Separator from '../components/Separator';
+import CoinItem from './CoinItem';
+import Separator from './Separator';
+import Dropdown from './Dropdown';
 
 export default class Rank extends Component {
-  static defaultProps = {}
+  static defaultProps = {
+    isShow:false
+  }
   state = {
     coins: [],
     refreshing: false,
     sortText: '排序方式',
-    sortSign: 1
+    sortSign: 1,
+    isShow:this.props.isShow
   }
-  coinsMap = new Map();
   sort = 'va';
   isRefreshMore=false;
   data = {
@@ -63,43 +67,45 @@ export default class Rank extends Component {
       coins: []
     }
   }
-
+  dropD=null;
+  componentWillReceiveProps(props){
+    this.setState({
+      isShow:props.isShow
+    })
+  }
   componentWillMount() {
     this.refresh();
   }
-
-  _header = () => {
-    var {sortText, sortSign} = this.state;
-    return (
-      <View style={styles.header}>
-        <View style={styles.headerName}>
-          <Text style={[styles.headerText, {textAlign: 'left'}]}>名称</Text>
-        </View>
-        <View style={styles.headerPrice}>
-          <Text style={[styles.headerText, {textAlign: 'right'}]}>价格</Text>
-        </View>
-        <View style={[styles.headerSort, styles.sort]}>
-          <Text style={[styles.headerText, {textAlign: 'right'}]}>{sortText}</Text>
-          <Image style={styles.sortImage}
-                 source={sortSign > 0 ? require('../resource/上.png') : require('../resource/下.png')}/>
-        </View>
-      </View>
-    );
-  }
-
   render() {
-    var {sort, coins, refreshing} = this.state;
+    var {sort, coins, refreshing,sortText, sortSign,isShow} = this.state;
+    var s =this.sort;
     return (
-      <View style={styles.root}>
-        {this._header()}
+      <View style={[styles.root,isShow?{display:'flex'}:{display:'none'}]}>
+        <View style={styles.header}>
+          <View style={styles.headerName}>
+            <Text style={[styles.headerText, {textAlign: 'left'}]}>名称</Text>
+          </View>
+          <View style={styles.headerPrice}>
+            <Text style={[styles.headerText, {textAlign: 'right'}]}>价格</Text>
+          </View>
+          <TouchableOpacity style={[styles.headerSort, styles.sort]}  onPress={()=>{
+            this.dropD.onclick();
+          }}>
+            <Text style={[styles.headerText, {textAlign: 'right'}]}>{sortText}</Text>
+            <Image style={styles.sortImage}
+                   source={sortSign > 0 ? require('../resource/上.png') : require('../resource/下.png')}/>
+          </TouchableOpacity>
+        </View>
+        <Dropdown ref={(ref)=>{this.dropD=ref}} style={styles.dropDown} width={100} top={40}
+                  onPress={(item,index)=>{this.refresh(item.sort)}}/>
         <FlatList style={styles.root}
-                  onRefresh={() => this.refresh(this.sort)}
+                  onRefresh={() => this.refresh(s)}
                   ItemSeparatorComponent={()=><Separator/>}
                   refreshing={refreshing}
                   onEndReached={() => this.refreshMore(this.data[this.sort].page + 1)}
                   onEndReachedThreshold={1}
                   data={coins}
-                  keyExtractor={(item) => item.code}
+                  keyExtractor={(item) => item.code+item.coin_id}
                   renderItem={({item, index}) => (
                     <CoinItem sort={sort} coin={item} no={index + 1}/>
                   )}
@@ -131,11 +137,12 @@ export default class Rank extends Component {
   getCoins(page, sort, currency) {
     var that = this;
     setTimeout(() => {
-      API.getCoins({
+      var params={
         page: page,
         sort: sort,
         currency: currency
-      }, (body) => {
+      }
+      API.getCoins(params, (body) => {
         if (body.no === 0) {
           var {sort, coins} = body.data;
           if (page === 1 || page - that.data[sort].page === 1) {
@@ -208,13 +215,14 @@ export default class Rank extends Component {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    display:'flex'
   },
   header: {
-    height: 40,
+    height: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#171B35'
+    backgroundColor: '#F5F4F8'
   },
   headerName: {
     flex: 1,
@@ -244,5 +252,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#75C1AF'
+  },
+  dropDown:{
+    position:'absolute',
+    right:5,
+    top:30,
+    width:120,
   }
 });

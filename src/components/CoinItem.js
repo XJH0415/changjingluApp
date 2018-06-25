@@ -51,7 +51,10 @@ export default class CoinItem extends Component {
         return NumUtils.formatNum(coin.vol_24h);
       case 'ga':
       case 'gd':
-        return coin.gains_pct_1d.toFixed(2)+'%';
+        if(coin.gains_pct_1d==='-999'){
+          return '-';
+        }
+        return (coin.gains_pct_1d*1).toFixed(2)+'%';
     }
   }
 }
