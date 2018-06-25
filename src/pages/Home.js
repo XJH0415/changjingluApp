@@ -6,6 +6,7 @@ import {
   Alert
 } from 'react-native';
 import Advert from '../components/Advert';
+import Notice from '../components/Notice';
 
 export default class Home extends Component{
   render() {
@@ -13,6 +14,7 @@ export default class Home extends Component{
     return (
       <View style={styles.root}>
         <Advert/>
+        <Notice/>
       </View>
     );
   }
