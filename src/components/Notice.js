@@ -11,28 +11,24 @@ export default class Notice extends Component {
   static defaultProps={
     data:{
       Notice: [
-        '111111111111111111111111111111111111111111',
-        '222222222222222222222222222222222222222222',
-        '333333333333333333333333333333333333333333',
+        '来长颈鹿参加邀请注册大赛，前10名奖BTC和ETH',
+        '长颈鹿资讯为全球区块链团队开设专栏了，快来入驻吧',
+        '长颈鹿资讯广告位招租，快来认领吧',
       ]}
   }
   render() {
     var {data:{Notice}}=this.props;
     return(
       <View  style={styles.root}>
-        <View style={styles.imgView}>
-          <View style={styles.img}/>
-        </View>
-        <Swiper style={styles.imgWrapper} height={18}
+        <Swiper
                 horizontal={false} showsPagination={false}
-                showsButtons={false} autoplay={true} showsVerticalScrollIndicator={true}
-                autoplayTimeout={2}>
+                showsButtons={false} autoplay={true}
+                autoplayTimeout={6}>
           {
             Notice.map((item,index)=>{
               return (
                 <View style={styles.textView} key={index}>
-                  <Text style={styles.bannerText} numberOfLines={1}>{item}</Text>
-
+                  <Text numberOfLines={1} style={styles.bannerText} numberOfLines={1}>{item}</Text>
                 </View>
               )
             })
@@ -45,26 +41,19 @@ export default class Notice extends Component {
 
 const styles = StyleSheet.create({
   root:{
-    margin:5,
-    height:60,
-    flexDirection:'row',
-  },
-  imgView: {
-    margin:1,
-    width:60,
-    height:60,
-    borderWidth:1,
-    borderColor:'blue',
+    height:40,
+    backgroundColor:'white',
+    paddingLeft:15,
+    paddingRight:15
   },
   textView: {
-    margin:2,
     flex:1,
+    alignItems:'flex-start',
+    justifyContent:'center'
   },
   bannerText:{
-    paddingLeft:30,
-    paddingRight:30,
-    flex:1,
-    fontSize:12,
-    top:'30%',
+    fontSize:14,
+    color:'#171B35',
+    fontWeight:'900'
   }
 })

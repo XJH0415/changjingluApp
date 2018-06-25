@@ -24,8 +24,10 @@ export default class Advert extends Component {
     return(
       <View  style={styles.root}>
         <Swiper style={styles.root}
-                showsButtons={true} autoplay={true}
-                autoplayTimeout={5}>
+                autoplay={true}
+                autoplayTimeout={5}
+                showsButtons={false}
+        >
           {
             imgUrls.map((item,index)=>{
               var source={uri:item};

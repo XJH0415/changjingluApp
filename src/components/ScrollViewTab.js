@@ -23,8 +23,8 @@ export default class ScrollViewTab extends Component {
     var style = StyleSheet.create({
       root: {
         minWidth: 40,
-        marginLeft:10,
-        marginRight:10,
+        paddingLeft:10,
+        paddingRight:10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'

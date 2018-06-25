@@ -55,7 +55,6 @@ const StackNavigator = createStackNavigator({
 export default class App extends Component {
   render() {
     return (
-
         <StackNavigator/>
     );
   }
