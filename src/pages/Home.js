@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import Advert from '../components/Advert';
 import Notice from '../components/Notice';
+import CodeItem from '../components/CodeItem';
+import PairItem from '../components/PairItem';
 
 export default class Home extends Component{
   render() {
@@ -15,6 +17,8 @@ export default class Home extends Component{
       <View style={styles.root}>
         <Advert/>
         <Notice/>
+        <CodeItem/>
+        <PairItem/>
       </View>
     );
   }
