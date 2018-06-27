@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Text,
     Image,
+  TouchableOpacity
 } from 'react-native';
 
 export  default class PairItem extends Component {
@@ -11,43 +12,44 @@ export  default class PairItem extends Component {
     data:{
       id:1001,
       pair:'BTC/USD',
-      exchange:'火币',
+      exchange:'火币全球专业站',
       price:40005.254,
       vol:12045.254,
-      change:-0.05124,
+      change:0.05124,
     }
   }
 
   render() {
     var {data:{id,pair,exchange,price,vol,change}}=this.props;
     return (
-      <View style={styles.root}>
+      <TouchableOpacity style={styles.root}>
         <View style={styles.img}>
           <Image />
         </View>
 
-        <View style={styles.codeView}>
-          <View style={styles.name}>
-            <Text style={styles.pairName}>{pair}</Text>
+        <View style={styles.leftView}>
+          <View >
+            <Text style={[styles.text]}>{pair}</Text>
           </View>
           <View >
-            <Text style={styles.exchange}>{exchange}</Text>
+            <Text style={[styles.text]}>{exchange}</Text>
           </View>
         </View>
 
-        <View style={styles.priceView}>
+        <View style={styles.centerView}>
           <View >
-            <Text style={[styles.price,change>0?{color:'red'}:{color:'green'}]}>价格:{price.toFixed(2)}</Text>
+            <Text style={[styles.text]}>￥{price.toFixed(2)}</Text>
           </View>
           <View >
-            <Text style={styles.vol}>成交量:{vol.toFixed(2)}</Text>
+            <Text numberOfLines={1} style={[styles.text,styles.grayText]}>量(24h):{vol.toFixed(2)}</Text>
           </View>
         </View>
 
-        <View style={styles.changeView}>
-          <Text style={change>0?{color:'red'}:{color:'green'}}>{(change*100).toFixed(2)}%</Text>
+        <View style={styles.rightView}>
+          <Text style={[styles.text,styles.grayText]}>占比</Text>
+          <Text style={[styles.text]}>{(change*100).toFixed(2)}%</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -55,45 +57,41 @@ export  default class PairItem extends Component {
 
 const styles=StyleSheet.create({
   root:{
-    marginLeft:5,
-    marginRight:5,
+    paddingLeft:5,
+    paddingRight:5,
     height:40,
     flexDirection:'row',
     justifyContent:'space-between',
     alignItems:'center',
+    backgroundColor:'white'
   },
   img:{
     width:30,
     height:30,
     backgroundColor:'red',
-    margin:2,
-  },
-  exchange:{
+    marginRight:5,
 
   },
-  codeView:{
-    flexDirection:'column',
+  text:{
+    overflow:'hidden'
   },
-  name:{
-
+  grayText:{
+    color:'gray',
+    fontSize:12
   },
-  pairName:{
-    fontWeight:'bold',
+  leftView:{
+    justifyContent:'center',
   },
-  vol:{
-
-  },
-  priceView:{
+  centerView:{
     flex:1,
-    flexDirection:'column',
-    justifyContent:'space-between',
+    justifyContent:'center',
     alignItems:'flex-end',
+    marginRight:5,
+    marginLeft:5
   },
-  price:{
+  rightView:{
+    justifyContent:'center',
+    alignItems:'center'
+  }
 
-  },
-
-  changeView:{
-    margin:5,
-  },
 });  

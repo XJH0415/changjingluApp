@@ -34,7 +34,7 @@ const StackNavigator = createStackNavigator({
   headerTransitionPreset:'fade-in-place',
 
   cardStyle:{
-    backgroundColor:'#F4FFFF'
+    backgroundColor:'#F4F4F4'
   },
   navigationOptions:{
     //顶栏栏组件的样式
@@ -47,7 +47,9 @@ const StackNavigator = createStackNavigator({
     },
     //顶栏标题文字样式
     headerTitleStyle:{
-      color:'#75C1AF'
+      fontSize:18,
+      fontWeight:'bold',
+      color:'white'
     }
   }
 

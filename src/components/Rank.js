@@ -4,6 +4,7 @@ import {
   Text,
   FlatList,
   Image,
+  Alert,
   TouchableOpacity,
   View
 } from 'react-native';
@@ -14,7 +15,8 @@ import Dropdown from './Dropdown';
 
 export default class Rank extends Component {
   static defaultProps = {
-    isShow:false
+    isShow:false,
+    onCoinItemPress:()=>{}
   }
   state = {
     coins: [],
@@ -78,6 +80,7 @@ export default class Rank extends Component {
   }
   render() {
     var {sort, coins, refreshing,sortText, sortSign,isShow} = this.state;
+    var {onCoinItemPress}=this.props;
     var s =this.sort;
     return (
       <View style={[styles.root,isShow?{display:'flex'}:{display:'none'}]}>
@@ -107,14 +110,13 @@ export default class Rank extends Component {
                   data={coins}
                   keyExtractor={(item) => item.code+item.coin_id}
                   renderItem={({item, index}) => (
-                    <CoinItem sort={sort} coin={item} no={index + 1}/>
+                    <CoinItem sort={sort} coin={item} no={index + 1} onPress={onCoinItemPress}/>
                   )}
         />
 
       </View>
     );
   }
-
   refresh(sort) {
     if (!this.state.refreshing) {
       this.setState({

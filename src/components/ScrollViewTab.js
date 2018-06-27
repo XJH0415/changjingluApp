@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   View, Alert
 } from 'react-native';
+import Separator from '../components/Separator'
 
 export default class ScrollViewTab extends Component {
   static defaultProps = {
@@ -47,12 +48,13 @@ export default class ScrollViewTab extends Component {
         this.setState({
           selectIndex: index
         })
+        this.scrollTo(index)
         onTabSelect(item, index,true)
       }} onLayout={(e) => {
         this.anchor[index] = e.nativeEvent.layout
       }}>
         <View style={[style.root, selectIndex === index ? style.select : {}]}>
-          <Text style={[style.text, selectIndex === index ? style.selectText : {}]}>{item.code}</Text>
+          <Text style={[style.text, selectIndex === index ? style.selectText : {}]}>{item.name}</Text>
         </View>
       </TouchableWithoutFeedback>
     )
@@ -99,6 +101,7 @@ export default class ScrollViewTab extends Component {
         }} style={styles.scrollView} horizontal={true}>
           {tabs.map(this.renderTab)}
         </ScrollView>
+        <Separator/>
       </View>
     )
   }

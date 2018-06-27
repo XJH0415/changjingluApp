@@ -10,61 +10,144 @@ import Swiper from 'react-native-swiper';
 import Header from '../components/Header';
 import Rank from '../components/Rank';
 import ScrollViewTab from '../components/ScrollViewTab';
-import CoinDetail from './CoinDetail';
+import CoinDetailItem from '../components/CoinDetailItem';
 
 export default class Coins extends Component {
   static defaultProps = {}
   state = {
     selectIndex: 0,
+    swiperIndex: 0,
     tabs: [
       {
-        id: 1,
-        code: 'BTC'
-      }, {
-        id: 1,
-        code: 'ETH'
-      }, {
-        id: 1,
-        code: 'XRP'
-      }, {
-        id: 1,
-        code: 'BCH'
-      }, {
-        id: 1,
-        code: 'EOS'
-      }, {
-        id: 1,
-        code: 'LTC'
-      }, {
-        id: 1,
-        code: 'XLM'
-      }, {
-        id: 1,
-        code: 'ADA'
-      }]
+        name: 'BTC',
+        obj: {
+          id: 1,
+          code: 'BTC'
+        }
+      },
+      {
+        name: 'ETH',
+        obj: {
+          id: 2,
+          code: 'ETH'
+        }
+      },
+      {
+        name: 'XRP',
+        obj: {
+          id: 3,
+          code: 'XRP'
+        }
+      },
+      {
+        name: 'BCH',
+        obj: {
+          id: 4,
+          code: 'BCH'
+        }
+      },
+      {
+        name: 'EOS',
+        obj: {
+          id: 5,
+          code: 'EOS'
+        }
+      },
+      {
+        name: 'BTC',
+        obj: {
+          id: 1,
+          code: 'BTC'
+        }
+      },
+      {
+        name: 'ETH',
+        obj: {
+          id: 2,
+          code: 'ETH'
+        }
+      },
+      {
+        name: 'XRP',
+        obj: {
+          id: 3,
+          code: 'XRP'
+        }
+      },
+      {
+        name: 'BCH',
+        obj: {
+          id: 4,
+          code: 'BCH'
+        }
+      },
+      {
+        name: 'EOS',
+        obj: {
+          id: 5,
+          code: 'EOS'
+        }
+      },
+      {
+        name: 'BTC',
+        obj: {
+          id: 1,
+          code: 'BTC'
+        }
+      },
+      {
+        name: 'ETH',
+        obj: {
+          id: 2,
+          code: 'ETH'
+        }
+      },
+      {
+        name: 'XRP',
+        obj: {
+          id: 3,
+          code: 'XRP'
+        }
+      },
+      {
+        name: 'BCH',
+        obj: {
+          id: 4,
+          code: 'BCH'
+        }
+      },
+      {
+        name: 'EOS',
+        obj: {
+          id: 5,
+          code: 'EOS'
+        }
+      }
+    ]
   }
   btns = ['COIN', '排行榜'];
 
   _onSelect = (index) => {
     this.setState({
-      selectIndex: index
+      selectIndex: index,
     })
   }
-  index = 0;
-  swiperIndex = 0;
 
   render() {
-    var {selectIndex, tabs} = this.state;
+    var {selectIndex, tabs, swiperIndex} = this.state;
+    var {navigate} = this.props.navigation;
     return (
       <View style={styles.root}>
-        <Header btns={this.btns} onSelect={this._onSelect}/>
-        <Rank isShow={selectIndex === 1}/>
+        <Header titles={this.btns} onSelect={this._onSelect}/>
+        <Rank isShow={selectIndex === 1} onCoinItemPress={(coin) => {
+          navigate('CoinDetail', {coin: coin})
+        }}/>
         <View style={[styles.root, selectIndex === 0 ? {display: 'flex'} : {display: 'none'}]}>
           <ScrollViewTab ref={(view) => {
             this.scrollViewTab = view;
           }} tabs={tabs} onTabSelect={(item, index, isUser) => {
             if (isUser) {
-              this.swiper.scrollBy(index - this.swiperIndex, true)
+              this.swiper.scrollBy(index - this.state.swiperIndex, true)
             }
           }
           }
@@ -80,14 +163,16 @@ export default class Coins extends Component {
             showsButtons={false}
             showsPagination={false}
             onIndexChanged={(index) => {
-              this.swiperIndex = index;
+              this.setState({
+                swiperIndex: index
+              })
               this.scrollViewTab.scrollTo(index)
             }}
           >
             {
               tabs.map((item, index) => {
                 return (
-                  <CoinDetail coin={item}/>
+                  <CoinDetailItem coinTab={item} key={item.id} selectIndex={swiperIndex} index={index}/>
                 )
               })
             }

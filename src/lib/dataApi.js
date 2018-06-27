@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-const URL = 'https://changjinglu.info'
+const URL = 'https://changjinglu.pro'
 
 export default class DataApi{
   static getCoins(body,callback){
