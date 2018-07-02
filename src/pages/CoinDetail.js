@@ -12,6 +12,7 @@ import {
 import NumUtils from '../utils/NumUtils';
 import PairItem from '../components/PairItem';
 import Separator from '../components/Separator';
+import API from '../lib/dataApi';
 
 export default class CoinDetail extends Component {
   static navigationOptions = (options) => {
@@ -41,17 +42,75 @@ export default class CoinDetail extends Component {
       vol_24h: '2158432',
       gains_pct_1d: '2.6879'
     },
-    currency: 'CNY'
-  }
 
+    currency: 'cny'
+  }
+  state={
+    tickers:[],
+    data:{},
+    lines:[]
+  }
+  componentWillMount() {
+    this.refresh();
+  }
+  refresh(){
+    var {coin,currency,navigation}=this.props;
+    if (navigation) {
+      coin = navigation ? navigation.state.params.coin : null
+    }
+    this.getTickers(coin.coin_id,currency);
+    this.getBasic(coin.coin_id,currency);
+    this.getKline(coin.coin_id,currency);
+  }
+  getTickers(coin_id,currency){
+    var that=this;
+    API.getCoinTicker(coin_id,currency,(body)=>{
+      that.setState({
+        tickers:body.data.tickers
+      })
+    })
+  }
+  getBasic(coin_id,currency){
+    var that=this;
+    API.getCoinBasic(coin_id,currency,(body)=>{
+      that.setState({
+        data:body.data
+      })
+    });
+  }
+  getKline(coin_id,currency){
+    var that=this;
+    API.getCoinKline(coin_id,currency,(body)=>{
+      that.setState({
+        lines:body.data[currency]
+      })
+    });
+  }
   render() {
     var {coin, currency, navigation} = this.props;
+    var {tickers,data,lines}=this.state;
+    var {
+      syb,//计价符号
+      amount,//总发行量
+      change_pct,//换手率
+      circulation,//流通量
+      gains_pct,//涨跌幅
+      high,//24小时最高价
+      low,//24小时最低价
+      price,//价格
+      value_pct,//流通市值占全球总值
+      value_order,//流通市值全球排行
+      vol,//24小时交易量
+      vol_order,//24成交额排行
+    }=data;
+    var circulation_value=data['circulation_'+currency];//流通市值
+    var vol_value=data['vol_'+currency];//24成交额
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
     var source = {uri: coin ? coin.icon : ''}
     var color = '#DA7D7E';
-    if (coin && coin.gains_pct_1d && coin.gains_pct_1d < 0) {
+    if (gains_pct && gains_pct*1 < 0) {
       color = '#3CB371';
     }
     return (
@@ -60,28 +119,32 @@ export default class CoinDetail extends Component {
           <View style={styles.detailTop}>
             <Image style={styles.image} source={source}/>
             <Text style={[styles.detailTopPrice, {color: color}]}>
-              ￥{coin ? (coin.price * 1).toFixed(2) : '-'}
+              {syb?syb:''}{price ?price: '-'}
             </Text>
             <Text style={[styles.detailTopText, {color: color},]}>{currency.toUpperCase()}</Text>
-            <Text style={[styles.detailTopText, {flex: 1, marginLeft: 5, color: color}]}>
-              {coin ? (coin.gains_pct_1d * 1).toFixed(2) + '%' : '-'}
+            <Text style={[styles.detailTopText, {marginLeft: 5, color: color}]}>
+              {gains_pct ? gains_pct : '-'}
             </Text>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+              <Text style={styles.detailCenterText}>高:{high?high:''}</Text>
+              <Text style={styles.detailCenterText}>低:{low?low:''}</Text>
+            </View>
             <TouchableOpacity style={styles.detailTopBtn}>
               <Text>自选</Text>
             </TouchableOpacity>
           </View>
           <View>
             <Text style={styles.detailCenterText}>
-              量(24h) {coin.vol_24h ? NumUtils.formatNum(coin.vol_24h) : '-'}{coin.code},
-              额(24h) {coin.vol_24h && coin.price ? NumUtils.formatNum(coin.vol_24h * coin.price) : '-'}
-              {currency.toUpperCase()}</Text>
+              量(24h): {vol ? vol : '-'},
+              额(24h): {syb?syb:''}{vol_value ? vol_value : '-'}  (第{vol_order?vol_order:'-'}名)
+              </Text>
             <Text style={styles.detailCenterText}>
-              总发行量{21000000},流通量{17041912},流通市值{NumUtils.formatNum(17041912 * (coin.price ? coin.price : 0))}
+              总发行量: {amount?amount:''},流通量: {circulation?circulation:''},流通市值: {syb?syb:''}{circulation_value},占全球总市值: {value_pct?value_pct+'%':'-'}  (第{value_order?value_order:'-'}名)
             </Text>
           </View>
           <View style={styles.detailBottom}>
             <View style={styles.detailChat}>
-
+              
             </View>
             <View style={styles.detailBottomMore}>
               <TouchableOpacity>
@@ -95,40 +158,34 @@ export default class CoinDetail extends Component {
           <View style={styles.newTop}>
             <Text style={styles.newTopTitle}>专栏资讯</Text>
           </View>
-          <View>
-            <View style={styles.newItem}>
-              <Text style={styles.newItemTitle} numberOfLines={1}>维持昨日判断，今天下跌至6008，反弹6350附近继续下跌，反复震荡一周，选择方向</Text>
-              <View style={{flexDirection:'row'}}>
-                <Text style={[styles.detailBottomText,{flex:1,textAlign:'left'}]}>2018-06-26 09:25</Text>
-                <Text style={styles.detailBottomText}>查看详情></Text>
+          <FlatList
+            data={[1, 2]}
+            ItemSeparatorComponent={() => <Separator/>}
+            renderItem={() =>(
+              <View style={styles.newItem}>
+                <Text style={styles.newItemTitle} numberOfLines={1}>趋势恶化，6100-6200附近止损观望，空仓观望。比特月线支撑5000再行操作</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={[styles.detailBottomText, {flex: 1, textAlign: 'left'}]}>2018-06-26 09:25</Text>
+                  <Text style={styles.detailBottomText}>查看详情></Text>
+                </View>
               </View>
-            </View>
-            <View style={styles.newItem}>
-              <Text style={styles.newItemTitle} numberOfLines={1}>今日动向：6170-5925（今日）-6340（大概一周）-5500-4800</Text>
-              <View style={{flexDirection:'row'}}>
-                <Text style={[styles.detailBottomText,{flex:1,textAlign:'left'}]}>2018-06-26 09:25</Text>
-                <Text style={styles.detailBottomText}>查看详情></Text>
-              </View>
-            </View>
-            <View style={styles.newItem}>
-              <Text style={styles.newItemTitle} numberOfLines={1}>趋势恶化，6100-6200附近止损观望，空仓观望。比特月线支撑5000再行操作</Text>
-              <View style={{flexDirection:'row'}}>
-                <Text style={[styles.detailBottomText,{flex:1,textAlign:'left'}]}>2018-06-26 09:25</Text>
-                <Text style={styles.detailBottomText}>查看详情></Text>
-              </View>
-            </View>
-            <View  style={styles.newShowMore}>
-              <TouchableOpacity >
-                <Text style={styles.newShowMoreText}>查看更多</Text>
-              </TouchableOpacity>
-            </View>
+            )}
+          />
+          <View style={styles.newShowMore}>
+            <TouchableOpacity>
+              <Text style={styles.newShowMoreText}>查看更多</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={[styles.view, styles.exchanges]}>
+          <View style={styles.newTop}>
+            <Text style={styles.newTopTitle}>行情</Text>
+          </View>
           <FlatList
-            data={[1,2,3,4,5]}
-            ItemSeparatorComponent={()=><Separator/>}
-            renderItem={()=><PairItem/>}
+            data={tickers}
+            ItemSeparatorComponent={() => <Separator/>}
+            keyExtractor={(item) => item.coin_id}
+            renderItem={({item, index}) => <PairItem ticker={item}/>}
           />
         </View>
       </ScrollView>
@@ -142,10 +199,10 @@ const styles = StyleSheet.create({
   },
   view: {
     backgroundColor: 'white',
-    margin:5,
+    margin: 5,
     marginTop: 0,
     marginBottom: 10,
-    padding:5,
+    padding: 5,
   },
   detail: {},
   detailTop: {
@@ -195,38 +252,37 @@ const styles = StyleSheet.create({
     color: 'gray',
     lineHeight: 16
   },
-  news: {
-
+  news: {},
+  newTop: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderColor: '#E6E6FA',
+    borderBottomWidth: 1
   },
-  newTop:{
-    paddingTop:5,
-    paddingBottom:5,
-    borderColor:'#E6E6FA',
-    borderBottomWidth:1
+  newTopTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#75C1AF'
   },
-  newTopTitle:{
-    fontSize:14,
-    fontWeight:'bold',
-    color:'#75C1AF'
+  newItem: {
+    paddingLeft:5,
+    paddingRight:5,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
-  newItem:{
-    paddingTop:2,
-    paddingBottom:2,
-    borderColor:'#E6E6FA',
-    borderBottomWidth:1
+  newItemTitle: {
+    fontSize: 14,
+    color:'black'
   },
-  newItemTitle:{
-    fontSize:14,
+  newShowMore: {
+    height: 26,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  newShowMore:{
-    height:26,
-    backgroundColor:'white',
-    justifyContent:'center',
-    alignItems:'center'
-  },
-  newShowMoreText:{
-    fontSize:14,
-    color:'gray'
+  newShowMoreText: {
+    fontSize: 14,
+    color: 'gray'
   },
   exchanges: {}
 });

@@ -4,12 +4,12 @@ import {
   Text,
   View
 } from 'react-native';
-
+import Header from '../components/Header';
 export default class Exchange extends Component{
   render() {
     return (
       <View style={styles.root}>
-        <Text>交易所</Text>
+        <Header titles={['交易所']} searchType={'exchange'}/>
       </View>
     );
   }

@@ -3,22 +3,25 @@ import {
   StyleSheet,
   Text,
   View,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native';
 import Advert from '../components/Advert';
 import Notice from '../components/Notice';
-import CodeItem from '../components/CodeItem';
-import PairItem from '../components/PairItem';
+import CoinLine from '../components/CoinLine';
 
 export default class Home extends Component{
+  state={
+    text:''
+  }
   render() {
+    var {text}=this.state;
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.root}>
         <Advert/>
         <Notice/>
-        <CodeItem/>
-        <PairItem/>
+        <CoinLine/>
       </View>
     );
   }

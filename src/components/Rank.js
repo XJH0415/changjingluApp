@@ -15,7 +15,7 @@ import Dropdown from './Dropdown';
 
 export default class Rank extends Component {
   static defaultProps = {
-    isShow:false,
+    isShow:true,
     onCoinItemPress:()=>{}
   }
   state = {
@@ -70,20 +70,16 @@ export default class Rank extends Component {
     }
   }
   dropD=null;
-  componentWillReceiveProps(props){
-    this.setState({
-      isShow:props.isShow
-    })
-  }
+
   componentWillMount() {
     this.refresh();
   }
   render() {
-    var {sort, coins, refreshing,sortText, sortSign,isShow} = this.state;
+    var {sort, coins, refreshing,sortText, sortSign} = this.state;
     var {onCoinItemPress}=this.props;
     var s =this.sort;
     return (
-      <View style={[styles.root,isShow?{display:'flex'}:{display:'none'}]}>
+      <View style={[styles.root]}>
         <View style={styles.header}>
           <View style={styles.headerName}>
             <Text style={[styles.headerText, {textAlign: 'left'}]}>名称</Text>
@@ -139,12 +135,7 @@ export default class Rank extends Component {
   getCoins(page, sort, currency) {
     var that = this;
     setTimeout(() => {
-      var params={
-        page: page,
-        sort: sort,
-        currency: currency
-      }
-      API.getCoins(params, (body) => {
+      API.getCoins(page,sort,currency,(body) => {
         if (body.no === 0) {
           var {sort, coins} = body.data;
           if (page === 1 || page - that.data[sort].page === 1) {

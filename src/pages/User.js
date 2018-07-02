@@ -4,12 +4,12 @@ import {
   Text,
   View
 } from 'react-native';
-
+import Header from '../components/Header';
 export default class User extends Component{
   render() {
     return (
       <View style={styles.root}>
-        <Text>个人中心</Text>
+        <Header titles={['我的长颈鹿']} showSearch={false}/>
       </View>
     );
   }

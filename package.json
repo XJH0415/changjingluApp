@@ -7,18 +7,20 @@
     "test": "jest"
   },
   "dependencies": {
+    "babel-preset-react-native": "^4.0.0",
+    "native-echarts": "^0.4.0",
     "react": "16.3.1",
     "react-native": "0.55.4",
     "react-native-crypto": "^2.1.2",
     "react-native-randombytes": "^2.3.0",
     "react-native-scrollable-tab-view": "^0.8.0",
     "react-native-swiper": "^1.5.13",
+    "react-native-update": "5.x",
     "react-navigation": "^2.4.1",
     "request": "2.85.0"
   },
   "devDependencies": {
     "babel-jest": "23.0.1",
-    "babel-preset-react-native": "4.0.0",
     "jest": "23.1.0",
     "jest-cli": "^23.1.0",
     "react-test-renderer": "16.3.1"

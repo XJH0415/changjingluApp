@@ -6,6 +6,6 @@ import {View} from 'react-native'
 
 export default class Separator extends Component{
   render(){
-    return <View style={{height: 1, backgroundColor: '#E6E6FA'}}/>
+    return <View style={{height: 0, borderColor: '#E6E6FA',borderBottomWidth:1}}/>
   }
 }

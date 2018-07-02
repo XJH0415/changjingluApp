@@ -14,8 +14,8 @@ export default class Advert extends Component {
   static defaultProps={
     data:{
       imgUrls: [
-        'https://changjinglu.info/asset/img/default.ads0.jpg',
-        'https://changjinglu.info/asset/img/default.ads1.jpg',
+        'https://changjinglu.pro/uploads/image/d75/9748608565bb208a90001e8b48331b20_390x200.png',
+        'https://changjinglu.pro/uploads/image/566/49a9240b0892928588aeee2bca411128_390x200.jpg',
       ]}
   }
 

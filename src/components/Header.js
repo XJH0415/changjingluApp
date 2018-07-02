@@ -13,31 +13,41 @@ import {
 
 export default class Header extends Component {
   static defaultProps = {
+    headerSelect: 0,
     onSelect: (index) => {
     },
-    titles: ['COIN', '排行榜'],
-    onBtn: (index) => {},
-    onSearch:(text)=>{}
+    titles: [],
+    onBtn: (index) => {
+    },
+    onSearch: (text) => {
+    },
+    searchType: 'coin',
+    showSearch: true
   }
   state = {
-    headerSelect: 0,
+    headerSelect: this.props.headerSelect,
     searchIng: false,
-    showValue:''
+    titles: this.props.titles
   }
-  _onChangeText(inputData){
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      headerSelect: props.headerSelect,
+      titles: props.titles,
+    })
   }
+
   render() {
-    var {titles, onBtn,onSearch} = this.props;
-    var {searchIng, inputValue} = this.state;
+    var {titles, searchType, onBtn, onSearch, showSearch} = this.props;
+    var {searchIng} = this.state;
     return (
       <View style={styles.root}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.leftView} onPress={() => onBtn(0)}>
+          <TouchableOpacity style={styles.leftView} onPress={() => onBtn(-1)}>
             <Image style={styles.leftImage} source={require('../resource/logo.png')}/>
           </TouchableOpacity>
           {
-            titles.length > 1 ?
+            titles && titles.length > 1 ?
               <View style={styles.titlesView}>
                 {
                   titles.map((item, index) => {
@@ -47,18 +57,26 @@ export default class Header extends Component {
               </View>
               :
               <View style={styles.titleView}>
-                <Text style={[styles.titleText]}>{titles[0]}</Text>
+                <Text style={[styles.titleText]}>{titles[0] ? titles[0] : '标题'}</Text>
               </View>
 
           }
-          <TouchableOpacity style={styles.rightView} onPress={() => {
-            this.setState({
-              searchIng: !searchIng
-            });
-            onBtn(1)
-          }}>
-            <Image style={styles.rightImage} source={require('../resource/search.png')}/>
-          </TouchableOpacity>
+          <View style={styles.rightView}>
+            {
+              showSearch ?
+                <TouchableOpacity onPress={() => {
+                  this.setState({
+                    searchIng: !searchIng
+                  });
+                  onBtn(1)
+                }}>
+                  <Image style={styles.rightImage} source={require('../resource/search.png')}/>
+                </TouchableOpacity>
+                :
+                null
+            }
+          </View>
+
         </View>
         {
           searchIng ?
@@ -69,15 +87,15 @@ export default class Header extends Component {
                 numberOfLines={1}
                 clearButtonMode='while-editing'
                 multiline={false}
-                placeholder={'请输入币名称'}
+                placeholder={searchType === 'coin' ? '请输入币名称' : searchType === 'new' ? '请输入资讯名称' : searchType === 'exchange' ? '请输入交易所名称' : ''}
                 selectionColor={'#75C1AF'}
-                onChangeText={(inputData)=>this.inputValue=inputData}
+                onChangeText={(inputData) => this.inputValue = inputData}
                 onSubmitEditing={(event) => onSearch(event.nativeEvent.text)}
                 underlineColorAndroid='transparent'
                 style={styles.searchInput}/>
               {
-                Platform.OS==='android'?
-                  <TouchableOpacity onPress={()=>{
+                Platform.OS === 'android' ?
+                  <TouchableOpacity onPress={() => {
                     this.refs.input.clear();
                   }}>
                     <Image style={styles.searchClear} source={require('../resource/clear.png')}/>
@@ -85,7 +103,7 @@ export default class Header extends Component {
                   :
                   null
               }
-              <TouchableOpacity onPress={()=>{
+              <TouchableOpacity onPress={() => {
                 onSearch(this.inputValue);
               }}>
                 <Text style={styles.searchBtn}>搜索</Text>
@@ -93,7 +111,6 @@ export default class Header extends Component {
             </View>
             :
             null
-
         }
       </View>
     )
@@ -103,7 +120,7 @@ export default class Header extends Component {
     var {onSelect} = this.props;
     var {headerSelect} = this.state;
     return (
-      <View style={[styles.titleBtn, headerSelect === index ? {backgroundColor: '#75C1AF'} : {}]}>
+      <View key={index} style={[styles.titleBtn, headerSelect === index ? {backgroundColor: '#75C1AF'} : {}]}>
         <TouchableWithoutFeedback onPress={() => {
           this.setState({headerSelect: index});
           onSelect(index)
@@ -193,14 +210,14 @@ const styles = StyleSheet.create({
     padding: 0,
     paddingLeft: 10,
   },
-  searchClear:{
-    height:16,
-    width:16,
-    margin:9
+  searchClear: {
+    height: 16,
+    width: 16,
+    margin: 9
   },
   searchBtn: {
     height: 30,
-    lineHeight: 26,
+    lineHeight: 28,
     borderColor: 'gray',
     borderWidth: 1,
     paddingLeft: 10,

@@ -13,7 +13,7 @@ export default class NewItem extends Component {
       writer:'作者',
       time:'yyyy-MM-dd',
       clickRate:'0',
-      imtUrl:'https://changjinglu.info/asset/img/default.ads0.jpg'
+      imtUrl:'https://changjinglu.pro/uploads/image/d75/9748608565bb208a90001e8b48331b20_390x200.png'
     }
   }
   render() {
