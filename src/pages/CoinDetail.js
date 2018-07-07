@@ -5,13 +5,14 @@ import {
   View,
   Image,
   Alert,
+  RefreshControl,
   ScrollView,
   TouchableOpacity,
   FlatList
 } from 'react-native';
-import NumUtils from '../utils/NumUtils';
 import PairItem from '../components/PairItem';
 import Separator from '../components/Separator';
+import CoinLine from '../components/CoinLine';
 import API from '../lib/dataApi';
 
 export default class CoinDetail extends Component {
@@ -45,50 +46,65 @@ export default class CoinDetail extends Component {
 
     currency: 'cny'
   }
-  state={
-    tickers:[],
-    data:{},
-    lines:[]
+  state = {
+    tickers: [],
+    data: {},
+    lines: [],
+    news: [],
+    isRefreshing:false,
   }
+
   componentWillMount() {
     this.refresh();
   }
-  refresh(){
-    var {coin,currency,navigation}=this.props;
+
+  refresh() {
+    var {coin, currency, navigation} = this.props;
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
-    this.getTickers(coin.coin_id,currency);
-    this.getBasic(coin.coin_id,currency);
-    this.getKline(coin.coin_id,currency);
+    this.getTickers(coin.coin_id, currency);
+    this.getBasic(coin.coin_id, currency);
+    this.getKline(coin.coin_id, currency);
   }
-  getTickers(coin_id,currency){
-    var that=this;
-    API.getCoinTicker(coin_id,currency,(body)=>{
+
+  getTickers(coin_id, currency) {
+    var that = this;
+    API.getCoinTicker(coin_id, currency, (data) => {
       that.setState({
-        tickers:body.data.tickers
+        tickers: data.tickers
       })
     })
   }
-  getBasic(coin_id,currency){
-    var that=this;
-    API.getCoinBasic(coin_id,currency,(body)=>{
+
+  getBasic(coin_id, currency) {
+    var that = this;
+    API.getCoinBasic(coin_id, currency, (data) => {
       that.setState({
-        data:body.data
+        data: data
       })
     });
   }
-  getKline(coin_id,currency){
-    var that=this;
-    API.getCoinKline(coin_id,currency,(body)=>{
+
+  getKline(coin_id, currency) {
+    var that = this;
+    API.getCoinKline(coin_id, currency, (data) => {
       that.setState({
-        lines:body.data[currency]
+        lines: data[currency]
       })
     });
+  }
+  _onRefresh() {
+    this.setState({isRefreshing: true});
+    setTimeout(() => {
+      this.setState({
+        isRefreshing: true
+      })
+    }, 5000);
   }
   render() {
     var {coin, currency, navigation} = this.props;
-    var {tickers,data,lines}=this.state;
+    var {tickers, data, lines, news} = this.state;
     var {
       syb,//计价符号
       amount,//总发行量
@@ -102,32 +118,44 @@ export default class CoinDetail extends Component {
       value_order,//流通市值全球排行
       vol,//24小时交易量
       vol_order,//24成交额排行
-    }=data;
-    var circulation_value=data['circulation_'+currency];//流通市值
-    var vol_value=data['vol_'+currency];//24成交额
+    } = data;
+    var circulation_value = data['circulation_' + currency];//流通市值
+    var vol_value = data['vol_' + currency];//24成交额
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
     var source = {uri: coin ? coin.icon : ''}
     var color = '#DA7D7E';
-    if (gains_pct && gains_pct*1 < 0) {
+    if (gains_pct && gains_pct * 1 < 0) {
       color = '#3CB371';
     }
     return (
-      <ScrollView style={styles.root}>
+      <ScrollView
+        style={styles.root}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.isRefreshing}
+            onRefresh={this._onRefresh}
+            tintColor="#ff0000"
+            title="Loading..."
+            titleColor="#00ff00"
+            colors={['#ff0000', '#00ff00', '#0000ff']}
+            progressBackgroundColor="#ffff00"
+          />}
+      >
         <View style={[styles.view, styles.detail]}>
           <View style={styles.detailTop}>
             <Image style={styles.image} source={source}/>
             <Text style={[styles.detailTopPrice, {color: color}]}>
-              {syb?syb:''}{price ?price: '-'}
+              {syb ? syb : ''}{price ? price : '-'}
             </Text>
             <Text style={[styles.detailTopText, {color: color},]}>{currency.toUpperCase()}</Text>
             <Text style={[styles.detailTopText, {marginLeft: 5, color: color}]}>
               {gains_pct ? gains_pct : '-'}
             </Text>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-              <Text style={styles.detailCenterText}>高:{high?high:''}</Text>
-              <Text style={styles.detailCenterText}>低:{low?low:''}</Text>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}</Text>
+              <Text style={styles.detailCenterText}>低(24h):{syb}{low ? low : ''}</Text>
             </View>
             <TouchableOpacity style={styles.detailTopBtn}>
               <Text>自选</Text>
@@ -136,15 +164,15 @@ export default class CoinDetail extends Component {
           <View>
             <Text style={styles.detailCenterText}>
               量(24h): {vol ? vol : '-'},
-              额(24h): {syb?syb:''}{vol_value ? vol_value : '-'}  (第{vol_order?vol_order:'-'}名)
-              </Text>
+              额(24h): {syb ? syb : ''}{vol_value ? vol_value : '-'} (第{vol_order ? vol_order : '-'}名)
+            </Text>
             <Text style={styles.detailCenterText}>
-              总发行量: {amount?amount:''},流通量: {circulation?circulation:''},流通市值: {syb?syb:''}{circulation_value},占全球总市值: {value_pct?value_pct+'%':'-'}  (第{value_order?value_order:'-'}名)
+              总发行量: {amount ? amount : ''},流通量: {circulation ? circulation : ''},流通市值: {syb ? syb : ''}{circulation_value},占全球总市值: {value_pct ? value_pct + '%' : '-'} (第{value_order ? value_order : '-'}名)
             </Text>
           </View>
           <View style={styles.detailBottom}>
             <View style={styles.detailChat}>
-              
+              <CoinLine lines={lines}/>
             </View>
             <View style={styles.detailBottomMore}>
               <TouchableOpacity>
@@ -154,34 +182,41 @@ export default class CoinDetail extends Component {
           </View>
 
         </View>
-        <View style={[styles.view, styles.news]}>
-          <View style={styles.newTop}>
-            <Text style={styles.newTopTitle}>专栏资讯</Text>
-          </View>
-          <FlatList
-            data={[1, 2]}
-            ItemSeparatorComponent={() => <Separator/>}
-            renderItem={() =>(
-              <View style={styles.newItem}>
-                <Text style={styles.newItemTitle} numberOfLines={1}>趋势恶化，6100-6200附近止损观望，空仓观望。比特月线支撑5000再行操作</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={[styles.detailBottomText, {flex: 1, textAlign: 'left'}]}>2018-06-26 09:25</Text>
-                  <Text style={styles.detailBottomText}>查看详情></Text>
-                </View>
+        {
+          news && news.length > 0 ?
+            <View style={[styles.view, styles.news]}>
+              <View style={styles.newTop}>
+                <Text style={styles.newTopTitle}>专栏资讯</Text>
               </View>
-            )}
-          />
-          <View style={styles.newShowMore}>
-            <TouchableOpacity>
-              <Text style={styles.newShowMoreText}>查看更多</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+
+              <FlatList
+                data={news}
+                ItemSeparatorComponent={() => <Separator/>}
+                renderItem={({item, index}) => (
+                  <View style={styles.newItem}>
+                    <Text style={styles.newItemTitle} numberOfLines={1}>{item.name}</Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={[styles.detailBottomText, {flex: 1, textAlign: 'left'}]}>{item.time}</Text>
+                      <Text style={styles.detailBottomText}>查看详情></Text>
+                    </View>
+                  </View>
+                )}
+              />
+              <View style={styles.newShowMore}>
+                <TouchableOpacity>
+                  <Text style={styles.newShowMoreText}>查看更多</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            : null
+        }
         <View style={[styles.view, styles.exchanges]}>
           <View style={styles.newTop}>
             <Text style={styles.newTopTitle}>行情</Text>
           </View>
           <FlatList
+            style={{flex: 1}}
             data={tickers}
             ItemSeparatorComponent={() => <Separator/>}
             keyExtractor={(item) => item.coin_id}
@@ -189,7 +224,8 @@ export default class CoinDetail extends Component {
           />
         </View>
       </ScrollView>
-    );
+    )
+      ;
   }
 }
 
@@ -237,11 +273,9 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginBottom: 5
   },
-  detailBottom: {
-    height: 80,
-  },
+  detailBottom: {},
   detailChat: {
-    flex: 1
+    height: 200
   },
   detailBottomMore: {
     height: 16,
@@ -265,14 +299,14 @@ const styles = StyleSheet.create({
     color: '#75C1AF'
   },
   newItem: {
-    paddingLeft:5,
-    paddingRight:5,
+    paddingLeft: 5,
+    paddingRight: 5,
     paddingTop: 2,
     paddingBottom: 2,
   },
   newItemTitle: {
     fontSize: 14,
-    color:'black'
+    color: 'black'
   },
   newShowMore: {
     height: 26,

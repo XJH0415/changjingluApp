@@ -6,18 +6,18 @@
 
 import React, {Component} from 'react';
 import {createStackNavigator} from 'react-navigation';
-import {Image,StyleSheet,Alert,Platform,Linking} from 'react-native';
-import {
-  isFirstTime,
-  isRolledBack,
-  packageVersion,
-  currentVersion,
-  checkUpdate,
-  downloadUpdate,
-  switchVersion,
-  switchVersionLater,
-  markSuccess,
-} from 'react-native-update';
+import {Image,StyleSheet,Alert,Platform,Linking,NetInfo} from 'react-native';
+// import {
+//   isFirstTime,
+//   isRolledBack,
+//   packageVersion,
+//   currentVersion,
+//   checkUpdate,
+//   downloadUpdate,
+//   switchVersion,
+//   switchVersionLater,
+//   markSuccess,
+// } from 'react-native-update';
 import _updateConfig from './update.json';
 const {appKey} = _updateConfig[Platform.OS];
 
@@ -67,59 +67,66 @@ const StackNavigator = createStackNavigator({
 
 })
 export default class App extends Component {
-  componentWillMount(){
-    // if (isFirstTime) {
-    //   Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [
-    //     {text: '是', onPress: ()=>{throw new Error('模拟启动失败,请重启应用')}},
-    //     {text: '否', onPress: ()=>{markSuccess()}},
-    //   ]);
-    // } else if (isRolledBack) {
-    //   Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
-    // }
+  // componentWillMount(){
+  //   // if (isFirstTime) {
+  //   //   Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [
+  //   //     {text: '是', onPress: ()=>{throw new Error('模拟启动失败,请重启应用')}},
+  //   //     {text: '否', onPress: ()=>{markSuccess()}},
+  //   //   ]);
+  //   // } else if (isRolledBack) {
+  //   //   Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
+  //   // }
+  // }
+  //
+  // doUpdate = info => {
+  //   downloadUpdate(info).then(hash => {
+  //     Alert.alert('提示', '下载完毕,是否重启应用?', [
+  //       {text: '是', onPress: ()=>{switchVersion(hash);}},
+  //       {text: '下次启动时', onPress: ()=>{switchVersionLater(hash);}},
+  //     ]);
+  //   }).catch(err => {
+  //     Alert.alert('提示', '更新失败.');
+  //   });
+  // };
+  // checkUpdate = (appKey) => {
+  //   checkUpdate(appKey).then(info => {
+  //     if (info.expired) {
+  //       if(Platform.OS==='android'){
+  //         // Alert.alert('提示', '您的应用程序已过期，长颈鹿资讯发布了全新的APP，快去下载体验吧！', [
+  //         //   {text: '确定',
+  //         //     onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}
+  //         //   },
+  //         // ]);
+  //       }
+  //     } else if (info.upToDate) {
+  //
+  //     } else {
+  //       Alert.alert('提示', '检查到新的版本'+info.name+',是否下载?\n'+ info.description, [
+  //         {text: '是', onPress: ()=>{this.doUpdate(info)}},
+  //         {text: '否',},
+  //       ]);
+  //     }
+  //   }).catch(err => {
+  //     if(Platform.OS==='android'){
+  //       Alert.alert('提示', '更新失败.');
+  //     }
+  //   });
+  // };
+  componentDidMount(){
+    NetInfo.addEventListener('change',function(reachability){
+     if(!reachability){
+        Alert.alert('提示','当前网络连接已断开，为确保应用程序正常使用，请确保网络连接通畅！')
+     }
+    });
+    // this.checkUpdate(appKey);
+
   }
-
-  doUpdate = info => {
-    downloadUpdate(info).then(hash => {
-      Alert.alert('提示', '下载完毕,是否重启应用?', [
-        {text: '是', onPress: ()=>{switchVersion(hash);}},
-        {text: '下次启动时', onPress: ()=>{switchVersionLater(hash);}},
-      ]);
-    }).catch(err => {
-      Alert.alert('提示', '更新失败.');
-    });
-  };
-  checkUpdate = (appKey) => {
-    checkUpdate(appKey).then(info => {
-      if (info.expired) {
-        if(Platform.OS==='android'){
-          // Alert.alert('提示', '您的应用程序已过期，长颈鹿资讯发布了全新的APP，快去下载体验吧！', [
-          //   {text: '确定',
-          //     onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}
-          //   },
-          // ]);
-        }
-      } else if (info.upToDate) {
-
-      } else {
-        Alert.alert('提示', '检查到新的版本'+info.name+',是否下载?\n'+ info.description, [
-          {text: '是', onPress: ()=>{this.doUpdate(info)}},
-          {text: '否',},
-        ]);
-      }
-    }).catch(err => {
-      if(Platform.OS==='android'){
-        Alert.alert('提示', '更新失败.');
-      }
-    });
-  };
   render() {
     return (
         <StackNavigator/>
     );
   }
-  componentDidMount(){
-    this.checkUpdate(appKey);
-  }
+
 }
 const styles=StyleSheet.create({
   tabIcon:{

@@ -38,7 +38,7 @@ export  default class PairItem extends Component {
 
         <View style={styles.leftView}>
           <View >
-            <Text style={[styles.text]}>{code.replace('_','/').toUpperCase()}</Text>
+            <Text style={[styles.text,{fontWeight:'bold'}]}>{code.replace('_','/').toUpperCase()}</Text>
           </View>
           <View >
             <Text style={[styles.text]}>{name.trim()}</Text>
@@ -69,9 +69,8 @@ export  default class PairItem extends Component {
 
 const styles=StyleSheet.create({
   root:{
-    paddingLeft:5,
-    paddingRight:5,
-    height:40,
+    padding:5,
+    height:50,
     flexDirection:'row',
     justifyContent:'space-between',
     alignItems:'center',

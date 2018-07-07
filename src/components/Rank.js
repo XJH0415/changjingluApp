@@ -15,18 +15,19 @@ import Dropdown from './Dropdown';
 
 export default class Rank extends Component {
   static defaultProps = {
-    isShow:true,
-    onCoinItemPress:()=>{}
+    isShow: true,
+    onCoinItemPress: () => {
+    }
   }
   state = {
     coins: [],
     refreshing: false,
     sortText: '排序方式',
     sortSign: 1,
-    isShow:this.props.isShow
+    isShow: this.props.isShow
   }
   sort = 'va';
-  isRefreshMore=false;
+  isRefreshMore = false;
   data = {
     'va': {
       page: 0,
@@ -69,15 +70,16 @@ export default class Rank extends Component {
       coins: []
     }
   }
-  dropD=null;
-
+  dropD = null;
+  isGetingData=false;
   componentWillMount() {
-    this.refresh();
+    this.refresh(this.sort);
   }
+
   render() {
-    var {sort, coins, refreshing,sortText, sortSign} = this.state;
-    var {onCoinItemPress}=this.props;
-    var s =this.sort;
+    var {sort, coins, refreshing, sortText, sortSign} = this.state;
+    var {onCoinItemPress} = this.props;
+    var s = this.sort;
     return (
       <View style={[styles.root]}>
         <View style={styles.header}>
@@ -87,7 +89,7 @@ export default class Rank extends Component {
           <View style={styles.headerPrice}>
             <Text style={[styles.headerText, {textAlign: 'right'}]}>价格</Text>
           </View>
-          <TouchableOpacity style={[styles.headerSort, styles.sort]}  onPress={()=>{
+          <TouchableOpacity style={[styles.headerSort, styles.sort]} onPress={() => {
             this.dropD.onclick();
           }}>
             <Text style={[styles.headerText, {textAlign: 'right'}]}>{sortText}</Text>
@@ -95,16 +97,20 @@ export default class Rank extends Component {
                    source={sortSign > 0 ? require('../resource/上.png') : require('../resource/下.png')}/>
           </TouchableOpacity>
         </View>
-        <Dropdown ref={(ref)=>{this.dropD=ref}} style={styles.dropDown} width={100} top={40}
-                  onPress={(item,index)=>{this.refresh(item.sort)}}/>
+        <Dropdown ref={(ref) => {
+          this.dropD = ref
+        }} style={styles.dropDown} width={100} top={40}
+                  onPress={(item, index) => {
+                    this.refresh(item.sort)
+                  }}/>
         <FlatList style={styles.root}
                   onRefresh={() => this.refresh(s)}
-                  ItemSeparatorComponent={()=><Separator/>}
+                  ItemSeparatorComponent={() => <Separator/>}
                   refreshing={refreshing}
                   onEndReached={() => this.refreshMore(this.data[this.sort].page + 1)}
                   onEndReachedThreshold={1}
                   data={coins}
-                  keyExtractor={(item) => item.code+item.coin_id}
+                  keyExtractor={(item) => item.code + item.coin_id}
                   renderItem={({item, index}) => (
                     <CoinItem sort={sort} coin={item} no={index + 1} onPress={onCoinItemPress}/>
                   )}
@@ -113,6 +119,7 @@ export default class Rank extends Component {
       </View>
     );
   }
+
   refresh(sort) {
     if (!this.state.refreshing) {
       this.setState({
@@ -123,10 +130,10 @@ export default class Rank extends Component {
   }
 
   refreshMore(page) {
-    if(!this.isRefreshMore){
+    if (!this.isRefreshMore) {
       if (page === 1) this.refresh(this.sort);
       if (this.data[this.sort].page === page) return;
-      this.isRefreshMore=true;
+      this.isRefreshMore = true;
       this.getCoins(page, this.sort, 'cny');
     }
 
@@ -135,24 +142,24 @@ export default class Rank extends Component {
   getCoins(page, sort, currency) {
     var that = this;
     setTimeout(() => {
-      API.getCoins(page,sort,currency,(body) => {
-        if (body.no === 0) {
-          var {sort, coins} = body.data;
-          if (page === 1 || page - that.data[sort].page === 1) {
-            if (page === 1) {//当page为1时，清空旧数据
-              that.data[sort].coins = [];
-            }else {
-              that.isRefreshMore=false;
-            }
-            for (let coin of coins) {
-              that.data[sort].coins.push(coin)
-            }
-            that.data[sort].page = page
-            that.showCoins(sort);
-          } else if (page - that.data[sort].page > 1) {
-            that.getCoins(page - 1, sort, currency)
+      if(that.isGetingData)return;
+      that.isGetingData=true;
+      API.getCoins(page, sort, currency, (data) => {
+        that.isGetingData=false;
+        var {sort, coins} = data;
+        if (page === 1 || page - that.data[sort].page === 1) {
+          if (page === 1) {//当page为1时，清空旧数据
+            that.data[sort].coins = [];
+          } else {
+            that.isRefreshMore = false;
           }
-
+          for (let coin of coins) {
+            that.data[sort].coins.push(coin)
+          }
+          that.data[sort].page = page
+          that.showCoins(sort);
+        } else if (page - that.data[sort].page > 1) {
+          that.getCoins(page - 1, sort, currency)
         }
       })
     }, 1000);
@@ -162,9 +169,10 @@ export default class Rank extends Component {
         that.setState({
           refreshing: false
         })
-        that.isRefreshMore=false;
+        that.isRefreshMore = false;
+        that.isGetingData = false;
       }
-    }, 80000)
+    }, 8000)
   }
 
   showCoins(sort) {
@@ -208,7 +216,7 @@ export default class Rank extends Component {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    display:'flex'
+    display: 'flex'
   },
   header: {
     height: 30,
@@ -246,10 +254,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#75C1AF'
   },
-  dropDown:{
-    position:'absolute',
-    right:5,
-    top:30,
-    width:120,
+  dropDown: {
+    position: 'absolute',
+    right: 5,
+    top: 30,
+    width: 120,
   }
 });

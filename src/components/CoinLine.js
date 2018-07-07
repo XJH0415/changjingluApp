@@ -1,48 +1,106 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Alert} from 'react-native'
-import Echarts from 'native-echarts'
+import {View, StyleSheet, Alert, Platform} from 'react-native'
+import Echarts from '../echarts';
+import DateUtils from '../utils/DateUtils'
 
 export default class CoinLine extends Component {
+  static defaultProps = {
+    lines: {}
+  }
   state = {
     width: 0,
-    height: 0
+    height: 0,
+    lines: this.props.lines
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      lines: props.lines,
+    })
   }
 
   render() {
-    var {width,height}=this.state;
+    var {width, height, lines} = this.state;
+    var date = [];
+    var data = [];
+    for (let time of Object.keys(lines)) {
+      var dateStr = DateUtils.Formart(new Date(time * 1000), 'yyyy-MM-dd');
+      var num = lines[time] * 1;
+      date.push(dateStr);
+      data.push(num);
+    }
+
     var option = {
-      backgroundColor:'white',
-      // legend: {                                   // 图例配置
-      //   padding: 5,                             // 图例内边距，单位px，默认上下左右内边距为5
-      //   itemGap: 10,                            // Legend各个item之间的间隔，横向布局时为水平间隔，纵向布局时为纵向间隔
-      //   data: ['ios', 'android']
-      // },
-      tooltip: {                                  // 气泡提示配置
-        trigger: 'item',                        // 触发类型，默认数据触发，可选为：'axis'
+      toolbox: {
+        show: false,
       },
-      xAxis: [                                    // 直角坐标系中横轴数组
-        {
-          type: 'category',                   // 坐标轴类型，横轴默认为类目轴，数值轴则参考yAxis说明
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      grid: {
+        top: 5,
+        left: 'left',
+        right: 'left'
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: date
+      },
+      yAxis: {
+        type: 'value',
+        splitNumber: 2,
+        scale: true,
+        boundaryGap: ['10%','10%'],
+        axisLabel: {
+          inside: true,
+          fontSize: 10,
+          color: 'gray'
+        },
+        splitLine:{
+          show:false
         }
-      ],
-      yAxis: [                                    // 直角坐标系中纵轴数组
-        {
-          type: 'value',                      // 坐标轴类型，纵轴默认为数值轴，类目轴则参考xAxis说明
-          boundaryGap: [0.1, 0.1],            // 坐标轴两端空白策略，数组内数值代表百分比
-          splitNumber: 4                      // 数值轴用，分割段数，默认为5
+      },
+      dataZoom: [{
+        startValue: data.length >= 15 ? data.length - 15 : 0,
+        endValue: data.length,
+        handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+        handleSize: '80%',
+        handleStyle: {
+          color: '#fff',
+          shadowBlur: 3,
+          shadowColor: 'rgba(0, 0, 0, 0.6)',
+          shadowOffsetX: 2,
+          shadowOffsetY: 2
         }
-      ],
+      }],
       series: [
         {
-          name: 'ios',                        // 系列名称
-          type: 'line',                       // 图表类型，折线图line、散点图scatter、柱状图bar、饼图pie、雷达图radar
-          data: [112, 23, 45, 56, 233, 343, 454, 89, 343, 123, 45, 123]
-        },
-        {
-          name: 'android',                    // 系列名称
-          type: 'line',                       // 图表类型，折线图line、散点图scatter、柱状图bar、饼图pie、雷达图radar
-          data: [45, 123, 145, 526, 233, 343, 44, 829, 33, 123, 45, 13]
+          name: '行情数据',
+          type: 'line',
+          smooth: true,
+          symbol: 'none',
+          sampling: 'average',
+          itemStyle: {
+            normal: {
+              color: '#74C2AF'
+            }
+          },
+          areaStyle: {
+            normal: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: '#E3F6EF' // 0% 处的颜色
+                }, {
+                  offset: 1, color: '#74C2AF' // 100% 处的颜色
+                }],
+                globalCoord: false // 缺省为 false
+              }
+            }
+          },
+          data: data
         }
       ]
     };
@@ -53,7 +111,10 @@ export default class CoinLine extends Component {
           width: nativeEvent.layout.width
         })
       }}>
-        <Echarts option={option} width={width} height={height}/>
+        {width > 0 && height > 0 ?
+            <Echarts option={option} width={width} height={height}/>
+          : null
+        }
       </View>
     )
   }
