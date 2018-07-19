@@ -10,44 +10,42 @@ export default class ViewPage extends Component {
   static defaultProps = {
     data: [],
     renderItem: null,
+    key:''
   }
   state = {
     data: this.props.data
   }
   defaultRenderItem = (item, index) => {
     return (
-      <Text key={index}
-            tabLabel={item.tabTitle ? item.tabTitle : '第' + (index + 1) + '页'}>
-        {item.tabTitle ? item.tabTitle : '第' + (index + 1) + '页'}
+      <Text
+        key={index}
+        tabLabel={item.title ? item.title : '第' + (index + 1) + '页'}>
+        {item.title ? item.title : '第' + (index + 1) + '页'}
       </Text>
     )
   }
   componentWillReceiveProps(props){
     this.setState({
-      isShow:props.isShow,
       data:props.data
     })
   }
   render() {
     var {data} = this.state;
-    var {renderItem} = this.props;
+    var {renderItem,key} = this.props;
     return (
-      <View style={[styles.root]}>
+      <View style={[styles.root]} key={key}>
         <ScrollableTabView
-          renderTabBar={() => <ScrollableTabBar tabStyle={{paddingLeft: 10, paddingRight: 10}}/>}
+          renderTabBar={() => <ScrollableTabBar tabStyle={{paddingLeft: 8, paddingRight: 8}}/>}
           tabBarUnderlineStyle={{backgroundColor: '#75C1AF'}}
           tabBarBackgroundColor='white'
           tabBarActiveTextColor='#75C1AF'
           tabBarInactiveTextColor='black'
           tabBarTextStyle={{fontSize: 16}}
           prerenderingSiblingsNumber={1}
-          onChangeTab={({i}) => {
-          }}
         >
           {
             data.map((item, index) => {
-              var itemView=renderItem?renderItem(item, index):this.defaultRenderItem(item, index);
-              return itemView
+              return renderItem?renderItem(item, index):this.defaultRenderItem(item, index);
             })
           }
         </ScrollableTabView>

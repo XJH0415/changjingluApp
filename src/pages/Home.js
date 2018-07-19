@@ -14,32 +14,22 @@ import Separator from '../components/Separator';
 export default class Home extends Component {
   state = {
     coins: [],
+    lines:{}
   }
 
   componentWillMount() {
     var that=this;
     API.getCoins(1,'va','cny',(data)=>{
       var coin_ids='';
-      for(let coin of data.coins){
-        coin_ids+=coin.coin_id+',';
-      }
-      coin_ids=coin_ids.substring(0,coin_ids.length-1)
-      API.getKlines(coin_ids,'cny',(da)=>{
-        var coins=[];
-        for(let coin of data.coins){
-          coin.line=da.klines[coin.coin_id]?da.klines[coin.coin_id]:[];
-          coins.push(coin)
-        }
-        that.setState({
-          coins:coins,
-        })
+      that.setState({
+        coins:data.coins,
       })
     })
   }
 
   render() {
     const {navigate} = this.props.navigation;
-    var {coins} = this.state;
+    var {coins,lines} = this.state;
     return (
       <View style={styles.root}>
         <Advert/>
@@ -48,7 +38,9 @@ export default class Home extends Component {
                   data={coins}
                   ItemSeparatorComponent={() => <Separator/>}
                   keyExtractor={(item) => item.coin_id}
-                  renderItem={({item, index}) => <MarketItem key={index} currency={'￥'} coin={item} data={item.line}/>}
+                  renderItem={({item, index}) => <MarketItem onPress={(coin) => {
+                    navigate('CoinDetail', {coin: coin})
+                  }}key={index} currency={'￥'} coin={item}/>}
         />
       </View>
     );

@@ -70,7 +70,10 @@ export default BottomTabNavigator = createBottomTabNavigator({
       )
     }
   }
-}, {})
+}, {
+  backBehavior:'none',
+  lazy:false,
+})
 
 const styles=StyleSheet.create({
   tabIcon:{

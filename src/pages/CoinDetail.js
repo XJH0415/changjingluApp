@@ -8,12 +8,15 @@ import {
   RefreshControl,
   ScrollView,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  BackHandler,
+  Platform
 } from 'react-native';
 import PairItem from '../components/PairItem';
 import Separator from '../components/Separator';
 import CoinLine from '../components/CoinLine';
 import API from '../lib/dataApi';
+import DateUtils from '../utils/DateUtils';
 
 export default class CoinDetail extends Component {
   static navigationOptions = (options) => {
@@ -23,7 +26,7 @@ export default class CoinDetail extends Component {
     if (navigation) {
       coin = options.navigation.state.params.coin
       if (coin) {
-        headerTitle = coin.code + '-' + (coin.name_cn ? coin.name_cn : '') + '(' + (coin.name_en ? coin.name_en : '') + ')'
+        headerTitle = coin.code?coin.code+'-' + (coin.name_cn ? coin.name_cn : coin.name_en):coin.name
       }
     }
     return {
@@ -43,8 +46,9 @@ export default class CoinDetail extends Component {
       vol_24h: '2158432',
       gains_pct_1d: '2.6879'
     },
-
-    currency: 'cny'
+    navigate:()=>{},
+    currency: 'cny',
+    onNewPress:()=>{}
   }
   state = {
     tickers: [],
@@ -53,7 +57,6 @@ export default class CoinDetail extends Component {
     news: [],
     isRefreshing:false,
   }
-
   componentWillMount() {
     this.refresh();
   }
@@ -66,6 +69,7 @@ export default class CoinDetail extends Component {
     this.getTickers(coin.coin_id, currency);
     this.getBasic(coin.coin_id, currency);
     this.getKline(coin.coin_id, currency);
+    this.getCoinArticles(coin.coin_id);
   }
 
   getTickers(coin_id, currency) {
@@ -94,16 +98,26 @@ export default class CoinDetail extends Component {
       })
     });
   }
+  getCoinArticles(coin_id){
+    var that=this;
+    API.getCoinArticles(coin_id,1,(data)=>{
+      that.setState({
+        news:data.article
+      })
+    })
+  }
   _onRefresh() {
-    this.setState({isRefreshing: true});
+    var that = this;
+    that.setState({isRefreshing: true});
+    that.refresh();
     setTimeout(() => {
-      this.setState({
-        isRefreshing: true
+      that.setState({
+        isRefreshing: false
       })
     }, 5000);
   }
   render() {
-    var {coin, currency, navigation} = this.props;
+    var {coin, currency, navigation,onNewPress,navigate} = this.props;
     var {tickers, data, lines, news} = this.state;
     var {
       syb,//计价符号
@@ -124,23 +138,19 @@ export default class CoinDetail extends Component {
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
-    var source = {uri: coin ? coin.icon : ''}
+    var source = {uri: coin.icon ? coin.icon : coin.icon_small}
     var color = '#DA7D7E';
     if (gains_pct && gains_pct * 1 < 0) {
       color = '#3CB371';
     }
     return (
+      
       <ScrollView
         style={styles.root}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefresh}
-            tintColor="#ff0000"
-            title="Loading..."
-            titleColor="#00ff00"
-            colors={['#ff0000', '#00ff00', '#0000ff']}
-            progressBackgroundColor="#ffff00"
+            onRefresh={()=>this._onRefresh}
           />}
       >
         <View style={[styles.view, styles.detail]}>
@@ -157,9 +167,21 @@ export default class CoinDetail extends Component {
               <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}</Text>
               <Text style={styles.detailCenterText}>低(24h):{syb}{low ? low : ''}</Text>
             </View>
-            <TouchableOpacity style={styles.detailTopBtn}>
-              <Text>自选</Text>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity style={styles.detailTopBtn}>
+                <Text>自选</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.detailTopBtn} onPress={()=>{
+                if(navigation){
+                  navigation.navigate('Comment', {data: coin})
+                }else {
+                  navigate('Comment', {data: coin})
+                }
+                
+              }}>
+                <Text>点评</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <View>
             <Text style={styles.detailCenterText}>
@@ -193,13 +215,20 @@ export default class CoinDetail extends Component {
                 data={news}
                 ItemSeparatorComponent={() => <Separator/>}
                 renderItem={({item, index}) => (
-                  <View style={styles.newItem}>
-                    <Text style={styles.newItemTitle} numberOfLines={1}>{item.name}</Text>
+                  <TouchableOpacity onPress={()=>{
+                    if(navigation){
+                      navigation.navigate('NewDetail', {data: item})
+                    }else {
+                      onNewPress(item)
+                    }
+                    
+                  }} style={styles.newItem}>
+                    <Text style={styles.newItemTitle} numberOfLines={1}>{item.title}</Text>
                     <View style={{flexDirection: 'row'}}>
-                      <Text style={[styles.detailBottomText, {flex: 1, textAlign: 'left'}]}>{item.time}</Text>
+                      <Text style={[styles.detailBottomText, {flex: 1, textAlign: 'left'}]}>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
                       <Text style={styles.detailBottomText}>查看详情></Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 )}
               />
               <View style={styles.newShowMore}>
@@ -245,7 +274,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 40
+    height: 50
   },
   image: {
     height: 25,
@@ -264,9 +293,10 @@ const styles = StyleSheet.create({
   detailTopBtn: {
     backgroundColor: '#DA7D7E',
     borderRadius: 25,
-    padding: 5,
-    paddingLeft: 10,
-    paddingRight: 10
+    padding: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
+    margin:2
   },
   detailCenterText: {
     fontSize: 10,

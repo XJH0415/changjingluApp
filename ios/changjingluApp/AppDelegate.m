@@ -6,7 +6,7 @@
  */
 
 #import "AppDelegate.h"
-
+#import "RCTHotUpdate.h"
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
@@ -19,7 +19,7 @@
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
   jsCodeLocation=[RCTHotUpdate bundleURL];
-#enfif
+#endif
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"changjingluApp"
                                                initialProperties:nil

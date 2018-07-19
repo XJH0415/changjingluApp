@@ -4,12 +4,14 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import Echarts from '../echarts';
 import NumUtils from '../utils/NumUtils';
 
 export default class MarketItem extends Component {
   static defaultProps = {
+    onPress:()=>{},
     currency:'￥',
     coin: {
       coin_id: null,
@@ -40,7 +42,7 @@ export default class MarketItem extends Component {
   }
 
   render() {
-    var {currency}=this.props;
+    var {currency,onPress}=this.props;
     var {chartWidth, chartHeight,coin,data} = this.state;
     var {code,name_cn,name_en,price,vol_24h,gains_pct_1d, icon}=coin;
     var option = {
@@ -92,42 +94,47 @@ export default class MarketItem extends Component {
           data: data
         }
       ],
-      animation: false
+      animation: true
     }
     return (
-      <View style={styles.root}>
+      <TouchableOpacity onPress={() => {
+        onPress(coin)
+      }} style={styles.root}>
         <View style={styles.imageView}>
           <Image style={styles.image} source={{uri: icon}}/>
         </View>
         <View style={styles.leftView}>
           <View>
-            <Text numberOfLines={1} style={[styles.text, {fontWeight: 'bold'}]}>{code?name_cn?code+'-'+name_cn:code+'-'+name_en:''}</Text>
+            <Text numberOfLines={1} style={[styles.text, {fontWeight: 'bold'}]}>{code}</Text>
           </View>
           <View>
-            <Text numberOfLines={1} style={[styles.text, {color: 'gray'}]}>量(24h):{vol_24h?NumUtils.formatNum(vol_24h):''}</Text>
+            <Text numberOfLines={1} style={[styles.text, {color: 'gray'}]}>{name_cn?name_cn:name_en}</Text>
           </View>
         </View>
         <View style={styles.rightView}>
           <View>
-            <Text numberOfLines={1} style={[styles.text,{fontWeight: 'bold',color: gains_pct_1d?gains_pct_1d*1>0?'rgb(223,100,115)':'rgb(65,158,40)':'gray'}]}>{currency}{price?(price*1).toFixed(2):''}</Text>
+            <Text numberOfLines={1} style={[styles.text,{fontSize:16,fontWeight: 'bold',color: gains_pct_1d?gains_pct_1d*1>0?'rgb(228,36,38)':'rgb(65,158,40)':'gray'}]}>{currency}{price?(price*1).toFixed(2):''}</Text>
           </View>
           <View>
-            <Text numberOfLines={1} style={[styles.text,{color: gains_pct_1d?gains_pct_1d*1>0?'rgb(223,100,115)':'rgb(65,158,40)':'gray'}]}>{gains_pct_1d?(gains_pct_1d*1).toFixed(2)+'%':''}</Text>
+            <Text numberOfLines={1} style={[styles.text, {fontSize:12,color: 'gray'}]}>量(24h):{vol_24h?NumUtils.formatNum(vol_24h):''}</Text>
           </View>
         </View>
-        <View style={styles.chart} onLayout={({nativeEvent}) => {
-          this.setState({
-            chartHeight: nativeEvent.layout.height,
-            chartWidth: nativeEvent.layout.width
-          })
-        }}>
-          {chartWidth > 0 && chartHeight > 0 ?
-            <Echarts option={option} width={chartWidth} height={chartHeight}/>
-            : null
-          }
-
+        <View>
+          <Text numberOfLines={1} style={[styles.text,styles.pct,{backgroundColor: gains_pct_1d?gains_pct_1d*1>0?'rgb(228,36,38)':'rgb(65,158,40)':'gray'}]}>{gains_pct_1d?(gains_pct_1d*1).toFixed(2)+'%':''}</Text>
         </View>
-      </View>
+        {/*<View style={styles.chart} onLayout={({nativeEvent}) => {*/}
+          {/*this.setState({*/}
+            {/*chartHeight: nativeEvent.layout.height,*/}
+            {/*chartWidth: nativeEvent.layout.width*/}
+          {/*})*/}
+        {/*}}>*/}
+          {/*{chartWidth > 0 && chartHeight > 0 ?*/}
+            {/*<Echarts option={option} width={chartWidth} height={chartHeight}/>*/}
+            {/*: null*/}
+          {/*}*/}
+        
+        {/*</View>*/}
+      </TouchableOpacity>
     )
   }
 }
@@ -155,18 +162,29 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   image: {
-    width: 30,
-    height: 30,
-    margin:5
+    width: 28,
+    height: 28,
+    margin:6
   },
   leftView: {
     marginRight: 5,
     justifyContent: 'center',
+    flex: 1,
   },
   rightView: {
-    flex: 1,
-    marginRight: 5,
+    minWidth:50,
+    marginRight: 15,
     justifyContent: 'center',
     alignItems: 'flex-end'
+  },
+  pct:{
+    paddingTop:4,
+    paddingBottom:4,
+    borderRadius:5,
+    marginRight:5,
+    color:'white',
+    minWidth:70,
+    fontWeight:'bold',
+    textAlign:'center'
   }
 })

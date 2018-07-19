@@ -1,70 +1,65 @@
 import React, { Component } from 'react';
 import {
-    View,
-    StyleSheet,
-    Text,
-    Image,
+  View,
+  StyleSheet,
+  Text,
+  Image,
   TouchableOpacity
 } from 'react-native';
 
-export  default class PairItem extends Component {
+export  default class SitePairItem extends Component {
   static defaultProps={
-    ticker:{
-      code: "1st_btc",
-      pair: '',
-      pct: "0.00",
-      price: "1.0726",
-      site: {
-        icon: "https://changjinglu.pro/uploads/image/a58/b608ca0bd632d4ccbcd85b9cb9167550_200x200.png",
-        name: "中币网",
-      },
-      site_id: "2",
-      syb: "¥",
-      update_time: "刚刚",
-      vol: "507",
-      vol_val: "543.48",
-      watching: false
-    }
-
+    ticker:null,
+    total:0,
+    time:0
   }
-
+  
   render() {
-    var {ticker:{code,site:{icon,name},price,vol,pct,update_time}}=this.props;
+    var {ticker:{pair_key,price,vol,update_time},total,time}=this.props;
     return (
       <TouchableOpacity style={styles.root}>
-        <View>
-          <Image  style={styles.img} source={{uri: icon}}/>
-        </View>
-
         <View style={styles.leftView}>
           <View >
-            <Text style={[styles.text,{fontWeight:'bold'}]}>{code.replace('_','/').toUpperCase()}</Text>
+            <Text style={[styles.text,{fontWeight:'bold'}]}>{pair_key.replace('_','/').toUpperCase()}</Text>
           </View>
           <View >
-            <Text style={[styles.text]}>{name.trim()}</Text>
+            <Text style={[styles.text]}>额(24h):{(vol*price).toFixed(2)}</Text>
           </View>
         </View>
-
+        
         <View style={styles.centerView}>
           <View >
-            <Text style={[styles.text]}>￥{price.trim()}</Text>
+            <Text style={[styles.text]}>￥{(price*1).toFixed(2)}</Text>
           </View>
           <View >
-            <Text numberOfLines={1} style={[styles.text,styles.grayText]}>量(24h):{vol.trim()}</Text>
+            <Text numberOfLines={1} style={[styles.text,styles.grayText]}>量(24h):{(vol*1).toFixed(0)}</Text>
           </View>
         </View>
-
+        
         <View style={styles.rightView}>
           <Text style={[styles.text,styles.grayText]}>占比</Text>
-          <Text style={[styles.text,styles.grayText]}>{(pct*1).toFixed(2)}%</Text>
+          <Text style={[styles.text,styles.grayText]}>{(vol*price/total).toFixed(2)}%</Text>
         </View>
         <View style={styles.timeView}>
-          <Text style={[styles.text,styles.grayText]}>{update_time.trim()}</Text>
+          <Text style={[styles.text,styles.grayText]}>{this._formartDate(time,update_time)}</Text>
         </View>
       </TouchableOpacity>
     );
   }
-
+  _formartDate(time,update_time){
+    var s = time-update_time;
+    var str='';
+    if(s<60){
+      str = s+'秒前';
+    }
+    if(s>60){
+      str = parseInt(s/60)+'分钟前';
+    }
+    if(s>3600){
+      str = parseInt(s/3600)+'小时前';
+    }
+    return str;
+  }
 }
 
 const styles=StyleSheet.create({
@@ -80,7 +75,7 @@ const styles=StyleSheet.create({
     width:30,
     height:30,
     marginRight:5,
-
+    
   },
   text:{
     overflow:'hidden',
@@ -111,4 +106,4 @@ const styles=StyleSheet.create({
     justifyContent:'center',
     alignItems:'center'
   }
-});  
+});

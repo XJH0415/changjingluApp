@@ -33,9 +33,9 @@ export default class CoinItem extends Component {
           <View style={{minWidth: 20}}><Text style={styles.text}>{no}</Text></View>
           <Image style={styles.image} source={{uri: icon}}/>
           <View style={{minWidth: 80,flex: 1}}><Text numberOfLines={1}
-            style={[styles.text, {textAlign: 'left'}]}>{coin.code+'-'+(coin.name_cn?coin.name_cn:'')+'('+(coin.name_en?coin.name_en:'')+')'}</Text></View>
+            style={[styles.text, {textAlign: 'left'}]}>{code+'-'+(name_cn?name_cn:name_en?name_en:'')}</Text></View>
           <View><Text style={[styles.text, {textAlign: 'right'}]}>{price}</Text></View>
-          <View style={{minWidth: 80}}><Text style={[styles.text, {textAlign: 'right'}]}>{text}</Text></View>
+          <View style={{minWidth: 100}}><Text style={[styles.text, {textAlign: 'right'}]}>{text}</Text></View>
         </View>
       </TouchableOpacity>
     )

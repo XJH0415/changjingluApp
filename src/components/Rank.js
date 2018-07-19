@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerSort: {
-    minWidth: 80,
+    minWidth: 100,
     marginLeft: 5,
     marginRight: 5
   },

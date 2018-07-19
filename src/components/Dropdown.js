@@ -14,6 +14,14 @@ export default class Dropdown extends Component {
         sort: 'vd'
       },
       {
+        text: '涨幅降序',
+        sort: 'ga'
+      },
+      {
+        text: '涨幅升序',
+        sort: 'gd'
+      },
+      {
         text: '流通量降序',
         sort: 'ca'
       },
@@ -29,14 +37,7 @@ export default class Dropdown extends Component {
         text: '交易量升序',
         sort: 'td'
       },
-      {
-        text: '涨幅降序',
-        sort: 'ga'
-      },
-      {
-        text: '涨幅升序',
-        sort: 'gd'
-      },
+      
     ],
     style: {},
     onPress: () => {
@@ -103,7 +104,6 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderTopWidth: 0,
-    maxHeight:200
   },
   btn: {
     height: 40,

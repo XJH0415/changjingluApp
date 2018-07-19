@@ -1,0 +1,18 @@
+首次上传
+    Ios:
+
+    pushy uploadIpa <your-package.ipa>
+
+    Android：
+
+    pushy uploadApk android/app/release/app-release.apk
+
+后续更新
+
+    pushy bundle --platform <ios|android>
+
+    根据提示填写相应信息
+
+
+教程：https://github.com/reactnativecn/react-native-pushy/blob/master/docs/guide3.md
+

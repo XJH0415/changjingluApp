@@ -10,6 +10,7 @@ import {
   TextInput,
   Platform
 } from 'react-native';
+import API from '../lib/dataApi';
 
 export default class Header extends Component {
   static defaultProps = {
@@ -21,13 +22,15 @@ export default class Header extends Component {
     },
     onSearch: (text) => {
     },
-    searchType: 'coin',
-    showSearch: true
+    searchType: 'coins',
+    showSearch: true,
   }
   state = {
     headerSelect: this.props.headerSelect,
     searchIng: false,
-    titles: this.props.titles
+    titles: this.props.titles,
+    coins:[],
+    sites:[]
   }
 
   componentWillReceiveProps(props) {
@@ -36,10 +39,33 @@ export default class Header extends Component {
       titles: props.titles,
     })
   }
-
+  _search(q){
+    var that=this;
+    var {searchType}=this.props;
+    console.log(q)
+    if(!q){
+      that.setState({
+        sites:[],
+        coins:[]
+      })
+    }else {
+      API.search(q,(data)=>{
+        if(searchType==='coins'){
+          that.setState({
+            coins:data.coins
+          })
+        }else if(searchType==='sites'){
+          that.setState({
+            sites:data.sites
+          })
+        }
+      })
+    }
+  }
+  
   render() {
     var {titles, searchType, onBtn, onSearch, showSearch} = this.props;
-    var {searchIng} = this.state;
+    var {searchIng,coins,sites} = this.state;
     return (
       <View style={styles.root}>
         <View style={styles.header}>
@@ -66,7 +92,9 @@ export default class Header extends Component {
               showSearch ?
                 <TouchableOpacity onPress={() => {
                   this.setState({
-                    searchIng: !searchIng
+                    searchIng: !searchIng,
+                    coins:[],
+                    sites:[]
                   });
                   onBtn(1)
                 }}>
@@ -89,14 +117,15 @@ export default class Header extends Component {
                 multiline={false}
                 placeholder={searchType === 'coin' ? '请输入币名称' : searchType === 'new' ? '请输入资讯名称' : searchType === 'exchange' ? '请输入交易所名称' : ''}
                 selectionColor={'#75C1AF'}
-                onChangeText={(inputData) => this.inputValue = inputData}
-                onSubmitEditing={(event) => onSearch(event.nativeEvent.text)}
+                onChangeText={(inputData) => {this.inputValue = inputData;this._search(inputData)}}
+                onSubmitEditing={(event) => this._search(event.nativeEvent.text)}
                 underlineColorAndroid='transparent'
                 style={styles.searchInput}/>
               {
                 Platform.OS === 'android' ?
                   <TouchableOpacity onPress={() => {
                     this.refs.input.clear();
+                    this._search('');
                   }}>
                     <Image style={styles.searchClear} source={require('../resource/clear.png')}/>
                   </TouchableOpacity>
@@ -104,7 +133,7 @@ export default class Header extends Component {
                   null
               }
               <TouchableOpacity onPress={() => {
-                onSearch(this.inputValue);
+                this._search(this.inputValue);
               }}>
                 <Text style={styles.searchBtn}>搜索</Text>
               </TouchableOpacity>
@@ -112,6 +141,27 @@ export default class Header extends Component {
             :
             null
         }
+        <View style={styles.searchView}>
+          {
+            coins.length>0&searchIng?
+              coins.map((item,index)=>(
+                <TouchableOpacity onPress={()=>{onSearch(searchType,item)}} style={styles.searchItem}>
+                  <Image style={styles.searchImage} source={{uri: item.icon_small}}/>
+                  <Text style={styles.searchText}>{item.name}</Text>
+                </TouchableOpacity>
+              ))
+              :
+              sites.length>0?
+                sites.map((item,index)=>(
+                  <TouchableOpacity onPress={()=>{onSearch(searchType,item)}} style={styles.searchItem}>
+                    <Image style={styles.searchImage} source={{uri: item.icon_small}}/>
+                    <Text style={styles.searchText}>{item.name}</Text>
+                  </TouchableOpacity>
+                ))
+                :null
+            
+          }
+        </View>
       </View>
     )
   }
@@ -223,5 +273,24 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     color: '#75C1AF'
+  },
+  searchView:{
+  
+  },
+  searchItem:{
+    height:40,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems: 'center',
+    backgroundColor:'white'
+  },
+  searchImage:{
+    height:20,
+    width:20,
+    margin:10
+  },
+  searchText:{
+    flex:1
   }
+  
 })
