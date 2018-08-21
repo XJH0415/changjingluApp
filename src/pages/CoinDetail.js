@@ -210,9 +210,8 @@ export default class CoinDetail extends Component {
               <View style={styles.newTop}>
                 <Text style={styles.newTopTitle}>专栏资讯</Text>
               </View>
-
               <FlatList
-                data={news}
+                data={news.slice(0,5)}
                 ItemSeparatorComponent={() => <Separator/>}
                 renderItem={({item, index}) => (
                   <TouchableOpacity onPress={()=>{
