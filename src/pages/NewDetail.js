@@ -119,7 +119,7 @@ export default class NewDetail extends Component {
                     </script>
                     </body>
                     </html>`
-            }}
+            , baseUrl: ''}}
             style={{flex: 1}}
             bounces={false}
             scalesPageToFit={false}

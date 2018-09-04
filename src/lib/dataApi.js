@@ -237,8 +237,57 @@ export default class DataApi {
         console.log(responseJson)
       });
   }
-  
-  
+
+  /**
+   * 登录
+   * @param phone 手机号
+   * @param password 密码
+   * @param callback 返回 true/false
+   */
+  static getLogin(phone, password, callback) {
+    getData(
+      URL + '/app/login',
+      bodyToString({
+        phone: phone,
+        password: password,
+      }),
+      callback);
+  }
+
+  /**
+   * 发送手机短信
+   * @param phone
+   * @param callback
+   */
+  static getSms(phone, callback) {
+    getData(
+      URL + '/app/sms',
+      bodyToString({
+        phone: phone,
+      }),
+      callback);
+  }
+
+  /**
+   * 注册
+   * @param name
+   * @param phone
+   * @param password
+   * @param sms
+   * @param callback
+   */
+  static getRegister(name, phone, password, sms, callback) {
+    getData(
+      URL + '/app/signup',
+      bodyToString({
+        name: name,
+        phone: phone,
+        password: password,
+        sms: sms,
+      }),
+      callback);
+  }
+
 }
 
 function bodyToString(body) {
