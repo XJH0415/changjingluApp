@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import Header from '../components/Header';
 import UserIndex from '../components/UserIndex';
+import LocalStorage from '../utils/LocalStorage';
 
 export default class User extends Component {
   state = {
@@ -70,8 +71,8 @@ export default class User extends Component {
                       this.setState({
                         isLogin:true,
                         info:JSON.parse(e.nativeEvent.data)
-                      })
-                      
+                      });
+                      LocalStorage.Save(JSON.parse(e.nativeEvent.data));
                     }
                   }}
                 />
