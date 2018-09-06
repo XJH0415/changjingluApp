@@ -84,7 +84,10 @@ export default class User extends Component {
         <Header titles={['我的长颈鹿']} showSearch={false}/>
         {
           isLogin ?
-            <UserIndex data={info}/>
+            <UserIndex
+              data={info}
+              goback={()=>{ this.setState({isLogin:false})}}
+            />
             :
             <View style={styles.root} onLayout={(event) => {
               let {x, y, width, height} = event.nativeEvent.layout;

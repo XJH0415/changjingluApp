@@ -27,6 +27,7 @@ export default class UserIndex extends Component {
     var {data} = this.state;
     return(
       <View style={styles.roots}>
+
         <View style={styles.nameImg}>
           <Image
             style={styles.image}
@@ -36,59 +37,48 @@ export default class UserIndex extends Component {
             <Text style={styles.name}>{data.name}</Text>
             <Text style={styles.phone}>{data.phone.substring(0,3)+'******'+data.phone.substring(9)}</Text>
           </View>
-        </View>
-
-        <View style={styles.total}>
-          <View style={styles.totalImgTxt}>
-            <Image style={styles.totalImg} source={require('../resource/integral.png')}/>
-            <Text style={styles.totalText}>我的积分 </Text>
-          </View>
-          <View>
-            <Text style={styles.totalNum}>{data.points} 积分</Text>
+          <View style={styles.totalNumView}>
+            <Text style={styles.totalNum}>{data.points}CJL</Text>
           </View>
         </View>
 
         <View style={styles.total}>
           <View style={styles.totalImgTxt}>
-            <Image style={styles.totalImg} source={require('../resource/GuessRecord.jpg')}/>
             <Text style={styles.totalText}>猜涨跌记录 </Text>
           </View>
           <View>
-            <Image style={styles.totalArrow} source={require('../resource/Arrow.jpg')}/>
+            <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
         </View>
 
         <View style={styles.total}>
           <View style={styles.totalImgTxt}>
-            <Image style={styles.totalImg} source={require('../resource/integral.png')}/>
             <Text style={styles.totalText}>积分记录 </Text>
           </View>
           <View>
-            <Image style={styles.totalArrow} source={require('../resource/Arrow.jpg')}/>
+            <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
         </View>
 
         <View style={styles.total}>
           <View style={styles.totalImgTxt}>
-            <Image style={styles.totalImg} source={require('../resource/Collection.jpg')}/>
             <Text style={styles.totalText}>收藏的文章 </Text>
           </View>
           <View>
-            <Image style={styles.totalArrow} source={require('../resource/Arrow.jpg')}/>
+            <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
         </View>
 
         <View style={styles.total}>
           <View style={styles.totalImgTxt}>
-            <Image style={styles.totalImg} source={require('../resource/ChangePassword.jpg')}/>
             <Text style={styles.totalText}>修改密码 </Text>
           </View>
           <View>
-            <Image style={styles.totalArrow} source={require('../resource/Arrow.jpg')}/>
+            <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
         </View>
 
-        <View style={styles.total}>
+        <View style={styles.gobackView}>
           <Text onPress={()=>{goback()}} style={styles.goBack}>退出登录</Text>
         </View>
       </View>
@@ -103,18 +93,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  goBack: {
-    width:deviceWidth,
-    color: 'blue',
-    fontSize: 15,
+  gobackView:{
+    height: 30,
+    marginTop: 20,
+    justifyContent:'center',
     alignItems: 'center',
   },
+  goBack: {
+    borderRadius: 8,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#4A90E2',
+    fontSize: 16,
+    color:'#ffffff',
+  },
   nameImg: {
-    height: 100,
+    height: 80,
     width: deviceWidth,
-    backgroundColor: '#96c2ff',
+    backgroundColor: '#e2f3ef',
     flexDirection: 'row',
-    padding: 20,
+    padding: 10,
   },
   image: {
     width: 60,
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
   },
   total: {
     marginTop: 5,
-    height: 30,
-    lineHeight:30,
+    marginLeft: 5,
+    height: 40,
     width: deviceWidth,
     backgroundColor: '#ffffff',
     flexDirection: 'row',
@@ -155,13 +155,16 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   totalText:{
-    fontSize: 20,
+    fontSize: 16,
+  },
+  totalNumView:{
+    flex:1,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
   totalNum: {
-    color: '#b1b1b1',
+    color: '#000000',
     fontSize: 15,
-    justifyContent: 'flex-end',
-    marginRight: 5,
   },
   totalArrow:{
     alignItems: 'flex-end',
