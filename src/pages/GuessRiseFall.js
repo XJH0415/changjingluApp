@@ -8,8 +8,10 @@ import {
   Dimensions,
   Button,
 } from 'react-native';
+import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import DateUtils from '../utils/DateUtils';
 import API from '../lib/dataApi';
+
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
@@ -28,33 +30,34 @@ export default class GuessRiseFall extends Component {
     return {
       headerTitle: headerTitle
     };
-
   };
+
+
   static defaultProps ={
-    data: {
-      bet:
-          { coin_bet_id: '3380',
+    data:
+      { bet:
+          { coin_bet_id: '3440',
             type: 'daily',
             coin_id: '1',
-            name: '比特币猜涨跌第63期',
-            seq: '63',
+            name: '比特币猜涨跌第64期',
+            seq: '64',
             base_price: '0',
             final_price: '0',
             final_details: null,
-            total_bets: '900',
-            bet_times: '14',
-            up_times: '9',
-            up_bets: '460',
-            down_times: '5',
-            down_bets: '440',
-            start_time: '1536116400',
-            freeze_time: '1536156000',
+            total_bets: '119',
+            bet_times: '6',
+            up_times: '2',
+            up_bets: '42',
+            down_times: '4',
+            down_bets: '77',
+            start_time: '1536202800',
+            freeze_time: '1536242400',
             freeze_details: null,
-            end_time: '1536199200',
+            end_time: '1536285600',
             bet_status: '1',
             status: '0',
             'bet_status.name': '下注中',
-            url: '/bet/3380' },
+            url: '/bet/3440' },
         coin:
           { coin_id: '1',
             code: 'BTC',
@@ -70,61 +73,47 @@ export default class GuessRiseFall extends Component {
             asset_platform: '',
             amount: '21000000',
             circulation: '17124875',
-            circulation_value_usd: '128801169415',
-            value_pct: '50.774968279639',
+            circulation_value_usd: '114985079965',
+            value_pct: '52.619003333208',
             value_order: '1',
-            price_usd: '7521.2910701553',
-            price_cny: '47628.575701759',
+            price_usd: '6714.5062352147',
+            price_cny: '42519.610734497',
             price_bet: '6398.8631775828',
             enable_bet: '1',
             bet_config: '[\r\n  {"site_id":2,"pair":"BTC/QC"},\r\n  {"site_id":3,"pair":"BTC/USDT"}\r\n]',
-            vol_24h: '1491769',
-            vol_24h_value_usd: '11220027003',
+            vol_24h: '2724031',
+            vol_24h_value_usd: '18290526220',
             vol_24h_order: '1',
             change_24h: '0.59028371132536',
             history: '',
             block_sites: '[{"url":"http://blockchain.info/"},{"url":"https://blockexplorer.com/"},{"url":"https://btc.com/"}]',
             ico_info: null,
-            last_update_time: '1536117421',
-            gains_pct_5m: '0.00000000206511',
-            gains_pct_1h: '0.00000000206511',
-            gains_pct_1d: '1.34493',
-            gains_pct_7d: '4.18076',
-            high_24h: '7521.2910701553',
-            low_24h: '7517.569876',
+            last_update_time: '1536213841',
+            gains_pct_5m: '0.00000000319693',
+            gains_pct_1h: '0.00000000319693',
+            gains_pct_1d: '-10.6825',
+            gains_pct_7d: '-5.58886',
+            high_24h: '6987.83279',
+            low_24h: '6714.506235',
             comment_stars: '83',
             comment_times: '19',
             status: '0',
             'icon.small': 'https://changjinglu.pro/uploads/image/996/76556ef0392f74257be6b42b13303ab2.png',
             icon: [Object],
-            url: '/b/bitcoin'
-          }
-      },
-    lastGuess:{
-      data1:{
-        name: 'gdj1',
-        riseFall: 'up',
-        record: '40',
-        time: '2018-09-05 17:20:14',
-      },
-      data2:{
-        name: 'gdj2',
-        riseFall: 'down',
-        record: '50',
-        time: '2018-09-05 15:20:14',
-      },
-      data3:{
-        name: 'gdj',
-        riseFall: 'up',
-        record: '40',
-        time: '2018-09-05 17:20:14',
-      }
-    }
+            url: '/b/bitcoin' } } ,
+
   }
 
-  state:{
+  state = {
     data: null,
     updateTime: null,
+    text: ''
+  }
+
+  onSelect(index, value){
+    this.setState({
+      text: `Selected index: ${index} , value: ${value}`
+    })
   }
 
   countDown(){
@@ -159,9 +148,8 @@ export default class GuessRiseFall extends Component {
   }
 
   componentWillMount() {
-    let that =this;
-    API.getGuessRF('3380',(data)=>{
-      that.setState({
+    API.getGuessRF('3440',(data)=>{
+      this.setState({
         data:data,
       })
     })
@@ -175,7 +163,7 @@ export default class GuessRiseFall extends Component {
     const { name, base_price, total_bets, bet_times, up_times, up_bets, down_times, down_bets, start_time, freeze_time, end_time, status  } = this.props.data.bet;
     const {code, name_cn,  } = this.props.data.coin;
     // this.countDown();
-    // var {updateTime } = this.state;
+    var {initItem, initId } = this.state;
     var bet_status = this.props.data.bet['bet_status.name'];
     var uri=this.props.data.coin['icon.small'];
     var up_betsWidth=(up_bets/total_bets)*100;
@@ -222,7 +210,22 @@ export default class GuessRiseFall extends Component {
         </View>
         <View style={styles.myGuess}>
           <Text style={styles.myGuess}>我要竞猜</Text>
-          <Text>按钮</Text>
+          <RadioGroup
+            onSelect = {(index, value) => this.onSelect(index, value)}
+            size={12}
+            color={'black'}
+            activeColor={'red'}
+            thickness={2}
+          >
+            <RadioButton value={'item1'} >
+              <Text>猜涨</Text>
+            </RadioButton>
+
+            <RadioButton value={'item2'} >
+              <Text>猜跌</Text>
+            </RadioButton>
+
+          </RadioGroup>
           <View style={styles.guessNum}>
             <TextInput
               style={styles.txtInput}
@@ -235,7 +238,6 @@ export default class GuessRiseFall extends Component {
         </View>
         <View>
           <Text>我的竞猜记录</Text>
-
         </View>
         <View>
           <Text style={styles.title1}>最近竞猜</Text>
@@ -333,5 +335,11 @@ const styles = StyleSheet.create({
     color:'#ffffff',
     fontSize: 16,
   },
-
+  radio:{
+    flexDirection:'row',
+    flexWrap:'wrap',
+    alignItems:'flex-start',
+    flex:1,
+    backgroundColor:'#ffffff',
+  },
 })
