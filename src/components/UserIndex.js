@@ -25,7 +25,6 @@ export default class UserIndex extends Component {
    
     var {goback, GuessRecord} =this.props;
     var {data} = this.state;
-    alert(JSON.stringify(data))
     return(
       <View style={styles.roots}>
         <View style={styles.nameImg}>

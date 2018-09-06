@@ -113,7 +113,8 @@ export default class GuessRiseFall extends Component {
   state = {
     msg: null,
     updateTime: null,
-    text: ''
+    text: '',
+    states: 1,
   }
 
   onSelect(index, value) {
@@ -366,7 +367,6 @@ const styles = StyleSheet.create({
   btn_gus: {
     width: 60,
     height: 40,
-    lineHeight: 40,
     textAlign: 'center',
     borderRadius: 8,
     backgroundColor: 'blue',

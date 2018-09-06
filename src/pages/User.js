@@ -18,18 +18,37 @@ export default class User extends Component {
   
   
   patchPostMessageFunction = function() {
-    var originalPostMessage = window.postMessage;
-    
-    var patchedPostMessage = function(message, targetOrigin, transfer) {
-      originalPostMessage(message, targetOrigin, transfer);
+    function awaitPostMessage() {
+      var isReactNativePostMessageReady = !!window.originalPostMessage;
+      var queue = [];
+      var currentPostMessageFn = function store(message) {
+        if (queue.length > 100) queue.shift();
+        queue.push(message);
+      };
+      if (!isReactNativePostMessageReady) {
+        var originalPostMessage = window.postMessage;
+        Object.defineProperty(window, 'postMessage', {
+          configurable: true,
+          enumerable: true,
+          get: function () {
+            return currentPostMessageFn;
+          },
+          set: function (fn) {
+            currentPostMessageFn = fn;
+            isReactNativePostMessageReady = true;
+            setTimeout(sendQueue, 0);
+          }
+        });
+        window.postMessage.toString = function () {
+          return String(originalPostMessage);
+        };
+      }
+
+      function sendQueue() {
+        while (queue.length > 0) window.postMessage(queue.shift());
+      }
     };
-    
-    patchedPostMessage.toString = function() {
-      return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
-    };
-    
-    window.postMessage = patchedPostMessage;
-    
+    awaitPostMessage();
     if(window.location['href']=='https://changjinglu.pro/signin'){
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
@@ -55,24 +74,25 @@ export default class User extends Component {
             }}>
               {width && height ?
                 <WebView
+                  ref={ref=>{
+                    this.webview=ref;
+                  }}
                   style={styles.root}
                   source={{uri: 'https://changjinglu.pro/signin?back=app&app=1'}}
                   scalesPageToFit={true}
-                  injectedJavaScript={this.renderView(width, height)}
+                  injectedJavaScript={this.renderView(width,height)}
                   injectJavaScript={(e)=>{
                     window.postMessage('111')
                   }}
                   scrollEnabled={false}
                   javaScriptEnabled={true}
-                  automaticallyAdjustContentInsets={false}
-                  bounces={false}
                   onMessage={(e)=>{
                     if(e.nativeEvent.data){
                       this.setState({
                         isLogin:true,
                         info:JSON.parse(e.nativeEvent.data)
+
                       });
-                      LocalStorage.Save(JSON.parse(e.nativeEvent.data));
                     }
                   }}
                 />
