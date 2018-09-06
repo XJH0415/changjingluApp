@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "bundle-android": "React-native bundle --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --platform android --assets-dest ./android/app/src/main/res/ --dev false",
-    "pushy":"pushy uploadApk android/app/release/app-release.apk"
+    "pushy": "pushy uploadApk android/app/release/app-release.apk"
   },
   "dependencies": {
     "babel-preset-react-native": "^4.0.0",
