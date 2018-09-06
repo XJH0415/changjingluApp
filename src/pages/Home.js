@@ -38,7 +38,7 @@ export default class Home extends Component {
       <View style={styles.root}>
         <Advert/>
         <Notice/>
-        <Text style={styles.goToGuess} onPress={()=>{navigate('GuessRiseFall',{})}}>进入猜涨跌</Text>
+        {/*<Text style={styles.goToGuess} onPress={()=>{navigate('GuessRiseFall',{})}}>进入猜涨跌</Text>*/}
         <FlatList style={{flex: 1}}
                   data={coins}
                   ItemSeparatorComponent={() => <Separator/>}
