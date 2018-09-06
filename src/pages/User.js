@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   WebView,
+  Platform
 } from 'react-native';
 import Header from '../components/Header';
 import UserIndex from '../components/UserIndex';
@@ -12,12 +13,12 @@ export default class User extends Component {
   state = {
     width: 0,
     height: 0,
-    isLogin:false,
-    info:null
+    isLogin: false,
+    info: null
   }
   
   
-  patchPostMessageFunction = function() {
+  patchPostMessageFunction = function () {
     function awaitPostMessage() {
       var isReactNativePostMessageReady = !!window.originalPostMessage;
       var queue = [];
@@ -43,26 +44,46 @@ export default class User extends Component {
           return String(originalPostMessage);
         };
       }
-
+      
       function sendQueue() {
         while (queue.length > 0) window.postMessage(queue.shift());
       }
     };
     awaitPostMessage();
-    if(window.location['href']=='https://changjinglu.pro/signin'){
+    if (window.location['href'] == 'https://changjinglu.pro/signin') {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
     }
     
   };
-  patchPostMessageJsCode = '(' + String(this.patchPostMessageFunction) + ')();';
+  
+  iospatchPostMessageFunction = function () {
+    var originalPostMessage = window.postMessage;
+    
+    var patchedPostMessage = function (message, targetOrigin, transfer) {
+      originalPostMessage(message, targetOrigin, transfer);
+    };
+    
+    patchedPostMessage.toString = function () {
+      return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
+    };
+    
+    window.postMessage = patchedPostMessage;
+    
+    if (window.location['href'] == 'https://changjinglu.pro/signin') {
+      var info = document.getElementById('info').innerHTML;
+      window.postMessage(info);
+    }
+  }
+  patchPostMessageJsCode = Platform.OS === 'android' ? '(' + String(this.patchPostMessageFunction) + ')();' : '(' + String(this.iospatchPostMessageFunction) + ')();';
+  
   render() {
-    var {width, height,isLogin,info} = this.state;
+    var {width, height, isLogin, info} = this.state;
     return (
       <View style={styles.root}>
         <Header titles={['我的长颈鹿']} showSearch={false}/>
         {
-          isLogin?
+          isLogin ?
             <UserIndex data={info}/>
             :
             <View style={styles.root} onLayout={(event) => {
@@ -74,24 +95,24 @@ export default class User extends Component {
             }}>
               {width && height ?
                 <WebView
-                  ref={ref=>{
-                    this.webview=ref;
+                  ref={ref => {
+                    this.webview = ref;
                   }}
                   style={styles.root}
                   source={{uri: 'https://changjinglu.pro/signin?back=app&app=1'}}
                   scalesPageToFit={true}
-                  injectedJavaScript={this.renderView(width,height)}
-                  injectJavaScript={(e)=>{
+                  injectedJavaScript={this.renderView(width, height)}
+                  injectJavaScript={(e) => {
                     window.postMessage('111')
                   }}
                   scrollEnabled={false}
                   javaScriptEnabled={true}
-                  onMessage={(e)=>{
-                    if(e.nativeEvent.data){
+                  onMessage={(e) => {
+                    if (e.nativeEvent.data) {
                       this.setState({
-                        isLogin:true,
-                        info:JSON.parse(e.nativeEvent.data)
-
+                        isLogin: true,
+                        info: JSON.parse(e.nativeEvent.data)
+                        
                       });
                     }
                   }}
@@ -100,11 +121,12 @@ export default class User extends Component {
               }
             </View>
         }
-        
-        
+      
+      
       </View>
     );
   }
+  
   renderView(width, height) {
     const heightPX = `${height || 400}px`;
     const widthPX = width ? `${width}px` : 'auto';
@@ -116,7 +138,7 @@ export default class User extends Component {
   }
   
   
-  createMeta(){
+  createMeta() {
     return `
  var oMeta = document.createElement('meta');
  oMeta.setAttribute('name',"viewport");
