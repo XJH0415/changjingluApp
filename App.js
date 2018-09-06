@@ -26,7 +26,9 @@ import coinDetailScreen from './src/pages/CoinDetail';
 import newDetailScreen from "./src/pages/NewDetail";
 import siteDetailScreen from './src/pages/SiteDetail';
 import commentScreen from "./src/pages/Comment";
-
+import GuessRiseFall from "./src/pages/GuessRiseFall";
+import Register from './src/components/Register';
+import Login from './src/components/Login';
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -51,8 +53,14 @@ const StackNavigator = createStackNavigator({
     screen:siteDetailScreen,
   },
   Comment:{
-    screen:commentScreen
-  }
+    screen:commentScreen,
+  },
+  GuessRiseFall:{
+    screen:GuessRiseFall,
+  },
+  Register:{
+    screen: Register,
+  },
 }, {
   headerMode:'screen',
   headerTransitionPreset:'fade-in-place',

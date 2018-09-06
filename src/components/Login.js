@@ -18,7 +18,7 @@ export default class Login extends Component {
     this._onChangePhone = this._onChangePhone.bind(this);
     this._onChangePassword = this._onChangePassword.bind(this);
   }
-  state = {
+  state= {
     phone:null,
     password:null,
     errors:null,
@@ -28,6 +28,7 @@ export default class Login extends Component {
     onRegisterPress: () => {},
     onLoginPress: () => {},
     type:'',
+    navigation:null
   }
 
   _onChangePhone(phone) {
@@ -50,7 +51,7 @@ export default class Login extends Component {
               errors:'用户名或密码错误'
             });
           }else {
-            LocalStorage.Deletes();
+            // LocalStorage.Deletes();
             LocalStorage.Save(data);
             onLoginPress(data);
           }
@@ -58,8 +59,8 @@ export default class Login extends Component {
   }
 
   render() {
-    var {onRegisterPress } =this.props;
-    var {errors, userMsg} =this.state;
+    const {navigate} = this.props.navigation;
+    var {errors} =this.state;
     return (
       <View style={styles.root}>
         <TouchableOpacity
@@ -102,9 +103,7 @@ export default class Login extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={()=>{
-              onRegisterPress();
-            }}
+            onPress={()=>{navigate('Register',{})}}
           >
             <Text
               style={styles.btText}>注册</Text>

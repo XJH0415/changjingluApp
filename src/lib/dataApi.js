@@ -287,7 +287,19 @@ export default class DataApi {
       }),
       callback);
   }
-
+  /**
+   * 根据id获取---猜涨跌
+   * @param id
+   * @param callback
+   */
+  static getGuessRF(id, callback) {
+    getData(
+      URL + '/app/viewBet',
+      bodyToString({
+        id: id,
+      }),
+      callback);
+  }
 }
 
 function bodyToString(body) {
