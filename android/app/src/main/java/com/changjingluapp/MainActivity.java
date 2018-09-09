@@ -1,7 +1,6 @@
 package com.changjingluapp;
 
 import com.facebook.react.ReactActivity;
-import com.imagepicker.ImagePickerPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -13,5 +12,4 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "changjingluApp";
     }
-    new ImagePickerPackage()
 }

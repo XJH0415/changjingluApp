@@ -3,8 +3,6 @@ package com.changjingluapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.bitgo.randombytes.RandomBytesPackage;
-import com.imagepicker.ImagePickerPackage;
 
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
@@ -34,8 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RandomBytesPackage(),
-            new ImagePickerPackage(),
             new UpdatePackage()
       );
     }

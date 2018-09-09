@@ -103,7 +103,6 @@ export default class UserIndex extends Component {
           </View>
         </TouchableOpacity>
 
-        <Text>{this.state.result}</Text>
 
         <View style={styles.gobackView}>
           <Text onPress={()=>{goback()}} style={styles.goBack}>退出登录</Text>

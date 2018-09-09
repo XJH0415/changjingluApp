@@ -150,9 +150,9 @@ export default class App extends Component {
   };
   componentDidMount(){
     NetInfo.addEventListener('change',function(reachability){
-     if(!reachability){
+      if(!reachability){
         Alert.alert('提示','当前网络连接已断开，为确保应用程序正常使用，请确保网络连接通畅！')
-     }
+      }
     });
     if(!__DEV__){
       this.checkUpdate(appKey);
@@ -163,7 +163,7 @@ export default class App extends Component {
   }
   render() {
     return (
-        <StackNavigator/>
+      <StackNavigator/>
     );
   }
 
