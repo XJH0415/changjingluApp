@@ -6,7 +6,7 @@ import {
   Platform
 } from 'react-native';
 import Header from '../components/Header';
-import UserIndex from '../components/UserIndex';
+import UserIndex from './UserIndex';
 import LocalStorage from '../utils/LocalStorage';
 
 export default class User extends Component {
@@ -49,12 +49,21 @@ export default class User extends Component {
         while (queue.length > 0) window.postMessage(queue.shift());
       }
     };
+
     awaitPostMessage();
-    if (window.location['href'] == 'https://changjinglu.pro/signin') {
+    if (window.location['href'] == 'https://changjinglu.pro/signin' ) {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
     }
-    
+
+    setTimeout(() =>{
+      if (document.getElementById('info')) {
+        var info = document.getElementById('info').innerHTML;
+        window.postMessage(info);
+      }
+    },5000)
+
+
   };
   
   iospatchPostMessageFunction = function () {
@@ -74,10 +83,12 @@ export default class User extends Component {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
     }
+
   }
   patchPostMessageJsCode = Platform.OS === 'android' ? '(' + String(this.patchPostMessageFunction) + ')();' : '(' + String(this.iospatchPostMessageFunction) + ')();';
   
   render() {
+    var navigation=this.props.navigation;
     var {width, height, isLogin, info} = this.state;
     return (
       <View style={styles.root}>
@@ -87,6 +98,7 @@ export default class User extends Component {
             <UserIndex
               data={info}
               goback={()=>{ this.setState({isLogin:false})}}
+              navigation={navigation}
             />
             :
             <View style={styles.root} onLayout={(event) => {
@@ -112,11 +124,12 @@ export default class User extends Component {
                   javaScriptEnabled={true}
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
+                      console.log(e.nativeEvent.data)
                       this.setState({
                         isLogin: true,
                         info: JSON.parse(e.nativeEvent.data)
-                        
                       });
+                      // LocalStorage.Save(e.nativeEvent.data);
                     }
                   }}
                 />

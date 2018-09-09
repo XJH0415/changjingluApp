@@ -287,6 +287,8 @@ export default class DataApi {
       }),
       callback);
   }
+
+
   /**
    * 根据id获取---猜涨跌
    * @param id
@@ -300,6 +302,137 @@ export default class DataApi {
       }),
       callback);
   }
+
+  /**
+   * 修改密码
+   * @param oldcode
+   * @param newcode
+   * @param callback
+   */
+  static getOnChangePassword(oldcode, newcode, callback) {
+    alert('1')
+    getData(
+      URL + '/password',
+      bodyToString({
+        oldcode: oldcode,
+        newcode: newcode
+      }),
+      callback);
+  }
+
+  /**
+   * 更换头像
+   * @param avatar
+   * @param callback
+   */
+  static getAvatar(avatar, callback) {
+    alert('1')
+    getData(
+      URL + '/avatar',
+      bodyToString({
+        avatar: avatar
+      }),
+      callback);
+  }
+
+  /**
+   * 积分记录
+   * @param page
+   * @returns {Promise<any> | Promise}异步
+   */
+  static getIntegralRecord(page) {
+    var url = URL + '/app/points';
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(page)
+      })
+        .then(response => response.json())
+        .then(result => resolve(result))
+        .catch(error => reject(error))
+    })
+  }
+
+  /**
+   * 猜涨跌记录
+   * @param page
+   * @returns {Promise<any> | Promise}
+   */
+  static getGuessRecord(page) {
+    var url = URL + '/app/bets';
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(page)
+      })
+        .then(response => response.json())
+        .then(result => resolve(result))
+        .catch(error => reject(error))
+    })
+  }
+
+  /**
+   * 收藏的文章
+   * @param page
+   * @returns {Promise<any> | Promise}
+   */
+  static getCollectionArticles(page) {
+    var url = URL + '/app/favArticle';
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(page)
+      })
+        .then(response => response.json())
+        .then(result => resolve(result))
+        .catch(error => reject(error))
+    })
+  }
+  // static getIntegralRecord(page, callback) {
+  //   var url = URL + '/app/points';
+  //   var key = null, body={};
+  //   if (!page) {
+  //     key = url;
+  //   }else{
+  //     key = url + '?' + page;
+  //     body= {
+  //       page:page
+  //     };
+  //   }
+  //   readData(key,callback,()=>{
+  //     fetch(url, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(body)
+  //     })
+  //       .then(response => response.json())
+  //       .then(responseJson => {
+  //         if (responseJson.no === 0) {
+  //           callback(responseJson.data);
+  //           save(key,responseJson.data)
+  //         } else {
+  //           console.log('msg:' + responseJson.msg);
+  //         }
+  //       })
+  //       .catch(error => console.error(error))
+  //   })
+  // }
+
 }
 
 function bodyToString(body) {
@@ -319,7 +452,12 @@ function bodyToString(body) {
 
 
 function getData(URL, bodyString, callback) {
-  var key = URL + '?' + bodyString;
+  var key = null;
+    if (!bodyString) {
+    key = URL;
+  }else{
+    key = URL + '?' + bodyString;
+  }
   readData(key,callback,()=>{
     fetch(URL,
       {
@@ -335,8 +473,10 @@ function getData(URL, bodyString, callback) {
           callback(responseJson.data);
           save(key,responseJson.data)
         } else {
-          Alert.alert('msg:' + responseJson.msg);
+          console.log('msg:' + responseJson.msg);
         }
+      }).catch((error) => {
+        console.error(error);
       });
   })
 }
@@ -345,6 +485,7 @@ function readData(key, callback, fetch) {
   AsyncStorage.getItem(key, (error, result) => {
     if (error) {
       console.log('read:' + error)
+      alert(error)
     }
     if(result){
       callback(JSON.parse(result));

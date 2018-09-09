@@ -11,11 +11,11 @@ var {
   width: deviceWidth
 } = Dimensions.get('window');
 const url='https://changjinglu.pro/signup?back=app&app=1';
-export default class SignUp extends Component {
+export default class MyNews extends Component {
   static navigationOptions = (options) => {
     var {navigation} = options;
     var data = null;
-    var headerTitle = '注册';
+    var headerTitle = '我的消息';
     if (navigation) {
       data = navigation.state.params.data
       if (data) {
@@ -25,26 +25,17 @@ export default class SignUp extends Component {
     return {
       headerTitle: headerTitle
     };
-
   };
 
   static defaultProps ={
-    goback :()=>{},
+
   }
 
   render() {
-    var {goback,  } =this.props;
     return (
       <View>
-        <Text>注册</Text>
-        <WebView
-          source={{uri: url}}
-          style={{flex: 1}}
-          bounces={false}
-          scalesPageToFit={false}
-          scrollEnabled={false}
-          automaticallyAdjustContentInsets={true}
-        />
+        <Text>消息</Text>
+
       </View>
 
     )

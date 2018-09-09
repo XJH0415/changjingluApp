@@ -34,79 +34,79 @@ export default class GuessRiseFall extends Component {
 
 
   static defaultProps = {
-    data:
-      {
-        bet:
-          {
-            coin_bet_id: '3440',
-            type: 'daily',
-            coin_id: '1',
-            name: '比特币猜涨跌第64期',
-            seq: '64',
-            base_price: '0',
-            final_price: '0',
-            final_details: null,
-            total_bets: '119',
-            bet_times: '6',
-            up_times: '2',
-            up_bets: '42',
-            down_times: '4',
-            down_bets: '77',
-            start_time: '1536202800',
-            freeze_time: '1536242400',
-            freeze_details: null,
-            end_time: '1536285600',
-            bet_status: '1',
-            status: '0',
-            'bet_status.name': '下注中',
-            url: '/bet/3440'
-          },
-        coin:
-          {
-            coin_id: '1',
-            code: 'BTC',
-            uri: 'bitcoin',
-            name_en: 'Bitcoin',
-            name_cn: '比特币',
-            icon_id: '1',
-            bind_currency_code: '',
-            description: '比特币（BitCoin）的概念最初由中本聪在2009年提出，根据中本聪的思路设计发布的开源软件以及建构其上的P2P网络。比特币是一种P2P形式的数字货币。点对点的传输意味着一个去中心化的支付系统。与大多数货币不同，比特币不依靠特定货币机构发行，它依据特定算法，通过大量的计算产生，比特币经济使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。P2P的去中心化特性与算法本身可以确保无法通过大量制造比特币来人为操控币值。基于密码学的设计可以使比特币只能被真实的拥有者转移或支付。这同样确保了货币所有权与流通交易的匿名性。比特币与其他虚拟货币最大的不同，是其总数量非常有限，具有极强的稀缺性。该货币系统曾在4年内只有不超过1050万个，之后的总数量将被永久限制在2100万个。',
-            whitepaper: 'http://www.bitcoin.org/bitcoin.pdf',
-            publish_time: '1225468800',
-            is_asset: '0',
-            asset_platform: '',
-            amount: '21000000',
-            circulation: '17124875',
-            circulation_value_usd: '114985079965',
-            value_pct: '52.619003333208',
-            value_order: '1',
-            price_usd: '6714.5062352147',
-            price_cny: '42519.610734497',
-            price_bet: '6398.8631775828',
-            enable_bet: '1',
-            bet_config: '[\r\n  {"site_id":2,"pair":"BTC/QC"},\r\n  {"site_id":3,"pair":"BTC/USDT"}\r\n]',
-            vol_24h: '2724031',
-            vol_24h_value_usd: '18290526220',
-            vol_24h_order: '1',
-            change_24h: '0.59028371132536',
-            history: '',
-            block_sites: '[{"url":"http://blockchain.info/"},{"url":"https://blockexplorer.com/"},{"url":"https://btc.com/"}]',
-            ico_info: null,
-            last_update_time: '1536213841',
-            gains_pct_5m: '0.00000000319693',
-            gains_pct_1h: '0.00000000319693',
-            gains_pct_1d: '-10.6825',
-            gains_pct_7d: '-5.58886',
-            high_24h: '6987.83279',
-            low_24h: '6714.506235',
-            comment_stars: '83',
-            comment_times: '19',
-            status: '0',
-            'icon.small': 'https://changjinglu.pro/uploads/image/996/76556ef0392f74257be6b42b13303ab2.png',
-            icon: [Object],
-            url: '/b/bitcoin'
-          }
-      },
+    // data:
+    //   {
+    //     bet:
+    //       {
+    //         coin_bet_id: '3440',
+    //         type: 'daily',
+    //         coin_id: '1',
+    //         name: '比特币猜涨跌第64期',
+    //         seq: '64',
+    //         base_price: '0',
+    //         final_price: '0',
+    //         final_details: null,
+    //         total_bets: '119',
+    //         bet_times: '6',
+    //         up_times: '2',
+    //         up_bets: '42',
+    //         down_times: '4',
+    //         down_bets: '77',
+    //         start_time: '1536202800',
+    //         freeze_time: '1536242400',
+    //         freeze_details: null,
+    //         end_time: '1536285600',
+    //         bet_status: '1',
+    //         status: '0',
+    //         'bet_status.name': '下注中',
+    //         url: '/bet/3440'
+    //       },
+    //     coin:
+    //       {
+    //         coin_id: '1',
+    //         code: 'BTC',
+    //         uri: 'bitcoin',
+    //         name_en: 'Bitcoin',
+    //         name_cn: '比特币',
+    //         icon_id: '1',
+    //         bind_currency_code: '',
+    //         description: '比特币（BitCoin）的概念最初由中本聪在2009年提出，根据中本聪的思路设计发布的开源软件以及建构其上的P2P网络。比特币是一种P2P形式的数字货币。点对点的传输意味着一个去中心化的支付系统。与大多数货币不同，比特币不依靠特定货币机构发行，它依据特定算法，通过大量的计算产生，比特币经济使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。P2P的去中心化特性与算法本身可以确保无法通过大量制造比特币来人为操控币值。基于密码学的设计可以使比特币只能被真实的拥有者转移或支付。这同样确保了货币所有权与流通交易的匿名性。比特币与其他虚拟货币最大的不同，是其总数量非常有限，具有极强的稀缺性。该货币系统曾在4年内只有不超过1050万个，之后的总数量将被永久限制在2100万个。',
+    //         whitepaper: 'http://www.bitcoin.org/bitcoin.pdf',
+    //         publish_time: '1225468800',
+    //         is_asset: '0',
+    //         asset_platform: '',
+    //         amount: '21000000',
+    //         circulation: '17124875',
+    //         circulation_value_usd: '114985079965',
+    //         value_pct: '52.619003333208',
+    //         value_order: '1',
+    //         price_usd: '6714.5062352147',
+    //         price_cny: '42519.610734497',
+    //         price_bet: '6398.8631775828',
+    //         enable_bet: '1',
+    //         bet_config: '[\r\n  {"site_id":2,"pair":"BTC/QC"},\r\n  {"site_id":3,"pair":"BTC/USDT"}\r\n]',
+    //         vol_24h: '2724031',
+    //         vol_24h_value_usd: '18290526220',
+    //         vol_24h_order: '1',
+    //         change_24h: '0.59028371132536',
+    //         history: '',
+    //         block_sites: '[{"url":"http://blockchain.info/"},{"url":"https://blockexplorer.com/"},{"url":"https://btc.com/"}]',
+    //         ico_info: null,
+    //         last_update_time: '1536213841',
+    //         gains_pct_5m: '0.00000000319693',
+    //         gains_pct_1h: '0.00000000319693',
+    //         gains_pct_1d: '-10.6825',
+    //         gains_pct_7d: '-5.58886',
+    //         high_24h: '6987.83279',
+    //         low_24h: '6714.506235',
+    //         comment_stars: '83',
+    //         comment_times: '19',
+    //         status: '0',
+    //         'icon.small': 'https://changjinglu.pro/uploads/image/996/76556ef0392f74257be6b42b13303ab2.png',
+    //         icon: [Object],
+    //         url: '/b/bitcoin'
+    //       }
+    //   },
 
   }
 
@@ -197,7 +197,7 @@ export default class GuessRiseFall extends Component {
           <Text>开始时间：{DateUtils.Formart(new Date(start_time * 1000), 'yyyy-MM-dd hh:mm:ss')}</Text>
           <View style={{flexDirection: 'row'}}>
             <Text>锁仓时间：{DateUtils.Formart(new Date(freeze_time * 1000), 'yyyy-MM-dd hh:mm:ss')} </Text>
-            <Text> 剩余时间:{updateTime}</Text>
+            <Text> 剩余:{updateTime}</Text>
           </View>
           <Text>开盘时间：{DateUtils.Formart(new Date(end_time * 1000), 'yyyy-MM-dd hh:mm:ss')}</Text>
         </View>

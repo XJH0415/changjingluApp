@@ -27,8 +27,11 @@ import newDetailScreen from "./src/pages/NewDetail";
 import siteDetailScreen from './src/pages/SiteDetail';
 import commentScreen from "./src/pages/Comment";
 import GuessRiseFall from "./src/pages/GuessRiseFall";
-import Register from './src/components/Register';
-import Login from './src/components/Login';
+import MyNews from "./src/pages/MyNews";
+import GuessRecord from "./src/pages/GuessRecord";
+import IntegralRecord from "./src/pages/IntegralRecord";
+import CollectionArticles from "./src/pages/CollectionArticles";
+import ChangePassword from "./src/pages/ChangePassword";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -58,8 +61,20 @@ const StackNavigator = createStackNavigator({
   GuessRiseFall:{
     screen:GuessRiseFall,
   },
-  Register:{
-    screen: Register,
+  MyNews:{
+    screen: MyNews,
+  },
+  GuessRecord:{
+    screen: GuessRecord,
+  },
+  IntegralRecord:{
+    screen: IntegralRecord,
+  },
+  CollectionArticles:{
+    screen: CollectionArticles,
+  },
+  ChangePassword:{
+    screen: ChangePassword,
   },
 }, {
   headerMode:'screen',
