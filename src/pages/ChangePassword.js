@@ -7,28 +7,26 @@ import {
   Text,
   View,
   TextInput,
-  WebView,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import API from "../lib/dataApi";
+
+const deviceWidth = Dimensions.get('window').width;      //设备的宽度
+const deviceHeight = Dimensions.get('window').height;    //设备的高度
 
 export default class ChangePassword extends Component {
   static navigationOptions = (options) => {
     var {navigation} = options;
     var data = null;
-    var headerTitle = '收藏的文章';
-    if (navigation) {
-      data = navigation.state.params.data
-      if (data) {
-        headerTitle = data.title
-      }
-    }
+    var headerTitle = '修改密码';
     return {
       headerTitle: headerTitle
     };
   };
 
   state={
-    error:null,
+    error:'密码长度6-18位任意数字字符',
     oldPassword:null,
     newPassword:null,
     reNewPassword:null,
@@ -51,25 +49,21 @@ export default class ChangePassword extends Component {
   }
 
   _onChangePassword(){
-    var {oldPassword, newPassword, reNewPassword} = this.state;
+    var {oldPassword, newPassword, reNewPassword, error} = this.state;
+    if ( !oldPassword || !newPassword || !reNewPassword) {
+      this.setState({error : '密码不能为空'});
+      return;
+    }
     var that = this;
-    API.getOnChangePassword(oldPassword, newPassword, (data)=>{
-      alert('2')
-      alert(data)
-      // that.setState({
-      //
-      // })
-    })
+    API.getOnChangePassword(oldPassword, newPassword);
   }
 
   render() {
     var {error, } = this.state;
     return (
-      <View>
-        <Text>修改密码</Text>
-        <Text>密码长度6-18位任意数字字符</Text>
+      <View style={styles.root}>
         <View style={styles.inputView}>
-          <View
+          <TouchableOpacity
             style={styles.inputBox}>
             <TextInput
               style={styles.input}
@@ -81,8 +75,8 @@ export default class ChangePassword extends Component {
               selectionColor={'#000000'}
               onChangeText={(oldPassword)=>{this._oldPassword(oldPassword)}}
             />
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.inputBox}>
             <TextInput
               style={styles.input}
@@ -94,8 +88,8 @@ export default class ChangePassword extends Component {
               selectionColor={'#000000'}
               onChangeText={(newPassword)=>{this._newPassword(newPassword)}}
             />
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.inputBox}>
             <TextInput
               style={styles.input}
@@ -107,12 +101,12 @@ export default class ChangePassword extends Component {
               selectionColor={'#000000'}
               onChangeText={(reNewPassword)=>{this._reNewPassword(reNewPassword)}}
             />
-          </View>
-          <Text style={styles.error}>{error}</Text>
+          </TouchableOpacity>
+          <Text style={[styles.error,error === '密码长度6-18位任意数字字符' ? {color:'#b1b1b1'}:{}]}>{error}</Text>
         </View>
-        <View>
-          <Text onPress={()=>{this._onChangePassword()}}>确认修改</Text>
-        </View>
+        <TouchableOpacity style={styles.row}>
+          <Text style={styles.changeRow} onPress={()=>{this._onChangePassword()} }>确认修改</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -120,8 +114,14 @@ export default class ChangePassword extends Component {
 
 
 const styles = StyleSheet.create({
+  root:{
+    flex:1,
+  },
   inputView:{
-
+    width: deviceWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
   },
   input: {
     width: 280,
@@ -147,5 +147,22 @@ const styles = StyleSheet.create({
     height: 30,
     color: '#ff0000',
     fontSize: 16,
+    marginTop: 5,
   },
+  row:{
+    height: 50,
+    width: deviceWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  changeRow:{
+    borderRadius: 8,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#4A90E2',
+    fontSize: 16,
+    color: '#ffffff',
+  }
 })

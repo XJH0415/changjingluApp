@@ -15,4 +15,3 @@
 
 
 教程：https://github.com/reactnativecn/react-native-pushy/blob/master/docs/guide3.md
-

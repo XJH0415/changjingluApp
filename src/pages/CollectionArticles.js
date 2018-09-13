@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
+  TouchableOpacity,
   FlatList,
 } from 'react-native';
 import API from "../lib/dataApi";
@@ -17,12 +17,6 @@ export default class CollectionArticles extends Component {
     var {navigation} = options;
     var data = null;
     var headerTitle = '收藏的文章';
-    if (navigation) {
-      data = navigation.state.params.data
-      if (data) {
-        headerTitle = data.title
-      }
-    }
     return {
       headerTitle: headerTitle
     };
@@ -45,7 +39,7 @@ export default class CollectionArticles extends Component {
     return (
       <View style={styles.titles}>
         <Text style={styles.titleTxt}>文章标题</Text>
-        <Text style={styles.titleTxt}>时间</Text>
+        {/*<Text style={styles.titleTxt}>时间</Text>*/}
       </View>
     )
   }
@@ -58,18 +52,18 @@ export default class CollectionArticles extends Component {
       )
     }else{
       records = data.data.records;
+      console.log(records)
       return (
         <View style={styles.root}>
-          <Text style={styles.points}>收藏的文章</Text>
           <FlatList
             ref='FlatList'
             data={records}
             ListHeaderComponent = {this._listHeaderComponent.bind(this)}
             renderItem = {({item,index}) =>
-              <View style={styles.records}>
-                <Text>{item.article.title}</Text>
-                <Text>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
-              </View>
+              <TouchableOpacity style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
+                <Text style={styles.articleTitle}>{item.article.title}</Text>
+                {/*<Text>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>*/}
+              </TouchableOpacity>
             }
             keyExtractor={(item,index)=>{}}
             refreshing={true}
@@ -92,12 +86,22 @@ const styles = StyleSheet.create({
   titles:{
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   titleTxt:{
-
+    marginLeft: 10,
+    marginRight: 10,
+    fontSize: 20,
+  },
+  articleTitle:{
+    fontSize: 16,
+    color:'#000',
   },
   records:{
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+    height:30,
   },
 })

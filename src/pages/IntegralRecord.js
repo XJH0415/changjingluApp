@@ -17,39 +17,39 @@ export default class IntegralRecord extends Component {
     var {navigation} = options;
     var data = null;
     var headerTitle = '积分记录';
-    if (navigation) {
-      data = navigation.state.params.data
-      if (data) {
-        headerTitle = data.title
-      }
-    }
     return {
       headerTitle: headerTitle
     };
   };
 
   state ={
-    data: null
+    page: 1,
+    data:null,
+    isRefresh:false,// 下拉刷新
+    isLoadMore:false,// 加载更多
   }
 
   componentDidMount(){
     let that = this;
-    API.getIntegralRecord(null)
-      .then(result => that.setState({data: result}))
+    var {page,datas} = this.state;
+    API.getIntegralRecord(page)
+      .then(result =>that.setState({data: result}))
       .catch(error => console.error(error))
   }
+
 
   _listHeaderComponent(){
     return (
       <View style={styles.titles}>
         <Text style={styles.titleTxt}>时间</Text>
         <Text style={styles.titleTxt}>事由</Text>
-        <Text style={styles.titleTxt}>CJL</Text>
+        <Text style={styles.titleTxt}>CJL积分</Text>
       </View>
     )
   }
 
   render() {
+    var {page,datas} = this.state;
     var  data = this.props.navigation.state.params.data;
     var da = this.state.data;
     var records= [];
@@ -66,15 +66,19 @@ export default class IntegralRecord extends Component {
             ref='FlatList'
             data={records}
             ListHeaderComponent = {this._listHeaderComponent.bind(this)}
+
+            // onRefresh={() => this._onRefresh()}
+            // refreshing={this.state.isRefresh}
+
+            keyExtractor={(item,index)=>{}}
             renderItem = {({item,index}) =>
-              <View style={styles.records}>
-                <Text>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
-                <Text>{item.type === 'bet_win' ? '猜涨跌获胜' : '猜涨跌下注'}</Text>
-                <Text>{item.type === 'bet_win' ? item.points : '-'+item.points}</Text>
+              <View style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
+                <Text style={styles.recTxt}>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
+                <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? '猜涨跌获胜' : '猜涨跌下注'}</Text>
+                <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? item.points : '-'+item.points}</Text>
               </View>
             }
-            keyExtractor={(item,index)=>{}}
-            refreshing={true}
+
           />
         </View>
       )
@@ -87,19 +91,29 @@ const styles = StyleSheet.create({
   root:{
     flex:1,
   },
-  point:{
+  points:{
     marginTop: 10,
-    fontSize: 16,
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   titles:{
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   titleTxt:{
+    fontSize: 18,
 
   },
   records:{
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    marginBottom:5,
   },
+  rec:{
+    marginRight: 50,
+  },
+  recTxt:{
+    fontSize: 16,
+  }
 })

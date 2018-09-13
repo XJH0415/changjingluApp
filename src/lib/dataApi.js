@@ -307,33 +307,60 @@ export default class DataApi {
    * 修改密码
    * @param oldcode
    * @param newcode
-   * @param callback
    */
-  static getOnChangePassword(oldcode, newcode, callback) {
-    alert('1')
-    getData(
-      URL + '/password',
-      bodyToString({
-        oldcode: oldcode,
-        newcode: newcode
-      }),
-      callback);
+  static getOnChangePassword(oldcode, newcode) {
+    let formData = new FormData();
+    formData.append("oldcode", oldcode);
+    formData.append("newcode", newcode);
+    formData.append("newcode2", newcode);
+    console.log('formData', formData);
+    //'oldcode='+oldcode+'&newcode='+newcode+'newcode2='+newcode
+    fetch(URL + '/password',{
+      method:'POST',
+      headers:{
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        "Content-Type": "multipart/form-data;charset=utf-8"
+      },
+      body: formData
+    })
+    // .then((response) => response.json())
+      .then((responseData)=>{
+        !responseData.url.indexOf('error') ? alert('修改成功') : alert('修改失败')
+        console.log('responseData=', responseData);
+      })
+      .catch((error)=>{
+        console.error('error=', error)
+      });
   }
 
   /**
    * 更换头像
-   * @param avatar
-   * @param callback
    */
-  static getAvatar(avatar, callback) {
-    alert('1')
-    getData(
-      URL + '/avatar',
-      bodyToString({
-        avatar: avatar
-      }),
-      callback);
+  static getUploadImage(uri, name){
+    console.log('uri', uri);
+    let formData = new FormData();
+    let file = { uri: uri, type: 'multipart/form-data', name: name};
+    formData.append("avatar", file);
+    console.log('formData', formData);
+    fetch(URL + '/avatar',{
+      method:'POST',
+      headers:{
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Content-Type':'multipart/form-data',
+      },
+      body:formData,
+    })
+    // .then((response) => response.json())
+      .then((responseData)=>{
+        alert('文件上传成功!');
+        console.log('responseData=', responseData);
+      })
+      .catch((error)=>{
+        console.error('error=', error)
+      });
   }
+
+
 
   /**
    * 积分记录
@@ -400,38 +427,6 @@ export default class DataApi {
         .catch(error => reject(error))
     })
   }
-  // static getIntegralRecord(page, callback) {
-  //   var url = URL + '/app/points';
-  //   var key = null, body={};
-  //   if (!page) {
-  //     key = url;
-  //   }else{
-  //     key = url + '?' + page;
-  //     body= {
-  //       page:page
-  //     };
-  //   }
-  //   readData(key,callback,()=>{
-  //     fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(body)
-  //     })
-  //       .then(response => response.json())
-  //       .then(responseJson => {
-  //         if (responseJson.no === 0) {
-  //           callback(responseJson.data);
-  //           save(key,responseJson.data)
-  //         } else {
-  //           console.log('msg:' + responseJson.msg);
-  //         }
-  //       })
-  //       .catch(error => console.error(error))
-  //   })
-  // }
 
 }
 
@@ -501,3 +496,4 @@ function save(key, value) {
     }
   })
 }
+

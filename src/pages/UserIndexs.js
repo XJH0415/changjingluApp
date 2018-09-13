@@ -3,31 +3,90 @@ import {StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, AsyncStorag
 import LocalStorage from "../utils/LocalStorage";
 import GuessRecord from "./GuessRecord";
 import IntegralRecord from "./IntegralRecord";
+import ImagePicker from 'react-native-image-picker';
+
+import API from '../lib/dataApi'
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
 
-export default class UserIndex extends Component {
-  static defaultProps ={
-    goback :()=>{},
-    GuessRecord:()=>{},
+export default class UserIndexs extends Component {
+  static defaultProps = {
+    goback: () => {
+    },
+    GuessRecord: () => {
+    },
     data: null,
-    navigation:null,
-  }
-  state={
-    data:this.props.data,
-    result: null,
+    navigation: null,
+
   }
 
-  componentWillReceiveProps(nextProps){
+  state = {
+    data: this.props.data,
+    result: null,
+    oldAvatar : this.props.data.avatar,
+    avatarSource : this.props.data.avatar,
+  }
+
+  selectPhotoTapped() {
+    const options = {
+      title: '选择图片',
+      cancelButtonTitle: '取消',
+      takePhotoButtonTitle: '拍照',
+      chooseFromLibraryButtonTitle: '选择照片',
+      cameraType: 'back',
+      mediaType: 'photo',
+      videoQuality: 'high',
+      durationLimit: 10,
+      maxWidth: 300,
+      maxHeight: 300,
+      quality: 0.8,
+      angle: 0,
+      allowsEditing: false,
+      noData: false,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      var that = this;
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = response.uri ;
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        that.setState({
+          avatarSource: source
+        });
+
+        var {data} = this.state;
+
+        API.getUploadImage(source, response.fileName);
+      }
+    });
+  }
+
+
+
+  componentWillReceiveProps(nextProps) {
     this.read();
     this.setState({
-      data:nextProps.data,
+      data: nextProps.data,
     })
   }
 
-  read(){
-    AsyncStorage.getItem('object',(error,result)=>{
+  read() {
+    AsyncStorage.getItem('object', (error, result) => {
       if (!error) {
         this.setState({
           result: result,
@@ -38,17 +97,19 @@ export default class UserIndex extends Component {
 
   render() {
     var {navigate} = this.props.navigation;
-    var {goback, GuessRecord} =this.props;
-    var {data} = this.state;
-    return(
+    var {goback, GuessRecord} = this.props;
+    var {data, avatarSource} = this.state;
+    return (
       <View style={styles.roots}>
 
         <View style={styles.nameImg}>
-          <Image
-            style={styles.image}
-            source={{uri: data.avatar}}
+          <TouchableOpacity onPress={()=>{this.selectPhotoTapped()}}>
+            <Image
+              style={styles.image}
+              source={{uri: avatarSource}}
+            />
+          </TouchableOpacity>
 
-          />
           <View style={styles.namePhone}>
             <Text style={styles.name}>{data.name}</Text>
             <Text style={styles.phone}>{data.phone}</Text>
@@ -58,16 +119,20 @@ export default class UserIndex extends Component {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.total} onPress={()=>{navigate('MyNews',{data:data})}}>
+        <TouchableOpacity style={styles.total} onPress={() => {
+          navigate('MyNews', {data: data})
+        }}>
           <View style={styles.totalImgTxt}>
-            <Text style={styles.totalText} >我的消息 </Text>
+            <Text style={styles.totalText}>我的消息 </Text>
           </View>
           <View>
             <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.total} onPress={()=>{navigate('GuessRecord',{data:data})}}>
+        <TouchableOpacity style={styles.total} onPress={() => {
+          navigate('GuessRecord', {data: data})
+        }}>
           <View style={styles.totalImgTxt}>
             <Text style={styles.totalText}>猜涨跌记录 </Text>
           </View>
@@ -76,7 +141,9 @@ export default class UserIndex extends Component {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.total} onPress={()=>{navigate('IntegralRecord',{data:data})}}>
+        <TouchableOpacity style={styles.total} onPress={() => {
+          navigate('IntegralRecord', {data: data})
+        }}>
           <View style={styles.totalImgTxt}>
             <Text style={styles.totalText}>积分记录 </Text>
           </View>
@@ -85,7 +152,9 @@ export default class UserIndex extends Component {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.total} onPress={()=>{navigate('CollectionArticles',{data:data})}}>
+        <TouchableOpacity style={styles.total} onPress={() => {
+          navigate('CollectionArticles', {data: data})
+        }}>
           <View style={styles.totalImgTxt}>
             <Text style={styles.totalText}>收藏的文章 </Text>
           </View>
@@ -94,7 +163,9 @@ export default class UserIndex extends Component {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.total} onPress={()=>{navigate('ChangePassword',{data:data})}}>
+        <TouchableOpacity style={styles.total} onPress={() => {
+          navigate('ChangePassword', {data: data})
+        }}>
           <View style={styles.totalImgTxt}>
             <Text style={styles.totalText}>修改密码 </Text>
           </View>
@@ -105,7 +176,9 @@ export default class UserIndex extends Component {
 
 
         <View style={styles.gobackView}>
-          <Text onPress={()=>{goback()}} style={styles.goBack}>退出登录</Text>
+          <Text onPress={() => {
+            goback()
+          }} style={styles.goBack}>退出登录</Text>
         </View>
       </View>
     )
@@ -113,16 +186,15 @@ export default class UserIndex extends Component {
 }
 
 
-
 const styles = StyleSheet.create({
   roots: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  gobackView:{
+  gobackView: {
     height: 30,
     marginTop: 20,
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   goBack: {
@@ -133,7 +205,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     backgroundColor: '#4A90E2',
     fontSize: 16,
-    color:'#ffffff',
+    color: '#ffffff',
   },
   nameImg: {
     height: 80,
@@ -141,6 +213,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e2f3ef',
     flexDirection: 'row',
     padding: 10,
+    marginBottom:30,
   },
   image: {
     width: 60,
@@ -148,12 +221,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   namePhone: {
-    marginLeft:10,
+    marginLeft: 10,
     justifyContent: 'space-around',
   },
   name: {
     fontSize: 20,
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   phone: {
     fontSize: 15,
@@ -177,22 +250,21 @@ const styles = StyleSheet.create({
   totalImg: {
     width: 20,
     height: 20,
-    marginRight:5,
+    marginRight: 5,
     marginLeft: 10,
   },
-  totalText:{
+  totalText: {
     fontSize: 16,
   },
-  totalNumView:{
-    flex:1,
+  totalNumView: {
+    flex: 1,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
   },
   totalNum: {
-    color: '#000000',
     fontSize: 15,
   },
-  totalArrow:{
+  totalArrow: {
     alignItems: 'flex-end',
     marginRight: 10,
     width: 20,

@@ -6,7 +6,7 @@ import {
   Platform
 } from 'react-native';
 import Header from '../components/Header';
-import UserIndex from './UserIndex';
+import UserIndexs from './UserIndexs';
 import LocalStorage from '../utils/LocalStorage';
 
 export default class User extends Component {
@@ -51,17 +51,17 @@ export default class User extends Component {
     };
 
     awaitPostMessage();
+
     if (window.location['href'] == 'https://changjinglu.pro/signin' ) {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
     }
 
-    setTimeout(() =>{
-      if (document.getElementById('info')) {
-        var info = document.getElementById('info').innerHTML;
-        window.postMessage(info);
-      }
-    },5000)
+    if (window.location['href'] == 'https://changjinglu.pro/signup' ) {
+      var info = document.getElementById('info').innerHTML;
+      window.postMessage(info);
+    }
+
 
 
   };
@@ -95,7 +95,7 @@ export default class User extends Component {
         <Header titles={['我的长颈鹿']} showSearch={false}/>
         {
           isLogin ?
-            <UserIndex
+            <UserIndexs
               data={info}
               goback={()=>{ this.setState({isLogin:false})}}
               navigation={navigation}
