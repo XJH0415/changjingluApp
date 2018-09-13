@@ -1,16 +1,29 @@
-/**
- * 积分记录
- */
 import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  ScrollView,
 } from 'react-native';
-import API from '../lib/dataApi';
+import RefreshList from '../components/RefreshList';
+import API from "../lib/dataApi";
 import DateUtils from '../utils/DateUtils'
+
+class RecordsItem extends Component{
+  static defaultProps ={
+    item:{},
+    index:0,
+  }
+  render(){
+    var {item, index} = this.props;
+    return(
+      <View style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
+        <Text style={styles.recTxt}>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
+        <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? '猜涨跌获胜' : '猜涨跌下注'}</Text>
+        <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? item.points : '-'+item.points}</Text>
+      </View>
+    )
+  }
+}
 
 export default class IntegralRecord extends Component {
   static navigationOptions = (options) => {
@@ -22,68 +35,41 @@ export default class IntegralRecord extends Component {
     };
   };
 
-  state ={
-    page: 1,
-    data:null,
-    isRefresh:false,// 下拉刷新
-    isLoadMore:false,// 加载更多
-  }
-
-  componentDidMount(){
-    let that = this;
-    var {page,datas} = this.state;
-    API.getIntegralRecord(page)
-      .then(result =>that.setState({data: result}))
-      .catch(error => console.error(error))
-  }
-
-
-  _listHeaderComponent(){
+  render() {
+    var  data = this.props.navigation.state.params.data;
     return (
-      <View style={styles.titles}>
-        <Text style={styles.titleTxt}>时间</Text>
-        <Text style={styles.titleTxt}>事由</Text>
-        <Text style={styles.titleTxt}>CJL积分</Text>
+      <View style={styles.root}>
+        <Text style={styles.points}>我的积分：{data.points}CJL</Text>
+        <View style={styles.titles}>
+          <Text style={styles.titleTxt}>时间</Text>
+          <Text style={styles.titleTxt}>事由</Text>
+          <Text style={styles.titleTxt}>CJL积分</Text>
+        </View>
+        <RefreshList
+          sort={'news'}
+          getList={(page, sort, callback) => {
+            this.getList(page, sort, callback)
+          }}
+          renderItem={(item, index) => {
+            return (<RecordsItem item={item} index={index}/>)
+          }}
+        />
       </View>
     )
   }
 
-  render() {
-    var {page,datas} = this.state;
-    var  data = this.props.navigation.state.params.data;
-    var da = this.state.data;
-    var records= [];
-    if(!da || !da.data || !records){
-      return(
-        <Text>Loading... </Text>
-      )
-    }else{
-      records= da.data.records;
-      return (
-        <View style={styles.root}>
-          <Text style={styles.points}>我的积分：{data.points}CJL</Text>
-          <FlatList
-            ref='FlatList'
-            data={records}
-            ListHeaderComponent = {this._listHeaderComponent.bind(this)}
-
-            // onRefresh={() => this._onRefresh()}
-            // refreshing={this.state.isRefresh}
-
-            keyExtractor={(item,index)=>{}}
-            renderItem = {({item,index}) =>
-              <View style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
-                <Text style={styles.recTxt}>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
-                <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? '猜涨跌获胜' : '猜涨跌下注'}</Text>
-                <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? item.points : '-'+item.points}</Text>
-              </View>
-            }
-
-          />
-        </View>
-      )
-    }
+  getList(page, sort, callback){
+    API.getIntegralRecord(page)
+      .then(result =>{
+        let da={};
+        da.pages = Math.ceil(result.data.total/result.data.size);
+        da.sort = sort;
+        da.list = result.data.records;
+        callback(da);
+      })
+      .catch(error => console.error(error))
   }
+
 }
 
 

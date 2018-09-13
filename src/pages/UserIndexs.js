@@ -119,16 +119,16 @@ export default class UserIndexs extends Component {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.total} onPress={() => {
+        {/*<TouchableOpacity style={styles.total} onPress={() => {
           navigate('MyNews', {data: data})
         }}>
           <View style={styles.totalImgTxt}>
-            <Text style={styles.totalText}>我的消息 </Text>
+            <Text style={styles.totalText}>测试页面 </Text>
           </View>
           <View>
             <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
 
         <TouchableOpacity style={styles.total} onPress={() => {
           navigate('GuessRecord', {data: data})

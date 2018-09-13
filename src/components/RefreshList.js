@@ -81,9 +81,17 @@ export default class RefreshList extends Component {
     setTimeout(() => {
       if(that.isGetingData)return;
       that.isGetingData=true;
+      if (!that.data[sort]) {
+        that.data[sort]={}
+      }
+      if (!that.data[sort].page){
+        that.data[sort].page=0;
+      }
       getList(page, sort,(data) => {
         that.isGetingData=false;
-        var {sort, list} = data;
+        var {sort, list, pages} = data;
+        console.log(page)
+        console.log(that.data[sort].page)
         if (page === 1 || page - that.data[sort].page === 1) {
           if (page === 1) {//当page为1时，清空旧数据
             that.data[sort]?that.data[sort].lists = []:that.data[sort]={lists:[],page:0};

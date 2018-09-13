@@ -38,8 +38,7 @@ export default class CollectionArticles extends Component {
   _listHeaderComponent(){
     return (
       <View style={styles.titles}>
-        <Text style={styles.titleTxt}>文章标题</Text>
-        {/*<Text style={styles.titleTxt}>时间</Text>*/}
+        <Text style={styles.titleTxt}>搜索框</Text>
       </View>
     )
   }
@@ -52,7 +51,7 @@ export default class CollectionArticles extends Component {
       )
     }else{
       records = data.data.records;
-      console.log(records)
+      console.log(data)
       return (
         <View style={styles.root}>
           <FlatList
@@ -60,9 +59,12 @@ export default class CollectionArticles extends Component {
             data={records}
             ListHeaderComponent = {this._listHeaderComponent.bind(this)}
             renderItem = {({item,index}) =>
-              <TouchableOpacity style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
-                <Text style={styles.articleTitle}>{item.article.title}</Text>
-                {/*<Text>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>*/}
+              <TouchableOpacity
+                style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
+                <Text
+                  style={styles.articleTitle}
+                  numberOfLines={1}
+                >{item.article.title}</Text>
               </TouchableOpacity>
             }
             keyExtractor={(item,index)=>{}}
@@ -79,10 +81,6 @@ const styles = StyleSheet.create({
   root:{
     flex:1,
   },
-  point:{
-    marginTop: 10,
-    fontSize: 16,
-  },
   titles:{
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -91,11 +89,12 @@ const styles = StyleSheet.create({
   titleTxt:{
     marginLeft: 10,
     marginRight: 10,
-    fontSize: 20,
+    fontSize: 16,
   },
   articleTitle:{
-    fontSize: 16,
     color:'#000',
+    marginLeft: 10,
+    marginRight: 10,
   },
   records:{
     flexDirection: 'row',
@@ -103,5 +102,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     height:30,
+
   },
 })
