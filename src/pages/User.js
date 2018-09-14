@@ -45,24 +45,25 @@ export default class User extends Component {
           return String(originalPostMessage);
         };
       }
-      
+
       function sendQueue() {
         while (queue.length > 0) window.postMessage(queue.shift());
       }
     };
 
     awaitPostMessage();
-
     if (window.location['href'] == 'https://changjinglu.pro/signin' ) {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
+      return;
     }
-
-    if (window.location['href'] == 'https://changjinglu.pro/signup?back=app&app=1' ) {
-      var info = document.getElementById('info').innerHTML;
-      window.postMessage(info);
-    }
-
+    setInterval(()=>{
+      var Element = document.getElementById('info')
+      if(!!Element){
+        window.postMessage(Element.innerHTML);
+        return;
+      }
+    },1000)
 
 
   };
@@ -79,12 +80,16 @@ export default class User extends Component {
     };
     
     window.postMessage = patchedPostMessage;
-    
     if (window.location['href'] == 'https://changjinglu.pro/signin') {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
     }
-
+    setInterval(()=>{
+      var Element = document.getElementById('info')
+      if(!!Element){
+        window.postMessage(Element.innerHTML);
+      }
+    },1000)
   }
   patchPostMessageJsCode = Platform.OS === 'android' ? '(' + String(this.patchPostMessageFunction) + ')();' : '(' + String(this.iospatchPostMessageFunction) + ')();';
   
@@ -118,9 +123,6 @@ export default class User extends Component {
                   source={{uri: 'https://changjinglu.pro/signin?back=app&app=1'}}
                   scalesPageToFit={true}
                   injectedJavaScript={this.renderView(width, height)}
-                  injectJavaScript={(e) => {
-                    window.postMessage('111')
-                  }}
                   scrollEnabled={false}
                   javaScriptEnabled={true}
                   onMessage={(e) => {
