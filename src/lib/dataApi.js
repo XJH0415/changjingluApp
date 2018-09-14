@@ -253,15 +253,7 @@ export default class DataApi {
       }),
       callback);
   }
-  /**
-   * 登出
-   */
-  static getLogOut(callback) {
-    getData(
-      URL + '/app/logout',
-      bodyToString({}),
-      callback);
-  }
+
   /**
    * 发送手机短信
    * @param phone
@@ -312,11 +304,29 @@ export default class DataApi {
   }
 
   /**
+   * 登出
+   * @param callback
+   */
+  static logOut() {
+    fetch(URL+'/app/logout', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: {}
+    })
+      .then(response => response.json())
+      .then(result => resolve(result))
+  }
+
+
+  /**
    * 修改密码
    * @param oldcode
    * @param newcode
    */
-  static getOnChangePassword(oldcode, newcode) {
+  static changePassword(oldcode, newcode) {
     let formData = new FormData();
     formData.append("oldcode", oldcode);
     formData.append("newcode", newcode);
@@ -344,7 +354,7 @@ export default class DataApi {
   /**
    * 更换头像
    */
-  static getUploadImage(uri, name){
+  static uploadImage(uri, name){
     console.log('uri', uri);
     let formData = new FormData();
     let file = { uri: uri, type: 'multipart/form-data', name: name};
@@ -436,6 +446,18 @@ export default class DataApi {
     })
   }
 
+  static SaveMsg(key,obj){
+    save(key,obj);
+  }
+
+  static getMsg(key,callback){
+    readData(key, callback,()=>{});
+  }
+
+  static removeMsg(key,callback){
+    removeData(key, callback,()=>{});
+  }
+
 }
 
 function bodyToString(body) {
@@ -501,6 +523,16 @@ function save(key, value) {
   AsyncStorage.setItem(key, JSON.stringify(value), (error) => {
     if (error) {
       console.log('save:' + error)
+    }
+  })
+}
+
+function removeData(key, callback) {
+  AsyncStorage.removeItem(key, (error) => {
+    if (error) {
+      console.log('remove:' + error)
+    }else {
+      callback(true)
     }
   })
 }

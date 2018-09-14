@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   WebView,
-  Platform
+  Platform, AsyncStorage
 } from 'react-native';
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
@@ -11,6 +11,7 @@ import LocalStorage from '../utils/LocalStorage';
 import API from '../lib/dataApi';
 
 export default class User extends Component {
+
   state = {
     width: 0,
     height: 0,
@@ -94,12 +95,16 @@ export default class User extends Component {
   }
   patchPostMessageJsCode = Platform.OS === 'android' ? '(' + String(this.patchPostMessageFunction) + ')();' : '(' + String(this.iospatchPostMessageFunction) + ')();';
 
-  componentDidMount(){
+  componentDidMount() {
     let that = this;
-    console.log(LocalStorage.Read())
-    // that.setState({
-    //   isLogin: true
-    // })
+    API.getMsg('userMsg',(info)=>{
+      if (info){
+        that.setState({
+          info: info,
+          isLogin: true,
+        })
+      }
+    })
   }
 
   render() {
@@ -113,10 +118,8 @@ export default class User extends Component {
             <UserIndexs
               data={info}
               goback={()=>{
-                API.getLogOut((result)=>{
-                  console.log(result)
-                });
-                LocalStorage.Deletes();
+                API.logOut(()=>{});
+                API.removeMsg('userMsg',()=>{});
                 this.setState({isLogin:false});
               }}
               navigation={navigation}
@@ -142,12 +145,12 @@ export default class User extends Component {
                   javaScriptEnabled={true}
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
-                      console.log(e.nativeEvent.data)
+                      console.log(e.nativeEvent.data);
+                      API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
                       this.setState({
                         isLogin: true,
                         info: JSON.parse(e.nativeEvent.data)
                       });
-                      LocalStorage.Save(JSON.parse(e.nativeEvent.data));
                     }
                   }}
                 />

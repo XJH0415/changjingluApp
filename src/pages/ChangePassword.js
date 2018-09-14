@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Dimensions,
+  Dimensions, AsyncStorage,
 } from 'react-native';
 import API from "../lib/dataApi";
 
@@ -55,7 +55,7 @@ export default class ChangePassword extends Component {
       return;
     }
     var that = this;
-    API.getOnChangePassword(oldPassword, newPassword);
+    API.changePassword(oldPassword, newPassword);
   }
 
   render() {

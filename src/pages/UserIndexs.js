@@ -72,35 +72,23 @@ export default class UserIndexs extends Component {
 
         var {data} = this.state;
 
-        API.getUploadImage(source, response.fileName);
+        API.uploadImage(source, response.fileName);
       }
     });
   }
 
 
-
   componentWillReceiveProps(nextProps) {
-    this.read();
     this.setState({
       data: nextProps.data,
     })
   }
 
-  read() {
-    AsyncStorage.getItem('object', (error, result) => {
-      if (!result) {
-        this.setState({
-          result: result,
-        });
-      }
-    })
-  };
-
   render() {
     var {navigate} = this.props.navigation;
     var {goback, GuessRecord} = this.props;
     var {data, avatarSource, result} = this.state;
-    console.log(result)
+    console.log('result:'+result)
     return (
       <View style={styles.roots}>
 
@@ -199,7 +187,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   goBack: {
-    borderWidth: 1,
     borderRadius: 8,
     paddingTop: 12,
     paddingBottom: 12,
