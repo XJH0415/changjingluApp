@@ -55,7 +55,7 @@ export default class NewDetail extends Component {
     var data =navigation ? navigation.state.params.data : null
     var {comment}=this.state;
     var {title, summary, add_time, views, content} = data;
-    var name = data.author && data.author.name ? data.author.name : data.columnist.name;
+    var name = data.author && data.author.name ? data.author.name : data.columnist&&data.columnist.name ? data.columnist.name : data.poster.name;
     return (
       <ScrollView style={styles.root}>
         <View style={styles.header}>

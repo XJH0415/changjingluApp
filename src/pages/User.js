@@ -103,7 +103,11 @@ export default class User extends Component {
           isLogin ?
             <UserIndexs
               data={info}
-              goback={()=>{ this.setState({isLogin:false})}}
+              goback={()=>{
+                API.getLogOut();
+                LocalStorage.Deletes();
+                this.setState({isLogin:false});
+              }}
               navigation={navigation}
             />
             :

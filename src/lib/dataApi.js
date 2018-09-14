@@ -253,7 +253,15 @@ export default class DataApi {
       }),
       callback);
   }
-
+  /**
+   * 登出
+   */
+  static getLogOut() {
+    getData(
+      URL + '/app/logout',
+      bodyToString({}),
+      callback);
+  }
   /**
    * 发送手机短信
    * @param phone

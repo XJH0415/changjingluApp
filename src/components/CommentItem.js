@@ -4,14 +4,18 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
 } from 'react-native';
+
+const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 
 export default class CommentItem extends Component {
   static defaultProps = {
     record: {}
   }
-  
+
   _renderStar(star) {
     var attr = [];
     for (var i = 0; i < 5; i++) {
@@ -24,11 +28,21 @@ export default class CommentItem extends Component {
     return attr;
   }
 
+  state={
+    reply: false,
+  }
+
   _ReplyBtn(){
+    var {reply} = this.state;
+    var that = this;
+    reply === false ? that.setState({reply: true}) : that.setState({reply: false})
+  }
+  _onReplyInput(){
 
   }
 
   render() {
+    var {reply} = this.state;
     var {add_time, content, dislikes, likes, stars, tips, replies, user: {name, avatar}} = this.props.record;
     avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
     return (
@@ -37,14 +51,15 @@ export default class CommentItem extends Component {
           <View style={styles.titleView}>
             <Image style={styles.image} source={{uri: avatar}}/>
             <Text style={[styles.nameText,{flex:1}]}>{name}</Text>
-            <View style={styles.star}>
-              {this._renderStar(stars === 0 ? 0 : stars).map((item, index) => {
-                return item;
-              })}
-            </View>
             <TouchableOpacity
-              onPress={this._ReplyBtn}
+              onPress={()=>{this._ReplyBtn()}}
+              style={{flexDirection: 'row'}}
             >
+              <View style={styles.star}>
+                {this._renderStar(stars === 0 ? 0 : stars).map((item, index) => {
+                  return item;
+                })}
+              </View>
               <Text style={styles.btnText}>回复</Text>
             </TouchableOpacity>
           </View>
@@ -71,6 +86,24 @@ export default class CommentItem extends Component {
             })
           }
         </View>
+        {
+          reply === true ?
+            <View style={styles.replyBtn}>
+              <TextInput
+                style={styles.replyInput}
+                autoCapitalize='none'
+                placeholderTextColor={'#888888'}
+                placeholder={'请输入回复内容'}
+                selectionColor={'rgb(65,158,40)'}
+                onChangeText={()=>{this._onReplyInput()}}
+              />
+              <TouchableOpacity style={styles.replyBtnTxt}>
+                <Text>回复</Text>
+              </TouchableOpacity>
+            </View>
+            :
+            <View />
+        }
       </View>
     )
   }
@@ -81,7 +114,7 @@ const styles=StyleSheet.create({
     padding:5
   },
   topView:{
-  
+
   },
   titleView:{
     flexDirection:'row',
@@ -146,7 +179,18 @@ const styles=StyleSheet.create({
   replieText:{
     color:'black',
     flex:1,
-  }
-  
-  
+  },
+  replyBtn:{
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  replyInput:{
+    marginLeft: 35,
+    flex: 1,
+  },
+  replyBtnTxt:{
+    marginRight: 5,
+  },
 })
