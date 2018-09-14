@@ -88,7 +88,7 @@ export default class UserIndexs extends Component {
 
   read() {
     AsyncStorage.getItem('object', (error, result) => {
-      if (!error) {
+      if (!result) {
         this.setState({
           result: result,
         });
@@ -99,7 +99,8 @@ export default class UserIndexs extends Component {
   render() {
     var {navigate} = this.props.navigation;
     var {goback, GuessRecord} = this.props;
-    var {data, avatarSource} = this.state;
+    var {data, avatarSource, result} = this.state;
+    console.log(result)
     return (
       <View style={styles.roots}>
 
@@ -176,11 +177,11 @@ export default class UserIndexs extends Component {
         </TouchableOpacity>
 
 
-        <View style={styles.gobackView}>
-          <Text onPress={() => {
-            goback()
-          }} style={styles.goBack}>退出登录</Text>
-        </View>
+        <TouchableOpacity style={styles.gobackView} onPress={() => {goback()}}>
+          <View style={styles.goBack}>
+            <Text style={styles.gobackTxt}>退出登录</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -193,18 +194,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   gobackView: {
-    height: 30,
     marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   goBack: {
+    borderWidth: 1,
     borderRadius: 8,
     paddingTop: 12,
     paddingBottom: 12,
     paddingLeft: 20,
     paddingRight: 20,
     backgroundColor: '#4A90E2',
+  },
+  gobackTxt:{
     fontSize: 16,
     color: '#ffffff',
   },

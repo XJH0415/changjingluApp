@@ -8,6 +8,7 @@ import {
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import LocalStorage from '../utils/LocalStorage';
+import API from '../lib/dataApi';
 
 export default class User extends Component {
   state = {
@@ -52,7 +53,7 @@ export default class User extends Component {
     };
 
     awaitPostMessage();
-    if (window.location['href'] == 'https://changjinglu.pro/signin' ) {
+    if (window.location['href'] == 'https://changjinglu.pro/app/me' ) {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
       return;
@@ -80,7 +81,7 @@ export default class User extends Component {
     };
     
     window.postMessage = patchedPostMessage;
-    if (window.location['href'] == 'https://changjinglu.pro/signin') {
+    if (window.location['href'] == 'https://changjinglu.pro/app/me') {
       var info = document.getElementById('info').innerHTML;
       window.postMessage(info);
     }
@@ -92,7 +93,15 @@ export default class User extends Component {
     },1000)
   }
   patchPostMessageJsCode = Platform.OS === 'android' ? '(' + String(this.patchPostMessageFunction) + ')();' : '(' + String(this.iospatchPostMessageFunction) + ')();';
-  
+
+  componentDidMount(){
+    let that = this;
+    console.log(LocalStorage.Read())
+    // that.setState({
+    //   isLogin: true
+    // })
+  }
+
   render() {
     var navigation=this.props.navigation;
     var {width, height, isLogin, info} = this.state;
@@ -104,7 +113,9 @@ export default class User extends Component {
             <UserIndexs
               data={info}
               goback={()=>{
-                API.getLogOut();
+                API.getLogOut((result)=>{
+                  console.log(result)
+                });
                 LocalStorage.Deletes();
                 this.setState({isLogin:false});
               }}
@@ -136,7 +147,7 @@ export default class User extends Component {
                         isLogin: true,
                         info: JSON.parse(e.nativeEvent.data)
                       });
-                      LocalStorage.Save(e.nativeEvent.data);
+                      LocalStorage.Save(JSON.parse(e.nativeEvent.data));
                     }
                   }}
                 />

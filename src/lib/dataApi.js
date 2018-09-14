@@ -256,7 +256,7 @@ export default class DataApi {
   /**
    * 登出
    */
-  static getLogOut() {
+  static getLogOut(callback) {
     getData(
       URL + '/app/logout',
       bodyToString({}),
