@@ -23,7 +23,11 @@ export default class CommentItem extends Component {
     }
     return attr;
   }
-  
+
+  _ReplyBtn(){
+
+  }
+
   render() {
     var {add_time, content, dislikes, likes, stars, tips, replies, user: {name, avatar}} = this.props.record;
     avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
@@ -38,7 +42,11 @@ export default class CommentItem extends Component {
                 return item;
               })}
             </View>
-            <Text style={styles.btnText}>回复</Text>
+            <TouchableOpacity
+              onPress={this._ReplyBtn}
+            >
+              <Text style={styles.btnText}>回复</Text>
+            </TouchableOpacity>
           </View>
           <Text style={styles.text}>{content}</Text>
           <View style={styles.btnsView}>

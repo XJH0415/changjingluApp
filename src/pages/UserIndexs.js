@@ -6,6 +6,7 @@ import IntegralRecord from "./IntegralRecord";
 import ImagePicker from 'react-native-image-picker';
 
 import API from '../lib/dataApi'
+import EditView from '../components/EditView'
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
@@ -119,7 +120,7 @@ export default class UserIndexs extends Component {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.total} onPress={() => {
+        {/*<TouchableOpacity style={styles.total} onPress={() => {
           navigate('MyNews', {data: data})
         }}>
           <View style={styles.totalImgTxt}>
@@ -128,7 +129,7 @@ export default class UserIndexs extends Component {
           <View>
             <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
 
         <TouchableOpacity style={styles.total} onPress={() => {
           navigate('GuessRecord', {data: data})
