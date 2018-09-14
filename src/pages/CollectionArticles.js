@@ -43,7 +43,8 @@ export default class CollectionArticles extends Component {
     )
   }
   render() {
-    var data = this.state.data;
+    var {data} = this.state;
+    var {navigate} = this.props.navigation;
     var records = [];
     if(!data || !data.data ){
       return(
@@ -60,7 +61,11 @@ export default class CollectionArticles extends Component {
             ListHeaderComponent = {this._listHeaderComponent.bind(this)}
             renderItem = {({item,index}) =>
               <TouchableOpacity
-                style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
+                style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}
+                onPress={() => {
+                  navigate('NewDetail', {data: records[index].article})
+                }}
+              >
                 <Text
                   style={styles.articleTitle}
                   numberOfLines={1}

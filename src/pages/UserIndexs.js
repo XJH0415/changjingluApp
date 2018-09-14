@@ -119,7 +119,7 @@ export default class UserIndexs extends Component {
           </View>
         </View>
 
-        {/*<TouchableOpacity style={styles.total} onPress={() => {
+        <TouchableOpacity style={styles.total} onPress={() => {
           navigate('MyNews', {data: data})
         }}>
           <View style={styles.totalImgTxt}>
@@ -128,7 +128,7 @@ export default class UserIndexs extends Component {
           <View>
             <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
           </View>
-        </TouchableOpacity>*/}
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.total} onPress={() => {
           navigate('GuessRecord', {data: data})
