@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
+  FlatList,
 } from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 
 export default class CommentItem extends Component {
   static defaultProps = {
-    record: {}
+    record: {},
+    rewardNum:['5','10','20','50']
   }
 
   _renderStar(star) {
@@ -30,6 +32,7 @@ export default class CommentItem extends Component {
 
   state={
     reply: false,
+    reward: false,
   }
 
   _ReplyBtn(){
@@ -37,12 +40,33 @@ export default class CommentItem extends Component {
     var that = this;
     reply === false ? that.setState({reply: true}) : that.setState({reply: false})
   }
-  _onReplyInput(){
+
+  _RewardBtn(){
+    var {reward} = this.state;
+    var that = this;
+    reward === false ? that.setState({reward: true}) : that.setState({reward: false})
+  }
+
+  _ReplyInputText(){
 
   }
 
+  _rewardItem(item){
+    return(
+      <TouchableOpacity >打赏{item}个CJL</TouchableOpacity>
+    )
+  }
+
+  _rewardList(){
+    return(
+      <View>
+        <Text>123</Text>
+      </View>
+    )
+  }
   render() {
-    var {reply} = this.state;
+    var {reply, reward} = this.state;
+    var {rewardNum, } = this.props;
     var {add_time, content, dislikes, likes, stars, tips, replies, user: {name, avatar}} = this.props.record;
     avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
     return (
@@ -66,7 +90,9 @@ export default class CommentItem extends Component {
           <Text style={styles.text}>{content}</Text>
           <View style={styles.btnsView}>
             <Text style={styles.timeText}>{add_time}</Text>
-            <Text style={styles.btnText}>打赏({tips})</Text>
+            <TouchableOpacity onPress={()=>{this._RewardBtn()}}>
+              <Text style={styles.btnText}>打赏({tips})</Text>
+            </TouchableOpacity>
             <Text style={styles.btnText}>点赞({likes})</Text>
             <Text style={styles.btnText}>胡扯({dislikes})</Text>
           </View>
@@ -92,14 +118,27 @@ export default class CommentItem extends Component {
               <TextInput
                 style={styles.replyInput}
                 autoCapitalize='none'
+                underlineColorAndroid={'transparent'}
                 placeholderTextColor={'#888888'}
                 placeholder={'请输入回复内容'}
                 selectionColor={'rgb(65,158,40)'}
-                onChangeText={()=>{this._onReplyInput()}}
+                onChangeText={()=>{this._ReplyInputText()}}
               />
               <TouchableOpacity style={styles.replyBtnTxt}>
-                <Text>回复</Text>
+                <Text style={{color: '#fff',}}>回复</Text>
               </TouchableOpacity>
+            </View>
+            :
+            <View />
+        }
+        {
+          reward === true ?
+            <View style={styles.rewardBtn}>
+              <FlatList
+                data={rewardNum}
+                ListHeaderComponent={()=>{this._rewardList()}}
+                renderItem={({item}) => {this._rewardItem(item)}}
+              />
             </View>
             :
             <View />
@@ -187,10 +226,22 @@ const styles=StyleSheet.create({
     justifyContent: 'center',
   },
   replyInput:{
-    marginLeft: 35,
+    margin: 0,
+    padding: 0,
     flex: 1,
+    marginLeft: 35,
+    paddingLeft: 5,
+    borderWidth: 1,
+    borderColor: '#888888'
   },
   replyBtnTxt:{
     marginRight: 5,
+    marginLeft: 5,
+    padding: 2,
+    backgroundColor: '#75C1AF',
+    borderRadius: 5,
   },
+  rewardBtn:{
+
+  }
 })

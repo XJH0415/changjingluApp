@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import LocalStorage from '../utils/LocalStorage';
 import API from '../lib/dataApi';
+import Cookie from 'react-native-cookie';
 
 export default class User extends Component {
 
@@ -19,6 +20,7 @@ export default class User extends Component {
     // info: {"user_id":"6","name":"gdj","email":"","phone":"15990163420","add_time":"1524105373","add_ip":"112.17.72.166","last_access_time":"1536743251","last_access_ip":"112.17.242.51","avatar_id":"3144","description":"","points":"10166","ref_id":"0","status":"0","role":"admin","avatar":"https:\/\/changjinglu.pro\/uploads\/image\/f96\/e7592f30bf94af4b69005f6fe0371e47.jpg"}
     isLogin: false,
     info:null,
+    cookiePsd:null,//cookie
   }
   
   patchPostMessageFunction = function () {
@@ -59,6 +61,8 @@ export default class User extends Component {
       window.postMessage(info);
       return;
     }
+
+
     setInterval(()=>{
       var Element = document.getElementById('info')
       if(!!Element){
@@ -66,6 +70,7 @@ export default class User extends Component {
         return;
       }
     },1000)
+
 
 
   };
@@ -120,6 +125,7 @@ export default class User extends Component {
               goback={()=>{
                 API.logOut(()=>{});
                 API.removeMsg('userMsg',()=>{});
+                Cookie.clear();
                 this.setState({isLogin:false});
               }}
               navigation={navigation}
@@ -146,6 +152,18 @@ export default class User extends Component {
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
                       console.log(e.nativeEvent.data);
+                      Cookie.get('https://changjinglu.pro/app/me', 'PHPSESSID').then((cookie) => {
+                        console.log('cookie:'+JSON.stringify(cookie));
+                        this.setState({
+                          cookiePsd: cookie.PHPSESSID,
+                        })
+                      });
+
+                      Cookie.set('https://changjinglu.pro/app/me','PHPSESSID', {
+                        expires: 5
+                      }).then(() => console.log('success'));3
+                      zAZZ
+
                       API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
                       this.setState({
                         isLogin: true,

@@ -6,7 +6,7 @@ import IntegralRecord from "./IntegralRecord";
 import ImagePicker from 'react-native-image-picker';
 
 import API from '../lib/dataApi'
-import EditView from '../components/EditView'
+
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
@@ -96,7 +96,7 @@ export default class UserIndexs extends Component {
           <TouchableOpacity onPress={()=>{this.selectPhotoTapped()}}>
             <Image
               style={styles.image}
-              source={{uri: avatarSource}}
+              source={avatarSource ? {uri: avatarSource} : require('../resource/noHeadImage.png')}
             />
           </TouchableOpacity>
 

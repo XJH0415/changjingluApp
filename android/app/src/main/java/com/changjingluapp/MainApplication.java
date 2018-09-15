@@ -3,6 +3,7 @@ package com.changjingluapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import im.shimo.react.cookie.CookieManagerPackage;
 import com.imagepicker.ImagePickerPackage;
 
 import cn.reactnative.modules.update.UpdateContext;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new CookieManagerPackage(),
             new ImagePickerPackage(),
             new UpdatePackage()
       );

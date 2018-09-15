@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-cookie')
     compile project(':react-native-image-picker')
     compile project(':react-native-update')
     compile fileTree(dir: "libs", include: ["*.jar"])
