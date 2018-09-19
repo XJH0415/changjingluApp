@@ -103,6 +103,23 @@ export default class NewDetail extends Component {
                           img.src = url;
                         });
                         window.onload=function(){window.location.hash = 1;document.title = document.getElementById('main').offsetHeight;}
+                        var wrapper = document.createElement("div");
+                        wrapper.id = "height-wrapper";
+                        while (document.body.firstChild) {
+                            wrapper.appendChild(document.body.firstChild);
+                        }
+                        document.body.appendChild(wrapper);
+                        var i = 0;
+                        function updateHeight() {
+                            document.title = wrapper.clientHeight;
+                            window.location.hash = ++i;
+                        }
+                        updateHeight();
+                        window.addEventListener("load", function() {
+                            updateHeight();
+                            setTimeout(updateHeight, 1000);
+                        });
+                        window.addEventListener("resize", updateHeight);
                     </script>
                     </body>
                     </html>`
