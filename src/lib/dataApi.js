@@ -268,19 +268,7 @@ export default class DataApi {
       callback);
   }
 
-  /**
-   * 根据id获取---猜涨跌
-   * @param id
-   * @param callback
-   */
-  static getGuessRF(id, callback) {
-    getData(
-      URL + '/app/viewBet',
-      bodyToString({
-        id: id,
-      }),
-      callback);
-  }
+
 
   /**
    * 登出
@@ -516,6 +504,45 @@ export default class DataApi {
       }),
       callback,errorCallback);
   }
+
+  /**
+   * 广告位招租
+   */
+  static getAdsInfo(callback, errorCallback){
+    var url = URL + '/app/adsInfo';
+    getData(
+      url,
+      bodyToString({
+      }),
+      callback, errorCallback);
+  }
+
+
+  /**
+   * 获取所有当天猜涨跌数据
+   */
+  static getBetActive(callback){
+    var url = URL + '/app/betActive';
+    getData(
+      url,
+      bodyToString({}),
+      callback);
+  }
+
+  /**
+   * 根据id获取---猜涨跌
+   * @param id
+   * @param callback
+   */
+  static getGuessRF(id, callback) {
+    getData(
+      URL + '/app/viewBet',
+      bodyToString({
+        id: id,
+      }),
+      callback);
+  }
+
   static SaveMsg(key,obj){
     save(key,obj);
   }

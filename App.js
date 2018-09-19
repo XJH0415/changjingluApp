@@ -170,9 +170,8 @@ export default class App extends Component {
 }
 const styles=StyleSheet.create({
   tabIcon:{
-    width:20,
-    height:20,
-    marginLeft:10
+    width:50,
+    height:50,
   }
 })
 

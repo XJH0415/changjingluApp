@@ -9,19 +9,54 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import API from '../lib/dataApi';
 
 export default class Advert extends Component {
 
   static defaultProps={
     data:{
       imgUrls: [
-        'https://changjinglu.pro/uploads/image/d75/9748608565bb208a90001e8b48331b20_390x200.png',
-        'https://changjinglu.pro/uploads/image/566/49a9240b0892928588aeee2bca411128_390x200.jpg',
+        'https://changjinglu.pro//uploads//image//ff6//19fc2abf09224b9dd4525c54906bd548.png',
+        'https://changjinglu.pro//uploads//image//6c7//da2264dc4d5bdf6f6da05659448db453.jpg',
+        'https://changjinglu.pro//uploads//image//967//852c109102b4eba696e51b5b2596a282.jpg',
       ]}
   }
 
+  state={
+    data: null,
+  }
+  _ImageBtn(item){
+
+  }
+  componentDidMount(){
+    let that =this;
+    API.getAdsInfo((data)=>{
+      if (data){
+        that.setState({
+          data:data,
+        })
+      }
+    },(error)=>{
+    })
+  }
+
   render() {
-    var {data:{imgUrls}}=this.props;
+    var {data}=this.state;
+    var records=[];
+    if (data&&data.records){
+      records = data.records;
+      if (!records||records.length < 3 ){
+        for (let defaultSrc of data.default.src){
+          if (defaultSrc.indexOf('https://')===-1){
+            defaultSrc='https://'+defaultSrc;
+          }
+          records.push({url: data.default.url, image_large: defaultSrc})
+          if (records.length === 3){
+            break;
+          }
+        }
+      }
+    }
     return(
       <View  style={styles.root}>
         <Swiper style={styles.root}
@@ -30,17 +65,19 @@ export default class Advert extends Component {
                 showsButtons={false}
         >
           {
-            imgUrls.map((item,index)=>{
-              var source={uri:item};
+            records.map((item,index)=>{
+              var source={uri:item.image_large};
               return (
                 <View style={styles.imgView} key={index}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={(item)=>{this._ImageBtn(item)}}>
                     <Image source={source} resizeMode='stretch' style={styles.bannerImg} />
+                    {/*<Image source={require('../resource/advertLogo.png')} resizeMode='stretch' style={styles.bannerImg} />*/}
                   </TouchableOpacity>
                 </View>
               )
             })
           }
+
         </Swiper>
       </View>
     )
@@ -49,14 +86,14 @@ export default class Advert extends Component {
 
 const styles = StyleSheet.create({
   root:{
-    height:200,
+    height:160,
   },
 
   imgView: {
     flex:1,
   },
   bannerImg:{
-    height:200,
+    height:160,
   }
 })
 

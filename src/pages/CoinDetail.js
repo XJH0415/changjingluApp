@@ -18,6 +18,8 @@ import CoinLine from '../components/CoinLine';
 import API from '../lib/dataApi';
 import DateUtils from '../utils/DateUtils';
 
+const GuessImg = 150;
+
 export default class CoinDetail extends Component {
   static navigationOptions = (options) => {
     var {navigation} = options;
@@ -56,6 +58,7 @@ export default class CoinDetail extends Component {
     lines: [],
     news: [],
     isRefreshing:false,
+    betData: null,
   }
   componentWillMount() {
     this.refresh();
@@ -70,6 +73,7 @@ export default class CoinDetail extends Component {
     this.getBasic(coin.coin_id, currency);
     this.getKline(coin.coin_id, currency);
     this.getCoinArticles(coin.coin_id);
+    this.getBetActive(coin.coin_id);
   }
 
   getTickers(coin_id, currency) {
@@ -106,6 +110,20 @@ export default class CoinDetail extends Component {
       })
     })
   }
+  getBetActive(coin_id){
+    var that=this;
+    API.getBetActive((data)=>{
+      for(var betData of data){
+        if (coin_id === betData.coin_id) {
+          that.setState({
+            betData:betData
+          });
+          break;
+        }
+      }
+    })
+  }
+
   _onRefresh() {
     var that = this;
     that.setState({isRefreshing: true});
@@ -118,7 +136,7 @@ export default class CoinDetail extends Component {
   }
   render() {
     var {coin, currency, navigation,onNewPress,navigate} = this.props;
-    var {tickers, data, lines, news} = this.state;
+    var {tickers, data, lines, news, betData, updateTime} = this.state;
     var {
       syb,//计价符号
       amount,//总发行量
@@ -133,6 +151,26 @@ export default class CoinDetail extends Component {
       vol,//24小时交易量
       vol_order,//24成交额排行
     } = data;
+    if (betData){
+      var {
+        coin_bet_id,//猜涨跌id
+        type,//类型
+        coin_id,//币id
+        name,//猜涨跌名称
+        seq,//猜涨跌期数
+        total_bets,//总奖池/积分CJL
+        bet_times,//猜的次数
+        up_times,//猜涨的次数
+        up_bets,//猜涨的积分
+        down_times,//猜跌的次数
+        down_bets,//猜跌的积分
+        start_time,//开盘时间
+        freeze_time,//开始时间
+        end_time,//锁仓时间
+        bet_status,//状态 0等待中 1下注中 2锁仓中
+        //'bet_status.name',//状态名称：等待中 下注中 锁仓中
+      } = betData;
+    }
     var circulation_value = data['circulation_' + currency];//流通市值
     var vol_value = data['vol_' + currency];//24成交额
     if (navigation) {
@@ -204,6 +242,43 @@ export default class CoinDetail extends Component {
           </View>
 
         </View>
+        <TouchableOpacity style={styles.guessView} onPress={()=>{navigate('GuessRiseFall',{coin:coin, betData: betData})}}>
+          <View style={styles.guessTitle}>
+            <View style={{flexDirection: 'row',alignItems: 'center'}}>
+              <Text style={styles.guessName}>{name}</Text>
+              <Text style={{backgroundColor: '#DA7D7E',padding: 2,marginLeft: 3,color: '#fff',borderRadius:  5}}>进入</Text>
+            </View>
+            <Text >
+              目前状态：{bet_status === '0' ? '等待中': bet_status === '1' ? '下注中' : '锁仓中'}
+            </Text>
+          </View>
+          <View style={styles.guessMsg}>
+            <View>
+              <Text>总奖池：{total_bets} CJL</Text>
+              <View style={styles.tolImg}>
+                <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_bets/total_bets)*GuessImg}}/>
+                <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_bets/total_bets)*GuessImg}}/>
+              </View>
+              <View style={styles.tolImg}>
+                <Text style={{color: 'rgb(253, 0, 63)',width: (up_bets/total_bets)*GuessImg}}>涨{up_bets}CJL</Text>
+                <Text >/</Text>
+                <Text style={{color: 'rgb(0, 180, 73)',width: (down_bets/total_bets)*GuessImg}}>跌{down_bets}CJL</Text>
+              </View>
+            </View>
+            <View>
+              <Text>竞猜次数：{bet_times}</Text>
+              <View style={styles.tolImg}>
+                <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_times/bet_times)*GuessImg}}/>
+                <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_times/bet_times)*GuessImg}}/>
+              </View>
+              <View style={styles.tolImg}>
+                <Text style={{color: 'rgb(253, 0, 63)',width: (up_times/bet_times)*GuessImg}}>涨{up_times}次</Text>
+                <Text >/</Text>
+                <Text style={{color: 'rgb(0, 180, 73)',width: (down_times/bet_times)*GuessImg}}>跌{down_times}次</Text>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
         {
           news && news.length > 0 ?
             <View style={[styles.view, styles.news]}>
@@ -292,10 +367,10 @@ const styles = StyleSheet.create({
   detailTopBtn: {
     backgroundColor: '#75C1AF',
     borderRadius: 5,
-    padding: 3,
+    padding: 5,
     paddingLeft: 15,
     paddingRight: 15,
-    margin:2,
+    margin: 2,
     marginTop: 5,
   },
   detailCenterText: {
@@ -349,5 +424,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray'
   },
-  exchanges: {}
+  exchanges: {},
+  guessView:{
+    margin: 5,
+    flex: 1,
+    backgroundColor: '#fff',
+    marginBottom: 10,
+  },
+  guessTitle:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  guessName:{
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  guessMsg:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tolImg:{
+    height: 20,
+    width: GuessImg,
+    flexDirection: 'row'
+  },
 });
