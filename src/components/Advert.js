@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 
@@ -33,7 +34,9 @@ export default class Advert extends Component {
               var source={uri:item};
               return (
                 <View style={styles.imgView} key={index}>
-                  <Image source={source} resizeMode='stretch' style={styles.bannerImg} />
+                  <TouchableOpacity>
+                    <Image source={source} resizeMode='stretch' style={styles.bannerImg} />
+                  </TouchableOpacity>
                 </View>
               )
             })

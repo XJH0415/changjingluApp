@@ -7,15 +7,18 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
-  FlatList,
+  Alert,
+  TouchableWithoutFeedback,
+  Modal,
 } from 'react-native';
+import API from '../lib/dataApi';
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 
 export default class CommentItem extends Component {
   static defaultProps = {
     record: {},
-    rewardNum:['5','10','20','50']
+    refresh: ()=>{}
   }
 
   _renderStar(star) {
@@ -33,6 +36,23 @@ export default class CommentItem extends Component {
   state={
     reply: false,
     reward: false,
+    points: null,
+    data: null,
+    rewardNum:[5,10,20,50],
+    replyText: null,
+  }
+
+  componentDidMount() {
+    let that = this;
+    API.getMsg('userMsg',(data)=>{
+      if (data){
+        that.setState({
+          data: data,
+        })
+      }else{
+        Alert.alert('','亲，未登录')
+      }
+    })
   }
 
   _ReplyBtn(){
@@ -47,26 +67,76 @@ export default class CommentItem extends Component {
     reward === false ? that.setState({reward: true}) : that.setState({reward: false})
   }
 
-  _ReplyInputText(){
+  _ReplyInputText(replyText){
+    this.setState({
+      replyText: replyText,
+    })
+  }
+
+  _onPressReward(val){
+    var that = this;
+    var {comment_id}=this.props.record;
+    API.getMsg('userMsg' , (msg)=>{
+      msg ?
+        API.CommentTips(comment_id, val, (result)=>{
+        result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : Alert.alert('','亲，打赏失败')
+      },(errorMsg)=>{
+        errorMsg === 'same user' ? Alert.alert('','亲，不能给自己打赏') :  Alert.alert('',errorMsg)
+      })
+        :
+        Alert.alert('','亲，未登录')
+    })
 
   }
 
-  _rewardItem(item){
-    return(
-      <TouchableOpacity >打赏{item}个CJL</TouchableOpacity>
-    )
+  _onPressReply(){
+    var that = this;
+    var {replyText} = this.state;
+    var {comment_id}=this.props.record;
+    API.getMsg('userMsg' , (msg)=>{
+      msg ?
+        !replyText ? Alert.alert('','亲，请输入回复内容')
+        :
+        API.CommentReply(comment_id, replyText, (result)=>{
+          result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : alert('亲，回复失败')
+        })
+        :
+        Alert.alert('','亲，未登录')
+    })
   }
 
-  _rewardList(){
-    return(
-      <View>
-        <Text>123</Text>
-      </View>
-    )
+  _onPressLike(){
+    var that = this;
+    var {comment_id}=this.props.record;
+    API.getMsg('userMsg' , (msg)=>{
+      msg ?
+        API.CommentLike(comment_id, (result)=>{
+          result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : Alert.alert('','亲，点赞失败')
+        }, (errorMsg)=>{
+          errorMsg === 'already voted' ? Alert.alert('','亲，您已表过态了') : Alert.alert('',errorMsg)
+        })
+        :
+        Alert.alert('','亲，未登录')
+    })
   }
+
+  _onPressDisLike(){
+    var that = this;
+    var {comment_id}=this.props.record;
+    API.getMsg('userMsg' , (msg)=>{
+      msg ?
+        API.CommentDisLike(comment_id, (result)=>{
+          result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : alert('亲，胡扯失败')
+        }, (errorMsg)=>{
+          errorMsg === 'already voted' ? Alert.alert('','亲，您已表过态了') : Alert.alert('',errorMsg)
+        })
+        :
+        Alert.alert('','亲，未登录')
+    })
+  }
+
   render() {
-    var {reply, reward} = this.state;
-    var {rewardNum, } = this.props;
+    var {reply, reward, data, rewardNum} = this.state;
     var {add_time, content, dislikes, likes, stars, tips, replies, user: {name, avatar}} = this.props.record;
     avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
     return (
@@ -93,8 +163,40 @@ export default class CommentItem extends Component {
             <TouchableOpacity onPress={()=>{this._RewardBtn()}}>
               <Text style={styles.btnText}>打赏({tips})</Text>
             </TouchableOpacity>
-            <Text style={styles.btnText}>点赞({likes})</Text>
-            <Text style={styles.btnText}>胡扯({dislikes})</Text>
+            <Modal
+              animationType={"fade"}
+              transparent={true}
+              visible={reward}
+            >
+              <View style={styles.modalView}>
+                <TouchableWithoutFeedback
+                  onPress={()=>this.setState({reward:false})}>
+                  <View style={{position: 'absolute',left: 0,right: 0,top: 0,bottom: 0,width: null,}}/>
+                </TouchableWithoutFeedback>
+                <View style={styles.rewardView}>
+                  <View>
+                    <Text style={styles.pointsText}>您有123个CJL</Text>
+                  </View>
+                  <View style={styles.rewardTxt}>
+                    {
+                      rewardNum.map((val)=>{
+                        return(
+                          <TouchableOpacity onPress={()=>{this._onPressReward(val)}}>
+                            <Text style={styles.rewardText}>打赏{val}个CJL</Text>
+                          </TouchableOpacity>
+                        )
+                      })
+                    }
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            <TouchableOpacity onPress={()=>{this._onPressLike()}}>
+              <Text style={styles.btnText}>点赞({likes})</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{this._onPressDisLike()}}>
+              <Text style={styles.btnText}>胡扯({dislikes})</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bottomView}>
@@ -122,23 +224,11 @@ export default class CommentItem extends Component {
                 placeholderTextColor={'#888888'}
                 placeholder={'请输入回复内容'}
                 selectionColor={'rgb(65,158,40)'}
-                onChangeText={()=>{this._ReplyInputText()}}
+                onChangeText={(replyText)=>{this._ReplyInputText(replyText)}}
               />
-              <TouchableOpacity style={styles.replyBtnTxt}>
+              <TouchableOpacity style={styles.replyBtnTxt} onPress={()=>{this._onPressReply()}}>
                 <Text style={{color: '#fff',}}>回复</Text>
               </TouchableOpacity>
-            </View>
-            :
-            <View />
-        }
-        {
-          reward === true ?
-            <View style={styles.rewardBtn}>
-              <FlatList
-                data={rewardNum}
-                ListHeaderComponent={()=>{this._rewardList()}}
-                renderItem={({item}) => {this._rewardItem(item)}}
-              />
             </View>
             :
             <View />
@@ -150,7 +240,7 @@ export default class CommentItem extends Component {
 
 const styles=StyleSheet.create({
   root:{
-    padding:5
+    padding:5,
   },
   topView:{
 
@@ -241,7 +331,33 @@ const styles=StyleSheet.create({
     backgroundColor: '#75C1AF',
     borderRadius: 5,
   },
-  rewardBtn:{
+  modalView:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'rgba(0, 0, 0, 0.3)',
+  },
+  rewardView:{
+    backgroundColor: '#333333',
+    borderRadius: 5,
+    padding: 10,
+  },
+  pointsText:{
+    fontWeight: 'bold',
+    color: '#fff',
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  rewardTxt:{
+    justifyContent:'center',
+  },
+  rewardText:{
+    width: 90,
+    backgroundColor: '#000',
+    color: '#75C1AF',
+    padding: 3,
+    margin:5,
+    borderRadius: 3,
+  },
 
-  }
 })

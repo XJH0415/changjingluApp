@@ -152,18 +152,6 @@ export default class User extends Component {
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
                       console.log(e.nativeEvent.data);
-                      Cookie.get('https://changjinglu.pro/app/me', 'PHPSESSID').then((cookie) => {
-                        console.log('cookie:'+JSON.stringify(cookie));
-                        this.setState({
-                          cookiePsd: cookie.PHPSESSID,
-                        })
-                      });
-
-                      Cookie.set('https://changjinglu.pro/app/me','PHPSESSID', {
-                        expires: 5
-                      }).then(() => console.log('success'));3
-                      zAZZ
-
                       API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
                       this.setState({
                         isLogin: true,

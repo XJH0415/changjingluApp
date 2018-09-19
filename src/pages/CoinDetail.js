@@ -140,7 +140,7 @@ export default class CoinDetail extends Component {
     }
     var source = {uri: coin.icon ? coin.icon : coin.icon_small}
     var color = '#DA7D7E';
-    if (gains_pct && gains_pct * 1 < 0) {
+    if (gains_pct && gains_pct.indexOf('-')!==-1) {
       color = '#3CB371';
     }
     return (
@@ -167,15 +167,15 @@ export default class CoinDetail extends Component {
               <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}</Text>
               <Text style={styles.detailCenterText}>低(24h):{syb}{low ? low : ''}</Text>
             </View>
-            <View>
+            <View style={{marginTop: 8,}}>
               <TouchableOpacity style={styles.detailTopBtn}>
                 <Text>自选</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.detailTopBtn} onPress={()=>{
                 if(navigation){
-                  navigation.navigate('Comment', {data: coin})
+                  navigation.navigate('Comment', {data: coin, type: 'coin'})
                 }else {
-                  navigate('Comment', {data: coin})
+                  navigate('Comment', {data: coin, type: 'coin'})
                 }
                 
               }}>
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   detailTopPrice: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   detailTopText: {
@@ -290,17 +290,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   detailTopBtn: {
-    backgroundColor: '#DA7D7E',
-    borderRadius: 25,
+    backgroundColor: '#75C1AF',
+    borderRadius: 5,
     padding: 3,
-    paddingLeft: 5,
-    paddingRight: 5,
-    margin:2
+    paddingLeft: 15,
+    paddingRight: 15,
+    margin:2,
+    marginTop: 5,
   },
   detailCenterText: {
     fontSize: 10,
     color: 'gray',
-    marginBottom: 5
+    marginBottom: 5,
+    marginRight: 5,
   },
   detailBottom: {},
   detailChat: {

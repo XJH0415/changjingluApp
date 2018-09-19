@@ -9,11 +9,15 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
-  WebView, Platform, BackAndroid
+  WebView, Platform, BackAndroid,
+  PixelRatio,
 } from 'react-native';
 import DateUtils from '../utils/DateUtils';
 import API from '../lib/dataApi';
 import CommentItem from '../components/CommentItem';
+import Comment from "./Comment";
+
+
 
 export default class NewDetail extends Component {
   static navigationOptions = (options) => {
@@ -32,28 +36,11 @@ export default class NewDetail extends Component {
   };
   state={
     height:0,
-    comment:{}
   }
-  componentWillMount() {
-    this.getComment(1);
-  }
-  getComment(page){
-    var that=this;
-    var {navigation} = that.props;
-    var data =navigation ? navigation.state.params.data : null;
-    if(data){
-      API.getComment('article',data.article_id,page,(data)=>{
-        that.setState({
-          comment:data
-        })
-      })
-    }
-    
-  }
+
   render() {
     var {navigation} = this.props;
     var data =navigation ? navigation.state.params.data : null
-    var {comment}=this.state;
     var {title, summary, add_time, views, content} = data;
     var name = data.author && data.author.name ? data.author.name : data.columnist&&data.columnist.name ? data.columnist.name : data.poster.name;
     return (
@@ -115,36 +102,29 @@ export default class NewDetail extends Component {
                           };
                           img.src = url;
                         });
-                        window.onload=function(){window.location.hash = 1;document.title = document.body.clientHeight+50;}
+                        window.onload=function(){window.location.hash = 1;document.title = document.getElementById('main').offsetHeight;}
                     </script>
                     </body>
                     </html>`
             , baseUrl: ''}}
-            style={{flex: 1}}
+            style={{height: this.state.height}}
             bounces={false}
             scalesPageToFit={false}
             scrollEnabled={false}
             automaticallyAdjustContentInsets={true}
             contentInset={{top: 0, left: 0}}
             onNavigationStateChange={(title) => {
+              // alert(title.title+':'+PixelRatio.roundToNearestPixel(parseInt(title.title)+10))
               if (title.title !== undefined) {
                 this.setState({
-                  height: (parseInt(title.title) + 20)
+                  height: (parseInt(title.title)+10)
                 })
               }
             }}
           >
           </WebView>
-          {
-            comment.records?comment.records.map((item,index)=>{
-              return(
-                <CommentItem key={index} record={item}/>
-              )
-            })
-              :
-              null
-          }
         </View>
+        <Comment data={data} type={'article'}/>
       </ScrollView>
     )
   }

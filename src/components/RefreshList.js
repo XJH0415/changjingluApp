@@ -57,6 +57,9 @@ export default class RefreshList extends Component {
   }
 
   refresh(sort) {
+    if (!sort){
+      sort = this.props.sort;
+    }
     if (!this.state.refreshing) {
       this.setState({
         refreshing: true

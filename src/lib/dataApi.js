@@ -269,27 +269,6 @@ export default class DataApi {
   }
 
   /**
-   * 注册
-   * @param name
-   * @param phone
-   * @param password
-   * @param sms
-   * @param callback
-   */
-  static getRegister(name, phone, password, sms, callback) {
-    getData(
-      URL + '/app/signup',
-      bodyToString({
-        name: name,
-        phone: phone,
-        password: password,
-        sms: sms,
-      }),
-      callback);
-  }
-
-
-  /**
    * 根据id获取---猜涨跌
    * @param id
    * @param callback
@@ -305,7 +284,6 @@ export default class DataApi {
 
   /**
    * 登出
-   * @param callback
    */
   static logOut() {
     fetch(URL+'/app/logout', {
@@ -446,10 +424,101 @@ export default class DataApi {
     })
   }
 
+  /**
+   * 发布评论
+   * @param type
+   * @param id
+   * @param content
+   * @param score
+   * @param callback
+   * @constructor
+   */
+  static CommentAdd(type, id, content, score, callback){
+    var url = URL + '/comment/add';
+    getData(
+      url,
+      bodyToString({
+        type: type,
+        id: id,
+        content: content,
+        score: score,
+      }),
+      callback);
+  }
+
+  /**
+   * 评论回复
+   * @param comment_id
+   * @param content
+   * @param callback
+   * @constructor
+   */
+  static CommentReply(comment_id, content, callback){
+    var url = URL + '/comment/reply/'+comment_id;
+    getData(
+      url,
+      bodyToString({
+        content: content,
+      }),
+      callback);
+  }
+
+  /**
+   * 打赏
+   * @param comment_id
+   * @param tips
+   * @param callback
+   * @constructor
+   */
+  static CommentTips(comment_id, tips, callback, errorCallback){
+    var url = URL + '/comment/tips/'+comment_id;
+    getData(
+      url,
+      bodyToString({
+        tips: tips,
+      }),
+      callback,errorCallback);
+  }
+
+  /**
+   * 点赞
+   * @param comment_id
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static CommentLike(comment_id, callback, errorCallback){
+    var url = URL + '/comment/like/'+comment_id;
+    getData(
+      url,
+      bodyToString({
+
+      }),
+      callback,errorCallback);
+  }
   static SaveMsg(key,obj){
     save(key,obj);
   }
 
+  /**
+   * 胡扯
+   * @param comment_id
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static CommentDisLike(comment_id, callback, errorCallback){
+    var url = URL + '/comment/dislike/'+comment_id;
+    getData(
+      url,
+      bodyToString({
+
+      }),
+      callback,errorCallback);
+  }
+  static SaveMsg(key,obj){
+    save(key,obj);
+  }
   static getMsg(key,callback){
     readData(key, callback,()=>{});
   }
@@ -476,7 +545,7 @@ function bodyToString(body) {
 }
 
 
-function getData(URL, bodyString, callback) {
+function getData(URL, bodyString, callback, errorCallback) {
   var key = null;
     if (!bodyString) {
     key = URL;
@@ -498,7 +567,9 @@ function getData(URL, bodyString, callback) {
           callback(responseJson.data);
           save(key,responseJson.data)
         } else {
-          console.log('msg:' + responseJson.msg);
+          if (errorCallback){
+            errorCallback(responseJson.msg)
+          }
         }
       }).catch((error) => {
         console.error(error);
@@ -537,3 +608,18 @@ function removeData(key, callback) {
   })
 }
 
+function getJson(url,param){
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(param)
+    })
+      .then(response => response.json())
+      .then(result => resolve(result))
+      .catch(error => reject(error))
+  })
+}
