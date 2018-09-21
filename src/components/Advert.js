@@ -14,19 +14,27 @@ import API from '../lib/dataApi';
 export default class Advert extends Component {
 
   static defaultProps={
-    data:{
-      imgUrls: [
-        'https://changjinglu.pro//uploads//image//ff6//19fc2abf09224b9dd4525c54906bd548.png',
-        'https://changjinglu.pro//uploads//image//6c7//da2264dc4d5bdf6f6da05659448db453.jpg',
-        'https://changjinglu.pro//uploads//image//967//852c109102b4eba696e51b5b2596a282.jpg',
-      ]}
+
   }
 
   state={
     data: null,
+    records: null,
   }
   _ImageBtn(item){
-
+    var navigate= this.props.navigate;
+    let that = this;
+    API.getNewsPlain('projects','1','', 1, (result)=>{
+      for (let records of result.records){
+        if (item.url.indexOf(records.article_id) !== -1){
+          // alert(JSON.stringify(records))
+          that.setState({
+            records:records
+          })
+          navigate('NewDetail', {data: records})
+        }
+      }
+    })
   }
   componentDidMount(){
     let that =this;
@@ -69,7 +77,7 @@ export default class Advert extends Component {
               var source={uri:item.image_large};
               return (
                 <View style={styles.imgView} key={index}>
-                  <TouchableOpacity onPress={(item)=>{this._ImageBtn(item)}}>
+                  <TouchableOpacity onPress={()=>{this._ImageBtn(item)}}>
                     <Image source={source} resizeMode='stretch' style={styles.bannerImg} />
                     {/*<Image source={require('../resource/advertLogo.png')} resizeMode='stretch' style={styles.bannerImg} />*/}
                   </TouchableOpacity>
@@ -86,14 +94,14 @@ export default class Advert extends Component {
 
 const styles = StyleSheet.create({
   root:{
-    height:160,
+    height:200,
   },
 
   imgView: {
     flex:1,
   },
   bannerImg:{
-    height:160,
+    height:200,
   }
 })
 

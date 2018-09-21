@@ -17,8 +17,9 @@ import Separator from '../components/Separator';
 import CoinLine from '../components/CoinLine';
 import API from '../lib/dataApi';
 import DateUtils from '../utils/DateUtils';
+import RegularData from '../utils/RegularData';
 
-const GuessImg = 150;
+const GuessImg = RegularData.GuessImg;
 
 export default class CoinDetail extends Component {
   static navigationOptions = (options) => {
@@ -242,43 +243,61 @@ export default class CoinDetail extends Component {
           </View>
 
         </View>
-        <TouchableOpacity style={styles.guessView} onPress={()=>{navigate('GuessRiseFall',{coin:coin, betData: betData})}}>
-          <View style={styles.guessTitle}>
-            <View style={{flexDirection: 'row',alignItems: 'center'}}>
-              <Text style={styles.guessName}>{name}</Text>
-              <Text style={{backgroundColor: '#DA7D7E',padding: 2,marginLeft: 3,color: '#fff',borderRadius:  5}}>进入</Text>
-            </View>
-            <Text >
-              目前状态：{bet_status === '0' ? '等待中': bet_status === '1' ? '下注中' : '锁仓中'}
-            </Text>
-          </View>
-          <View style={styles.guessMsg}>
-            <View>
-              <Text>总奖池：{total_bets} CJL</Text>
-              <View style={styles.tolImg}>
-                <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_bets/total_bets)*GuessImg}}/>
-                <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_bets/total_bets)*GuessImg}}/>
+        {
+          betData ?
+            <TouchableOpacity style={styles.guessView} onPress={()=>{navigate('GuessRiseFall',{coin:coin, betData: betData})}}>
+              <View style={styles.guessTitle}>
+                <View style={{flexDirection: 'row',alignItems: 'center'}}>
+                  <Text style={styles.guessName}>{name}</Text>
+                  <Text style={{backgroundColor: '#DA7D7E',padding: 2,marginLeft: 3,color: '#fff',borderRadius:  5}}>进入</Text>
+                </View>
+                <Text >
+                  目前状态：{bet_status === '0' ? '等待中': bet_status === '1' ? '下注中' : '锁定中'}
+                </Text>
               </View>
-              <View style={styles.tolImg}>
-                <Text style={{color: 'rgb(253, 0, 63)',width: (up_bets/total_bets)*GuessImg}}>涨{up_bets}CJL</Text>
-                <Text >/</Text>
-                <Text style={{color: 'rgb(0, 180, 73)',width: (down_bets/total_bets)*GuessImg}}>跌{down_bets}CJL</Text>
-              </View>
-            </View>
-            <View>
-              <Text>竞猜次数：{bet_times}</Text>
-              <View style={styles.tolImg}>
-                <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_times/bet_times)*GuessImg}}/>
-                <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_times/bet_times)*GuessImg}}/>
-              </View>
-              <View style={styles.tolImg}>
-                <Text style={{color: 'rgb(253, 0, 63)',width: (up_times/bet_times)*GuessImg}}>涨{up_times}次</Text>
-                <Text >/</Text>
-                <Text style={{color: 'rgb(0, 180, 73)',width: (down_times/bet_times)*GuessImg}}>跌{down_times}次</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
+              {
+                bet_status === '0' ?
+                  <View style={{flexDirection: 'row',marginTop: 10,}}>
+                    <Text style={{marginRight: 10,}}>开始时间</Text>
+                    <Text>{DateUtils.Formart(new Date(start_time * 1000), 'yyyy-MM-dd hh:mm:ss')}</Text>
+                  </View>
+                  :
+                  <View style={styles.guessMsg}>
+                    <View>
+                      <Text>总奖池：{total_bets} CJL</Text>
+                      <View style={styles.tolImg}>
+                        <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_bets/total_bets)*GuessImg}}/>
+                        <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_bets/total_bets)*GuessImg}}/>
+                      </View>
+                      <View style={styles.tolImg}>
+                        <View style={{alignItems: 'flex-end',width: GuessImg/2}}>
+                          <Text style={{color: 'rgb(253, 0, 63)'}}>涨{up_bets}CJL</Text>
+                        </View>
+                        <Text >/</Text>
+                        <Text style={{color: 'rgb(0, 180, 73)',width: GuessImg/2}}>跌{down_bets}CJL</Text>
+                      </View>
+                    </View>
+                    <View>
+                      <Text>竞猜次数：{bet_times}</Text>
+                      <View style={styles.tolImg}>
+                        <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_times/bet_times)*GuessImg}}/>
+                        <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_times/bet_times)*GuessImg}}/>
+                      </View>
+                      <View style={styles.tolImg}>
+                        <View style={{alignItems: 'flex-end', width: GuessImg/2}} >
+                          <Text style={{color: 'rgb(253, 0, 63)'}}>涨{up_times}次</Text>
+                        </View>
+                        <Text >/</Text>
+                        <Text style={{color: 'rgb(0, 180, 73)',width: GuessImg/2}}>跌{down_times}次</Text>
+                      </View>
+                    </View>
+                  </View>
+              }
+            </TouchableOpacity>
+            :
+            <View/>
+        }
+
         {
           news && news.length > 0 ?
             <View style={[styles.view, styles.news]}>
@@ -368,8 +387,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#75C1AF',
     borderRadius: 5,
     padding: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 40,
+    paddingRight: 40,
     margin: 2,
     marginTop: 5,
   },

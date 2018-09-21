@@ -32,6 +32,8 @@ import GuessRecord from "./src/pages/GuessRecord";
 import IntegralRecord from "./src/pages/IntegralRecord";
 import CollectionArticles from "./src/pages/CollectionArticles";
 import ChangePassword from "./src/pages/ChangePassword";
+import HistoryBets from "./src/pages/HistoryBets";
+import User from "./src/pages/User";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -75,6 +77,21 @@ const StackNavigator = createStackNavigator({
   },
   ChangePassword:{
     screen: ChangePassword,
+  },
+  HistoryBets:{
+    screen: HistoryBets,
+  },
+  Users:{
+    screen: User,
+    navigationOptions:(Options)=>{
+      return{
+        headerTitle:'',
+        headerStyle:{
+          height:0,
+          borderBottomWidth:0,
+        }
+      }
+    }
   },
 }, {
   headerMode:'screen',

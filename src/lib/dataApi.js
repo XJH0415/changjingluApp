@@ -484,6 +484,8 @@ export default class DataApi {
       }),
       callback,errorCallback);
   }
+
+
   static SaveMsg(key,obj){
     save(key,obj);
   }
@@ -530,18 +532,70 @@ export default class DataApi {
   }
 
   /**
-   * 根据id获取---猜涨跌
-   * @param id
+   * 根据coin_bet_id获取---猜涨跌数据
+   * @param coin_bet_id
    * @param callback
    */
-  static getGuessRF(id, callback) {
+  static getGuessRF(coin_bet_id, callback) {
     getData(
       URL + '/app/viewBet',
       bodyToString({
-        id: id,
+        id: coin_bet_id,
       }),
       callback);
   }
+
+  /**
+   * 根据coin_id获取当前币的猜涨跌历史记录
+   * @param coin_id
+   * @param callback
+   */
+  static getHistoryBets(coin_id, callback) {
+    getData(
+      URL + '/app/viewBet',
+      bodyToString({
+        coin_id: coin_id,
+      }),
+      callback);
+  }
+
+  /**
+   * 根据coin_bet_id
+   * 获取---当前用户猜涨跌数据
+   * 以及所有参与本次猜涨跌的记录
+   * @param coin_bet_id
+   * @param callback
+   */
+  static getCurrentBets(coin_bet_id, callback) {
+    getData(
+      URL + '/app/getBet',
+      bodyToString({
+        id: coin_bet_id,
+      }),
+      callback);
+  }
+
+  /**
+   * 猜涨跌--我要竞猜
+   * @param id 猜涨跌期数coin_bet_id
+   * @param type
+   * @param bet 猜的数值
+   * @param callback
+   * @param errorCallback
+   */
+  static AddBet(id, type, bet, callback, errorCallback) {
+    SubmitForm(
+      URL + '/app/addBet',
+      bodyToString({
+        id: id,
+        type: type,
+        bet: bet+''
+      }),
+      callback, errorCallback);
+  }
+
+
+
 
   static SaveMsg(key,obj){
     save(key,obj);
@@ -635,18 +689,26 @@ function removeData(key, callback) {
   })
 }
 
-function getJson(url,param){
-  return new Promise((resolve, reject) => {
-    fetch(url, {
+function SubmitForm(URL, bodyString, callback, errorCallback) {
+  fetch(URL,
+    {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
-      body: JSON.stringify(param)
+      body: bodyString
     })
-      .then(response => response.json())
-      .then(result => resolve(result))
-      .catch(error => reject(error))
-  })
+    // .then((response) => response.json())
+    .then((responseJson) => {
+      alert(JSON.stringify(responseJson))
+      if (responseJson.no === 0) {
+        callback(responseJson);
+      } else {
+        if (errorCallback){
+          errorCallback(responseJson)
+        }
+      }
+    }).catch((error) => {
+    console.error(error);
+  });
 }

@@ -36,7 +36,7 @@ export default class Home extends Component {
     var {coins,lines} = this.state;
     return (
       <View style={styles.root}>
-        <Advert/>
+        <Advert navigate={navigate}/>
         <Notice/>
         {/*<Text style={styles.goToGuess} onPress={()=>{navigate('GuessRiseFall',{})}}>进入猜涨跌</Text>*/}
         <FlatList style={{flex: 1}}

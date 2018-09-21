@@ -16,8 +16,6 @@ export default class User extends Component {
   state = {
     width: 0,
     height: 0,
-    // isLogin: true,
-    // info: {"user_id":"6","name":"gdj","email":"","phone":"15990163420","add_time":"1524105373","add_ip":"112.17.72.166","last_access_time":"1536743251","last_access_ip":"112.17.242.51","avatar_id":"3144","description":"","points":"10166","ref_id":"0","status":"0","role":"admin","avatar":"https:\/\/changjinglu.pro\/uploads\/image\/f96\/e7592f30bf94af4b69005f6fe0371e47.jpg"}
     isLogin: false,
     info:null,
     cookiePsd:null,//cookie
