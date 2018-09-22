@@ -40,6 +40,7 @@ export default class CommentItem extends Component {
     data: null,
     rewardNum:[5,10,20,50],
     replyText: null,
+    userMsg: null,
   }
 
   componentDidMount() {
@@ -51,6 +52,18 @@ export default class CommentItem extends Component {
         })
       }else{
         Alert.alert('','亲，未登录')
+      }
+    })
+    this.getUserMsg();
+  }
+
+  getUserMsg(){
+    var that = this;
+    API.getMsg('userMsg', (userMsg)=>{
+      if(userMsg){
+        that.setState({
+          userMsg:userMsg
+        })
       }
     })
   }
@@ -136,9 +149,13 @@ export default class CommentItem extends Component {
   }
 
   render() {
-    var {reply, reward, data, rewardNum} = this.state;
+    var {reply, reward, data, rewardNum, userMsg} = this.state;
     var {add_time, content, dislikes, likes, stars, tips, replies, user: {name, avatar}} = this.props.record;
     avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
+    var points = null;
+    if (userMsg){
+      points = userMsg.points;
+    }
     return (
       <View style={styles.root}>
         <View style={styles.topView}>
@@ -175,7 +192,7 @@ export default class CommentItem extends Component {
                 </TouchableWithoutFeedback>
                 <View style={styles.rewardView}>
                   <View>
-                    <Text style={styles.pointsText}>您有123个CJL</Text>
+                    <Text style={styles.pointsText}>您有{points}个CJL</Text>
                   </View>
                   <View style={styles.rewardTxt}>
                     {

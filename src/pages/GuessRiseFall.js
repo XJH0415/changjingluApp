@@ -19,6 +19,7 @@ import RegularData from '../utils/RegularData';
 import SelectButtonItem from "../components/SelectButtonItem";
 import MyBetsList from "../components/MyBetsList";
 import HistoryList from "../components/HistoryList";
+
 const GuessImg = RegularData.GuessImg;
 
 export default class GuessRiseFall extends Component {
@@ -49,7 +50,7 @@ export default class GuessRiseFall extends Component {
     updateTime: '',
     historyBets: null,
     CurrentData: null, //当前用户猜涨跌数据以及所有参与本次猜涨跌的记录
-    userMsg:null,//用户在本地的部分数据
+    userMsg: null,//用户在本地的部分数据
   }
 
   componentDidMount() {
@@ -67,7 +68,7 @@ export default class GuessRiseFall extends Component {
     this.getUserMsg();
   }
 
-  getUserMsg(){
+  getUserMsg() {
     let that = this;
     API.getMsg('userMsg', (userMsg) => {
       if (userMsg) {
@@ -133,9 +134,9 @@ export default class GuessRiseFall extends Component {
     let that = this;
     var {betData} = this.props.navigation.state.params;
     API.getCurrentBets(betData.coin_bet_id, (CurrentData) => {
-        that.setState({
-          CurrentData: CurrentData,
-        })
+      that.setState({
+        CurrentData: CurrentData,
+      })
     })
   }
 
@@ -167,7 +168,7 @@ export default class GuessRiseFall extends Component {
     return (
       <ScrollView style={styles.root}>
         <View style={styles.rowView}>
-          <View style={styles.posit}>
+          <View style={[styles.posit,{marginLeft: 25,}]}>
             <Text>目前状态</Text>
             <Text>{bet_status === '0' ? '等待中' : bet_status === '1' ? '下注中' : '锁仓中'}</Text>
           </View>
@@ -178,7 +179,7 @@ export default class GuessRiseFall extends Component {
           </View>
         </View>
         {
-          bet_status === '3' || bet_status === '6' ?
+          bet_status === '3' ?
             <View style={styles.rowView}>
               <View style={styles.posit}>
                 <Text>锁定价格</Text>
@@ -204,36 +205,42 @@ export default class GuessRiseFall extends Component {
             <Text>{bet_status === '0' ? '等待中' : bet_status === '1' ? '' : '还剩' + updateTime}</Text>
           </View>
         </View>
-        <View style={styles.rowView}>
-          <View style={styles.posit}>
-            <Text>总奖池：{total_bets} CJL</Text>
-            <View style={styles.tolImg}>
-              <View style={{backgroundColor: 'rgb(253, 0, 63)', width: (up_bets / total_bets) * GuessImg}}/>
-              <View style={{backgroundColor: 'rgb(0, 180, 73)', width: (down_bets / total_bets) * GuessImg}}/>
-            </View>
-            <View style={styles.tolImg}>
-              <View style={{alignItems: 'flex-end', width: GuessImg / 2}}>
-                <Text style={{color: 'rgb(253, 0, 63)'}}>涨{up_bets}CJL</Text>
+        {
+          bet_status !== '0' ?
+            <View style={styles.rowView}>
+              <View style={styles.posit}>
+                <Text>总奖池：{total_bets} CJL</Text>
+                <View style={styles.tolImg}>
+                  <View style={{backgroundColor: 'rgb(253, 0, 63)', width: (up_bets / total_bets) * GuessImg}}/>
+                  <View style={{backgroundColor: 'rgb(0, 180, 73)', width: (down_bets / total_bets) * GuessImg}}/>
+                </View>
+                <View style={styles.tolImg}>
+                  <View style={{alignItems: 'flex-end', width: GuessImg / 2}}>
+                    <Text style={{color: 'rgb(253, 0, 63)'}}>涨{up_bets}CJL</Text>
+                  </View>
+                  <Text>/</Text>
+                  <Text style={{color: 'rgb(0, 180, 73)', width: GuessImg / 2}}>跌{down_bets}CJL</Text>
+                </View>
               </View>
-              <Text>/</Text>
-              <Text style={{color: 'rgb(0, 180, 73)', width: GuessImg / 2}}>跌{down_bets}CJL</Text>
-            </View>
-          </View>
-          <View style={styles.posit}>
-            <Text>竞猜次数：{bet_times}</Text>
-            <View style={styles.tolImg}>
-              <View style={{backgroundColor: 'rgb(253, 0, 63)', width: (up_times / bet_times) * GuessImg}}/>
-              <View style={{backgroundColor: 'rgb(0, 180, 73)', width: (down_times / bet_times) * GuessImg}}/>
-            </View>
-            <View style={styles.tolImg}>
-              <View style={{alignItems: 'flex-end', width: GuessImg / 2}}>
-                <Text style={{color: 'rgb(253, 0, 63)'}}>涨{up_times}次</Text>
+              <View style={styles.posit}>
+                <Text>竞猜次数：{bet_times}</Text>
+                <View style={styles.tolImg}>
+                  <View style={{backgroundColor: 'rgb(253, 0, 63)', width: (up_times / bet_times) * GuessImg}}/>
+                  <View style={{backgroundColor: 'rgb(0, 180, 73)', width: (down_times / bet_times) * GuessImg}}/>
+                </View>
+                <View style={styles.tolImg}>
+                  <View style={{alignItems: 'flex-end', width: GuessImg / 2}}>
+                    <Text style={{color: 'rgb(253, 0, 63)'}}>涨{up_times}次</Text>
+                  </View>
+                  <Text>/</Text>
+                  <Text style={{color: 'rgb(0, 180, 73)', width: GuessImg / 2}}>跌{down_times}次</Text>
+                </View>
               </View>
-              <Text>/</Text>
-              <Text style={{color: 'rgb(0, 180, 73)', width: GuessImg / 2}}>跌{down_times}次</Text>
             </View>
-          </View>
-        </View>
+            :
+            <View/>
+        }
+
 
         {
           bet_status === '0' ?
@@ -247,10 +254,12 @@ export default class GuessRiseFall extends Component {
                       <SelectButtonItem betData={betData}/>
                       <MyBetsList CurrentData={CurrentData}/>
                     </View>
-                  :
-                    <TouchableOpacity onPress={()=>{navigate('Users', {})}}>
-                      <Text>登录后您可以竞猜</Text>
-                    </TouchableOpacity>
+                    :
+                    <View
+                      // onPress={() => {navigate('Users', {})}}
+                    >
+                      <Text style={{fontSize: 16,}}>登录后您可以竞猜</Text>
+                    </View>
                 }
 
               </View>
@@ -264,7 +273,7 @@ export default class GuessRiseFall extends Component {
                 bet_status === '3' ?
                   <View style={styles.results}>
                     <Text>最终结果：</Text>
-                    <Text style={{color: final_price-base_price > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)'}}>
+                    <Text style={{color: final_price - base_price > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)'}}>
                       {
                         final_price - base_price > 0 ? '涨' : '跌'
                       }
@@ -280,23 +289,27 @@ export default class GuessRiseFall extends Component {
         }
 
 
-        <View style={{backgroundColor: '#fff', flex: 1, marginTop: 10,}}>
-          {
-            CurrentData ?
-              <CurrentBetList CurrentData={CurrentData}/>
-              :
-              <View/>
-          }
-        </View>
+        {
+          bet_status !== '0' ?
+            <View style={{backgroundColor: '#fff', flex: 1, marginTop: 10,}}>
+              {
+                CurrentData ?
+                  <CurrentBetList CurrentData={CurrentData}/>
+                  :
+                  <View/>
+              }
+            </View>
+            :
+            <View/>
+        }
 
 
-          {
-            historyBets ?
-              <HistoryList historyBets={historyBets} betData={betData} coin={coin} navigation={navigate}/>
-              :
-              <Text> </Text>
-          }
-
+        {
+          historyBets ?
+            <HistoryList historyBets={historyBets} betData={betData} coin={coin} navigation={navigate}/>
+            :
+            <Text> </Text>
+        }
 
 
         <BetRulesItem/>
@@ -340,7 +353,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 10,
   },
-  results:{
+  results: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

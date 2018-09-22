@@ -485,7 +485,6 @@ export default class DataApi {
       callback,errorCallback);
   }
 
-
   static SaveMsg(key,obj){
     save(key,obj);
   }
@@ -594,7 +593,55 @@ export default class DataApi {
       callback, errorCallback);
   }
 
+  /**
+   * 文章收藏
+   * @param article_id
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static ArticleLike(article_id, callback, errorCallback){
+    var url = URL + '/article/like/'+article_id;
+    getData(
+      url,
+      bodyToString({
+      }),
+      callback,errorCallback);
+  }
 
+  /**
+   * 文章取消收藏
+   * @param article_id
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static ArticleUnLike(article_id, callback, errorCallback){
+    var url = URL + '/article/unlike/'+article_id;
+    getData(
+      url,
+      bodyToString({
+      }),
+      callback,errorCallback);
+  }
+
+  /**
+   * 文章打赏功能
+   * @param article_id
+   * @param tips
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static ArticleTips(article_id, tips, callback, errorCallback){
+    var url = URL + '/article/tips/'+article_id;
+    getData(
+      url,
+      bodyToString({
+        tips: tips
+      }),
+      callback,errorCallback);
+  }
 
 
   static SaveMsg(key,obj){

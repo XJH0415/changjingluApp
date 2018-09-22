@@ -135,6 +135,12 @@ export default class CoinDetail extends Component {
       })
     }, 5000);
   }
+
+  _Collection(){
+
+  }
+
+
   render() {
     var {coin, currency, navigation,onNewPress,navigate} = this.props;
     var {tickers, data, lines, news, betData, updateTime} = this.state;
@@ -207,8 +213,8 @@ export default class CoinDetail extends Component {
               <Text style={styles.detailCenterText}>低(24h):{syb}{low ? low : ''}</Text>
             </View>
             <View style={{marginTop: 8,}}>
-              <TouchableOpacity style={styles.detailTopBtn}>
-                <Text>自选</Text>
+              <TouchableOpacity style={styles.detailTopBtn} onPress={()=>{this._Collection()}}>
+                <Text>收  藏</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.detailTopBtn} onPress={()=>{
                 if(navigation){
@@ -218,7 +224,7 @@ export default class CoinDetail extends Component {
                 }
                 
               }}>
-                <Text>点评</Text>
+                <Text>点  评</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -263,8 +269,8 @@ export default class CoinDetail extends Component {
                   </View>
                   :
                   <View style={styles.guessMsg}>
-                    <View>
-                      <Text>总奖池：{total_bets} CJL</Text>
+                    <View style={{alignItems: 'center'}}>
+                      <Text >总奖池：{total_bets} CJL</Text>
                       <View style={styles.tolImg}>
                         <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_bets/total_bets)*GuessImg}}/>
                         <View style={{backgroundColor: 'rgb(0, 180, 73)',width: (down_bets/total_bets)*GuessImg}}/>
@@ -277,7 +283,7 @@ export default class CoinDetail extends Component {
                         <Text style={{color: 'rgb(0, 180, 73)',width: GuessImg/2}}>跌{down_bets}CJL</Text>
                       </View>
                     </View>
-                    <View>
+                    <View style={{alignItems: 'center'}}>
                       <Text>竞猜次数：{bet_times}</Text>
                       <View style={styles.tolImg}>
                         <View style={{backgroundColor: 'rgb(253, 0, 63)',width: (up_times/bet_times)*GuessImg}}/>
@@ -387,8 +393,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#75C1AF',
     borderRadius: 5,
     padding: 5,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 25,
+    paddingRight: 25,
     margin: 2,
     marginTop: 5,
   },

@@ -16,6 +16,7 @@ import DateUtils from '../utils/DateUtils';
 import API from '../lib/dataApi';
 import CommentItem from '../components/CommentItem';
 import Comment from "./Comment";
+import CollectionRewardItem from "../components/CollectionRewardItem";
 
 
 
@@ -36,10 +37,29 @@ export default class NewDetail extends Component {
   };
   state={
     height:0,
+    userMsg: null,
   }
 
+  componentDidMount(){
+    this.getUserMsg();
+  }
+
+  getUserMsg(){
+    var that = this;
+    API.getMsg('userMsg',(userMsg)=>{
+      that.setState({
+        userMsg: userMsg
+      })
+    })
+  }
+
+
+
   render() {
+    var userMsg = this.state.userMsg;
     var {navigation} = this.props;
+    console.log(navigation)
+    var {navigate} = navigation;
     var data =navigation ? navigation.state.params.data : null
     var {title, summary, add_time, views, content} = data;
     var name = data.author && data.author.name ? data.author.name : data.columnist&&data.columnist.name ? data.columnist.name : data.poster.name;
@@ -141,7 +161,20 @@ export default class NewDetail extends Component {
           >
           </WebView>
         </View>
-        <Comment data={data} type={'article'}/>
+
+        {
+          userMsg ?
+            <View>
+              <CollectionRewardItem data={data} />
+              <Comment data={data} type={'article'}/>
+            </View>
+            :
+            <View
+              // onPress={() => {navigate('Index.User', {})}}
+              style={{margin: 20,}}>
+              <Text style={{fontSize: 16,}}>登录后您可以评论</Text>
+             </View>
+        }
       </ScrollView>
     )
   }

@@ -34,6 +34,7 @@ import CollectionArticles from "./src/pages/CollectionArticles";
 import ChangePassword from "./src/pages/ChangePassword";
 import HistoryBets from "./src/pages/HistoryBets";
 import User from "./src/pages/User";
+import MyLike from "./src/pages/MyLike";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -93,6 +94,9 @@ const StackNavigator = createStackNavigator({
       }
     }
   },
+  MyLike:{
+    screen: MyLike,
+  }
 }, {
   headerMode:'screen',
   headerTransitionPreset:'fade-in-place',

@@ -78,7 +78,7 @@ export default class SelectButtonItem extends Component {
     API.AddBet(coin_bet_id, type, betNum, (result) => {
       alert(result)
     }, (error) => {
-      alert('2' + JSON.stringify(error))
+      Alert.alert('2' + '亲，数据出错了')
     })
   }
 

@@ -26,7 +26,7 @@ export  default class CurrentBetList extends Component {
         <Text style={styles.currentTitle}>最近竞猜记录</Text>
         <View style={[styles.betList,{backgroundColor:'#e2f3ef'}]}>
           <Text style={styles.bolds}>用户</Text>
-          <Text style={[styles.bolds,{marginRight: 20}]}>涨跌</Text>
+          <Text style={[styles.bolds,{marginRight: 10}]}>涨跌</Text>
           <Text style={[styles.bolds,{marginRight: 60}]}>CJL</Text>
           <Text style={styles.bolds}>下注时间</Text>
         </View>
