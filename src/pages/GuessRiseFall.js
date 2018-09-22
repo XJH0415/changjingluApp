@@ -7,11 +7,10 @@ import {
   Image,
   ScrollView,
   Picker,
-  TouchableOpacity, TouchableWithoutFeedback
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import DateUtils from '../utils/DateUtils';
-import Rules from '../utils/Rules';
 import API from '../lib/dataApi';
 import BetRulesItem from "../components/BetRulesItem";
 import CurrentBetList from "../components/CurrentBetList";
@@ -54,7 +53,7 @@ export default class GuessRiseFall extends Component {
   }
 
   componentDidMount() {
-    var {coin, betData} = this.props.navigation.state.params;
+    var {coin, betData, key} = this.props.navigation.state.params;
     var {start_time, freeze_time, end_time, bet_status} = betData;
     this.setState({
       coin: coin,
@@ -256,7 +255,8 @@ export default class GuessRiseFall extends Component {
                     </View>
                     :
                     <View
-                      // onPress={() => {navigate('Users', {})}}
+                      // onPress={() => {
+                      // }}
                     >
                       <Text style={{fontSize: 16,}}>登录后您可以竞猜</Text>
                     </View>

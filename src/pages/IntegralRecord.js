@@ -16,10 +16,16 @@ class RecordsItem extends Component{
   render(){
     var {item, index} = this.props;
     return(
-      <View style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}>
-        <Text style={styles.recTxt}>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm')}</Text>
-        <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? '猜涨跌获胜' : '猜涨跌下注'}</Text>
-        <Text style={[styles.rec,styles.recTxt]}>{item.type === 'bet_win' ? item.points : '-'+item.points}</Text>
+      <View style={styles.records}>
+        <View style={{flex:1}}>
+          <Text style={styles.recTxt}>{item.type === 'bet_win' ? item.points : '-'+item.points}</Text>
+        </View>
+        <View style={{flex:1}}>
+          <Text style={styles.recTxt}>{item.type === 'bet_win' ? '猜涨跌获胜' : '猜涨跌下注'}</Text>
+        </View>
+        <View style={{flex:1.5, alignItems: 'flex-end'}}>
+          <Text style={styles.recTxt}>{DateUtils.Formart(new Date(item.add_time*1000),'yy-MM-dd hh:mm')}</Text>
+        </View>
       </View>
     )
   }
@@ -39,12 +45,7 @@ export default class IntegralRecord extends Component {
     var  data = this.props.navigation.state.params.data;
     return (
       <View style={styles.root}>
-        <Text style={styles.points}>我的积分：{data.points}CJL</Text>
-        <View style={styles.titles}>
-          <Text style={styles.titleTxt}>时间</Text>
-          <Text style={styles.titleTxt}>事由</Text>
-          <Text style={styles.titleTxt}>CJL积分</Text>
-        </View>
+
         <RefreshList
           sort={'news'}
           getList={(page, sort, callback) => {
@@ -76,30 +77,16 @@ export default class IntegralRecord extends Component {
 const styles = StyleSheet.create({
   root:{
     flex:1,
-  },
-  points:{
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  titles:{
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  titleTxt:{
-    fontSize: 18,
-
+    backgroundColor: '#fcfcfc',
   },
   records:{
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom:5,
-  },
-  rec:{
-    marginRight: 50,
+    justifyContent: 'space-between',
+    marginBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   recTxt:{
-    fontSize: 16,
+    fontSize: 18,
   }
 })

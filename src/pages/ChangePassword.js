@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Dimensions, AsyncStorage,
+  Dimensions, AsyncStorage, Image,
 } from 'react-native';
 import API from "../lib/dataApi";
 
@@ -63,6 +63,9 @@ export default class ChangePassword extends Component {
     return (
       <View style={styles.root}>
         <View style={styles.inputView}>
+          <View >
+            <Image style={styles.img} source={require('../resource/updatePassword.png')}/>
+          </View>
           <TouchableOpacity
             style={styles.inputBox}>
             <TextInput
@@ -116,12 +119,18 @@ export default class ChangePassword extends Component {
 const styles = StyleSheet.create({
   root:{
     flex:1,
+    backgroundColor: '#fff',
   },
   inputView:{
     width: deviceWidth,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 100,
+  },
+
+  img:{
+    height: 50,
+    width: 50,
   },
   input: {
     width: 280,
@@ -140,7 +149,7 @@ const styles = StyleSheet.create({
     width: 280,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(216, 216, 216, 0.20)',
     margin: 5,
   },
   error:{

@@ -173,7 +173,7 @@ export default class NewDetail extends Component {
               // onPress={() => {navigate('Index.User', {})}}
               style={{margin: 20,}}>
               <Text style={{fontSize: 16,}}>登录后您可以评论</Text>
-             </View>
+            </View>
         }
       </ScrollView>
     )

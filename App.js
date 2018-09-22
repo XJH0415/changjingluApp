@@ -125,22 +125,24 @@ const StackNavigator = createStackNavigator({
 })
 export default class App extends Component {
   componentWillMount(){
-    // if (isFirstTime) {
-    //   Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [
-    //     {text: '是', onPress: ()=>{throw new Error('模拟启动失败,请重启应用')}},
-    //     {text: '否', onPress: ()=>{markSuccess()}},
-    //   ]);
-    // } else if (isRolledBack) {
-    //   Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
-    // }
+    if (isFirstTime) {
+      if (markSuccess) {
+        markSuccess();
+      }
+    } else if (isRolledBack) {
+      Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
+    }
   }
 
   doUpdate = info => {
     downloadUpdate(info).then(hash => {
+
       Alert.alert('提示', '下载完毕,是否重启应用?', [
         {text: '是', onPress: ()=>{switchVersion(hash);}},
-        {text: '下次启动时', onPress: ()=>{switchVersionLater(hash);}},
+        {text: '下次启动时', onPress: ()=>{switchVersionLater(hash);}
+        },
       ]);
+
     }).catch(err => {
       Alert.alert('提示', '更新出错:'+err);
     });
@@ -180,7 +182,9 @@ export default class App extends Component {
     }
   }
   componentWillUnmount(){
-    markSuccess();
+    if (markSuccess) {
+      markSuccess();
+    }
   }
   render() {
     return (
@@ -193,6 +197,8 @@ const styles=StyleSheet.create({
   tabIcon:{
     width:50,
     height:50,
+    marginLeft: 0,
+    paddingLeft: 0,
   }
 })
 

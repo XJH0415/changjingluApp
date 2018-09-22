@@ -71,6 +71,7 @@ export default class Advert extends Component {
                 autoplay={true}
                 autoplayTimeout={5}
                 showsButtons={false}
+                key = {records.length}
         >
           {
             records.map((item,index)=>{

@@ -4,32 +4,55 @@ import {
   Text,
   View,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import API from '../lib/dataApi'
 
 export default class Notice extends Component {
   static defaultProps={
-    data:{
-      Notice: [
-        '来长颈鹿参加邀请注册大赛，前10名奖BTC和ETH',
-        '长颈鹿资讯为全球区块链团队开设专栏了，快来入驻吧',
-        '长颈鹿资讯广告位招租，快来认领吧',
-      ]}
   }
+
+  state={
+    records:[]
+  }
+
+  _onNotice(){
+    let that = this;
+    API.getNewsPlain('', 1, '', 1, (data) => {
+      if (data && data.records && data.records.length >= 5){
+        var records= data.records.slice(0,4)
+        that.setState({
+          records: records
+        })
+      }
+
+    });
+  }
+
+  componentDidMount(){
+    this._onNotice();
+  }
+
   render() {
-    var {data:{Notice}}=this.props;
+    var {records} = this.state;
+    var navigate= this.props.navigate;
     return(
       <View  style={styles.root}>
         <Swiper
-                horizontal={false} showsPagination={false}
-                showsButtons={false} autoplay={true}
-                autoplayTimeout={6}>
+                horizontal={false}
+                showsPagination={false}
+                showsButtons={false}
+                autoplay={true}
+                autoplayTimeout={6}
+                key = {records.length}
+        >
           {
-            Notice.map((item,index)=>{
+            records.map((item,index)=>{
               return (
-                <View style={styles.textView} key={index}>
-                  <Text numberOfLines={1} style={styles.bannerText} numberOfLines={1}>{item}</Text>
-                </View>
+                <TouchableOpacity style={styles.textView} onPress={()=>{navigate('NewDetail',{data:item})}}>
+                  <Text numberOfLines={1} style={styles.bannerText}>{item.title}</Text>
+                </TouchableOpacity>
               )
             })
           }

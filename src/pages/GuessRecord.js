@@ -130,7 +130,6 @@ class GuessRecordItem extends Component{
         <View style={styles.gusTime}>
           <Text>{DateUtils.Formart(new Date(item.add_time*1000),'yyyy-MM-dd hh:mm:ss')}</Text>
         </View>
-        <Separator style={{height: 10,}}/>
       </View>
     )
   }
@@ -199,8 +198,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   flat:{
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 5,
   },
   separator:{
     backgroundColor: '#fcfcfc',

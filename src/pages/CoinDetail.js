@@ -49,7 +49,7 @@ export default class CoinDetail extends Component {
       vol_24h: '2158432',
       gains_pct_1d: '2.6879'
     },
-    navigate:()=>{},
+    navigate:null,
     currency: 'cny',
     onNewPress:()=>{}
   }
@@ -143,6 +143,9 @@ export default class CoinDetail extends Component {
 
   render() {
     var {coin, currency, navigation,onNewPress,navigate} = this.props;
+    if (!navigate){
+      navigate = navigation.navigate;
+    }
     var {tickers, data, lines, news, betData, updateTime} = this.state;
     var {
       syb,//计价符号
@@ -208,27 +211,28 @@ export default class CoinDetail extends Component {
             <Text style={[styles.detailTopText, {marginLeft: 5, color: color}]}>
               {gains_pct ? gains_pct : '-'}
             </Text>
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}</Text>
-              <Text style={styles.detailCenterText}>低(24h):{syb}{low ? low : ''}</Text>
-            </View>
-            <View style={{marginTop: 8,}}>
-              <TouchableOpacity style={styles.detailTopBtn} onPress={()=>{this._Collection()}}>
-                <Text>收  藏</Text>
+            <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <TouchableOpacity  onPress={()=>{this._Collection()}}>
+                <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 10}}>
+                  <Text style={styles.detailTopBtn}>自选</Text>
+                </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.detailTopBtn} onPress={()=>{
+              <TouchableOpacity  onPress={()=>{
                 if(navigation){
                   navigation.navigate('Comment', {data: coin, type: 'coin'})
                 }else {
                   navigate('Comment', {data: coin, type: 'coin'})
                 }
-                
               }}>
-                <Text>点  评</Text>
+                <View style={{height: 50, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={styles.detailTopBtn}>点评</Text>
+                </View>
+
               </TouchableOpacity>
             </View>
           </View>
           <View>
+            <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}低(24h):{syb}{low ? low : ''}</Text>
             <Text style={styles.detailCenterText}>
               量(24h): {vol ? vol : '-'},
               额(24h): {syb ? syb : ''}{vol_value ? vol_value : '-'} (第{vol_order ? vol_order : '-'}名)
@@ -251,7 +255,8 @@ export default class CoinDetail extends Component {
         </View>
         {
           betData ?
-            <TouchableOpacity style={styles.guessView} onPress={()=>{navigate('GuessRiseFall',{coin:coin, betData: betData})}}>
+            <TouchableOpacity style={styles.guessView} onPress={()=>{
+              navigate('GuessRiseFall',{coin:coin, betData: betData})}}>
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>
                   <Text style={styles.guessName}>{name}</Text>
@@ -311,6 +316,7 @@ export default class CoinDetail extends Component {
                 <Text style={styles.newTopTitle}>专栏资讯</Text>
               </View>
               <FlatList
+                keyExtractor={(item,index) => index}
                 data={news.slice(0,5)}
                 ItemSeparatorComponent={() => <Separator/>}
                 renderItem={({item, index}) => (
@@ -344,10 +350,10 @@ export default class CoinDetail extends Component {
             <Text style={styles.newTopTitle}>行情</Text>
           </View>
           <FlatList
+            keyExtractor={(item,index) => index}
             style={{flex: 1}}
             data={tickers}
             ItemSeparatorComponent={() => <Separator/>}
-            keyExtractor={(item) => item.coin_id}
             renderItem={({item, index}) => <PairItem ticker={item}/>}
           />
         </View>
@@ -371,7 +377,7 @@ const styles = StyleSheet.create({
   detail: {},
   detailTop: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     height: 50
   },
@@ -381,7 +387,7 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   detailTopPrice: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   detailTopText: {
@@ -392,14 +398,18 @@ const styles = StyleSheet.create({
   detailTopBtn: {
     backgroundColor: '#75C1AF',
     borderRadius: 5,
-    padding: 5,
-    paddingLeft: 25,
-    paddingRight: 25,
+    padding: 6,
+    paddingLeft: 15,
+    paddingRight: 15,
     margin: 2,
     marginTop: 5,
+    color: '#fff'
   },
   detailCenterText: {
-    fontSize: 10,
+    fontSize: 12,
+    padding:0,
+    margin: 0,
+    lineHeight: 12,
     color: 'gray',
     marginBottom: 5,
     marginRight: 5,

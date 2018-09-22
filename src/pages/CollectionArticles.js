@@ -8,9 +8,11 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Image,
 } from 'react-native';
 import API from "../lib/dataApi";
 import DateUtils from "../utils/DateUtils";
+import Separator from "../components/Separator";
 
 export default class CollectionArticles extends Component {
   static navigationOptions = (options) => {
@@ -38,7 +40,7 @@ export default class CollectionArticles extends Component {
   _listHeaderComponent(){
     return (
       <View style={styles.titles}>
-        <Text style={styles.titleTxt}>搜索框</Text>
+        {/*<Text style={styles.titleTxt}>搜索框</Text>*/}
       </View>
     )
   }
@@ -59,9 +61,10 @@ export default class CollectionArticles extends Component {
             ref='FlatList'
             data={records}
             ListHeaderComponent = {this._listHeaderComponent.bind(this)}
+            ItemSeparatorComponent={() => <Separator/>}
             renderItem = {({item,index}) =>
               <TouchableOpacity
-                style={[styles.records,(index+1)%2 === 0 ? {backgroundColor: '#e2f3ef'} : {backgroundColor: '#fff'}]}
+                style={styles.records}
                 onPress={() => {
                   navigate('NewDetail', {data: records[index].article})
                 }}
@@ -85,6 +88,7 @@ export default class CollectionArticles extends Component {
 const styles = StyleSheet.create({
   root:{
     flex:1,
+    backgroundColor: '#fcfcfc',
   },
   titles:{
     flexDirection: 'row',
@@ -98,6 +102,7 @@ const styles = StyleSheet.create({
   },
   articleTitle:{
     color:'#000',
+    fontSize: 16,
     marginLeft: 10,
     marginRight: 10,
   },

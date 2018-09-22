@@ -19,4 +19,8 @@
  *
  * 行颜色
  * #e2f3ef
+ *
+ *
+ * 行间横条
+ * backgroundColor: '#fcfcfc',
  */
