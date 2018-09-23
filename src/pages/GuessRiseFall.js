@@ -43,9 +43,9 @@ export default class GuessRiseFall extends Component {
   }
 
   state = {
-    coin: null,//币数据
+    coin: this.props.navigation.state.params.coin,//币数据
     coin_id: null,//币coin_id
-    betData: null,//币猜涨跌数据
+    betData: this.props.navigation.state.params.betData,//币猜涨跌数据
     updateTime: '',
     historyBets: null,
     CurrentData: null, //当前用户猜涨跌数据以及所有参与本次猜涨跌的记录
@@ -53,12 +53,8 @@ export default class GuessRiseFall extends Component {
   }
 
   componentDidMount() {
-    var {coin, betData, key} = this.props.navigation.state.params;
+    var {coin, betData} = this.state;
     var {start_time, freeze_time, end_time, bet_status} = betData;
-    this.setState({
-      coin: coin,
-      betData: betData,
-    });
     bet_status === '0' ? this.countDown(start_time) :
       bet_status === '1' ? this.countDown(freeze_time) :
         this.countDown(end_time);
@@ -79,10 +75,10 @@ export default class GuessRiseFall extends Component {
   }
 
   countDown(countTime) {
+    var {coin, betData} = this.state;
     var times = Math.floor(countTime - new Date().getTime() / 1000);
-    var timer = null;
     var that = this;
-    timer = setInterval(function () {
+    that.timer = setInterval(function () {
       var day = 0,
         hour = 0,
         minute = 0,
@@ -110,11 +106,26 @@ export default class GuessRiseFall extends Component {
       times--;
     }, 1000);
     if (times <= 0) {
-      clearInterval(timer);
+      clearInterval(that.timer);
       this.setState({
         updateTime: '',
       })
+      this.getBetActive(coin.coin_id);
     }
+  }
+
+  getBetActive(coin_id){
+    var that=this;
+    API.getBetActive((data)=>{
+      for(var betData of data){
+        if (coin_id === betData.coin_id) {
+          that.setState({
+            betData:betData
+          });
+          break;
+        }
+      }
+    })
   }
 
   getHistoryBets() {
@@ -137,6 +148,10 @@ export default class GuessRiseFall extends Component {
         CurrentData: CurrentData,
       })
     })
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer);
   }
 
   render() {
@@ -167,7 +182,7 @@ export default class GuessRiseFall extends Component {
     return (
       <ScrollView style={styles.root}>
         <View style={styles.rowView}>
-          <View style={[styles.posit,{marginLeft: 25,}]}>
+          <View style={styles.posit}>
             <Text>目前状态</Text>
             <Text>{bet_status === '0' ? '等待中' : bet_status === '1' ? '下注中' : '锁仓中'}</Text>
           </View>
@@ -333,6 +348,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   posit: {
+    flex: 1,
     alignItems: 'center',
   },
   tolImg: {

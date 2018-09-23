@@ -23,4 +23,8 @@
  *
  * 行间横条
  * backgroundColor: '#fcfcfc',
+ *
+ *
+ * 本地部分用户信息 userMsg
+ * 本地用户自选信息 币：selfCoins  交易对: selfTickers
  */

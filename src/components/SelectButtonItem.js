@@ -76,7 +76,7 @@ export default class SelectButtonItem extends Component {
     }
     // alert(coin_bet_id+','+type+','+betNum)
     API.AddBet(coin_bet_id, type, betNum, (result) => {
-      alert(result)
+      Alert.alert(' ' + '竞猜成功！')
     }, (error) => {
       Alert.alert('2' + '亲，数据出错了')
     })

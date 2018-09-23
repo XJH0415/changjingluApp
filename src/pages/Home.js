@@ -18,35 +18,81 @@ const deviceHeight = Dimensions.get('window').height;    //设备的高度
 export default class Home extends Component {
   state = {
     coins: [],
-    lines:{}
+    lines:{},
+    selfCoins: [],
+    myTicker:[]
   }
 
   componentWillMount() {
     var that=this;
-    API.getCoins(1,'va','cny',(data)=>{
-      var coin_ids='';
-      that.setState({
-        coins:data.coins,
+    function init(){
+      API.getCoins(1,'va','cny',(data)=>{
+        that.setState({
+          coins:data.coins,
+        })
       })
-    })
+      API.getSelfSelect('1', 'va', (selfCoins)=>{
+        that.setState({
+          selfCoins:selfCoins.coins.records,
+        })
+      })
+      API.getMeTickers('', '',(myTicker)=>{
+        that.setState({
+          myTicker:myTicker,
+        })
+      })
+    }
+    init();
+    that.Interval=setInterval(()=>{
+      init();
+    },5000)
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.Interval);
   }
 
   render() {
     const {navigate} = this.props.navigation;
-    var {coins,lines} = this.state;
+    var {coins,lines,selfCoins} = this.state;
+    var newSelfCoins=[]
+    var newCoins=[]
+    if (selfCoins.length > 0){
+      newCoins.push({type: '行情'})
+      newSelfCoins.push({type: '自选'})
+      Array.prototype.push.apply(newCoins, coins)
+
+      // alert(JSON.stringify(selfCoins))
+      Array.prototype.push.apply(newSelfCoins, selfCoins)
+
+      Array.prototype.push.apply(newSelfCoins, newCoins)
+    }
+    if (newSelfCoins.length === 0 ){
+      newSelfCoins = coins;
+    }
     return (
       <View style={styles.root}>
         <Advert navigate={navigate}/>
         <Notice navigate={navigate}/>
-        {/*<Text style={styles.goToGuess} onPress={()=>{navigate('GuessRiseFall',{})}}>进入猜涨跌</Text>*/}
         <Separator />
         <FlatList style={{flex: 1}}
-                  data={coins}
+                  data={newSelfCoins}
                   ItemSeparatorComponent={() => <Separator/>}
                   keyExtractor={(item) => item.coin_id}
-                  renderItem={({item, index}) => <MarketItem onPress={(coin) => {
-                    navigate('CoinDetail', {coin: coin})
-                  }}key={index} currency={'￥'} coin={item}/>}
+                  renderItem={({item, index}) => {
+                    if (item.type) {
+                      return(
+                        <Text style={styles.title}>{item.type}</Text>
+                      )
+                    }else {
+                      //判断
+                      return(
+                        <MarketItem onPress={(coin) => {
+                          navigate('CoinDetail', {coin: coin, type: item.type})
+                        }}key={index} currency={'￥'} coin={item} />
+                      )
+                    }
+                  }}
         />
       </View>
     );
@@ -65,5 +111,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 5,
     borderRadius: 8,
+  },
+  title:{
+    marginLeft: 5,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    borderTopWidth: 1,
+    borderColor: '#E6E6FA',
   }
 });

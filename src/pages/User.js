@@ -9,7 +9,6 @@ import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import LocalStorage from '../utils/LocalStorage';
 import API from '../lib/dataApi';
-import Cookie from 'react-native-cookie';
 
 export default class User extends Component {
 
@@ -19,6 +18,7 @@ export default class User extends Component {
     isLogin: false,
     info:null,
     cookiePsd:null,//cookie
+    LoginKey: this.props.key,
   }
   
   patchPostMessageFunction = function () {
@@ -123,7 +123,6 @@ export default class User extends Component {
               goback={()=>{
                 API.logOut(()=>{});
                 API.removeMsg('userMsg',()=>{});
-                Cookie.clear();
                 this.setState({isLogin:false});
               }}
               navigation={navigation}

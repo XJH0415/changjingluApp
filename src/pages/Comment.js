@@ -75,26 +75,27 @@ export default class Comment extends Component{
 
   _discussBtn(){
     let that = this;
-    var {data, type} = this.props.navigation.state.params;
+    var data = null,type = null;
+    if (this.props.data){
+      data = this.props.data;
+      type = this.props.type;
+    }else{
+      data = this.props.navigation.state.params.data;
+      type = this.props.navigation.state.params.type;
+    }
     var {discuss, stars} = this.state;
-    // alert(JSON.stringify(data))
+    var id = '';
+    if (type === 'coin'){
+      id = data.coin_id;
+    }
+    if (type === 'article'){
+      id = data.article_id;
+    }
     !discuss? Alert.alert('','请输入评论内容') :
       stars === 0 ? Alert.alert('','亲，请评分') :
-    API.getMsg('userMsg',(msg)=>{
-      if (!msg){
-        Alert.alert('','未登录')
-      } else{
-        var id = '';
-        if (type === 'coin'){
-          id = data.coin_id;
-        } else{
-          id = data.article_id;
-        }
         API.CommentAdd(type, id, discuss, stars, (result)=>{
           result ? that.refs.RefreshList.refresh() : Alert.alert('','评论失败')
         })
-      }
-    })
   }
 
 

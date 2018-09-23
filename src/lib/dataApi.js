@@ -643,6 +643,45 @@ export default class DataApi {
       callback,errorCallback);
   }
 
+  /**
+   * 我的自选---币
+   * @param page
+   * @param sort
+   * @param callback
+   * @param errorCallback
+   */
+  static getSelfSelect(page, sort, callback, errorCallback){
+    var url = URL + '/app/selfSelect';
+    getData(
+      url,
+      bodyToString({
+        page: page,
+        sort: sort
+      }),
+      callback,errorCallback);
+  }
+
+  /**
+   * 我的自选---交易所
+   * @param page
+   * @param sort
+   * @param callback
+   * @param errorCallback
+   */
+  static getMeTickers(page, sort, callback, errorCallback){
+    var url = URL + '/me/tickers';
+    getData(
+      url,
+      bodyToString({
+        page: page,
+        sort: sort
+      }),
+      callback,errorCallback);
+  }
+
+
+
+
 
   static SaveMsg(key,obj){
     save(key,obj);

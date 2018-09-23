@@ -51,7 +51,7 @@ export default class CoinDetail extends Component {
     },
     navigate:null,
     currency: 'cny',
-    onNewPress:()=>{}
+    onNewPress:()=>{},
   }
   state = {
     tickers: [],
@@ -60,7 +60,10 @@ export default class CoinDetail extends Component {
     news: [],
     isRefreshing:false,
     betData: null,
+    selfSelect: false,
+    type: this.props.type,
   }
+
   componentWillMount() {
     this.refresh();
   }
@@ -146,7 +149,10 @@ export default class CoinDetail extends Component {
     if (!navigate){
       navigate = navigation.navigate;
     }
-    var {tickers, data, lines, news, betData, updateTime} = this.state;
+    var {tickers, data, lines, news, betData, updateTime, selfSelect, type} = this.state;
+    if (type === '自选'){
+      selfSelect = true;
+    }
     var {
       syb,//计价符号
       amount,//总发行量
@@ -213,8 +219,8 @@ export default class CoinDetail extends Component {
             </Text>
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
               <TouchableOpacity  onPress={()=>{this._Collection()}}>
-                <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 10}}>
-                  <Text style={styles.detailTopBtn}>自选</Text>
+                <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 5}}>
+                  <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity  onPress={()=>{
@@ -227,7 +233,6 @@ export default class CoinDetail extends Component {
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={styles.detailTopBtn}>点评</Text>
                 </View>
-
               </TouchableOpacity>
             </View>
           </View>
@@ -256,7 +261,10 @@ export default class CoinDetail extends Component {
         {
           betData ?
             <TouchableOpacity style={styles.guessView} onPress={()=>{
-              navigate('GuessRiseFall',{coin:coin, betData: betData})}}>
+              navigate('GuessRiseFall',{
+                coin:coin,
+                betData: betData,
+                key: this.props.key})}}>
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>
                   <Text style={styles.guessName}>{name}</Text>

@@ -8,11 +8,13 @@ import {
 } from 'react-native';
 import Echarts from '../echarts';
 import NumUtils from '../utils/NumUtils';
+import API from '../lib/dataApi';
 
 export default class MarketItem extends Component {
   static defaultProps = {
-    onPress:()=>{},
-    currency:'￥',
+    onPress: () => {
+    },
+    currency: '￥',
     coin: {
       coin_id: null,
       url: null,
@@ -23,7 +25,7 @@ export default class MarketItem extends Component {
       price: null,
       circulation: null,
       vol_24h: null,
-      gains_pct_1d:null
+      gains_pct_1d: null
     },
     data: []
   }
@@ -34,6 +36,18 @@ export default class MarketItem extends Component {
     chartHeight: 0
   }
 
+  componentDidMount() {
+    this.SaveSelfCoins();
+  }
+
+
+  SaveSelfCoins() {
+    var {selfCoins} = this.state;
+    if (selfCoins !== []) {
+      API.SaveMsg('selfCoins', selfCoins)
+    }
+  }
+
   componentWillReceiveProps(props) {
     this.setState({
       data: props.data,
@@ -42,9 +56,15 @@ export default class MarketItem extends Component {
   }
 
   render() {
-    var {currency,onPress}=this.props;
-    var {chartWidth, chartHeight,coin,data} = this.state;
-    var {code,name_cn,name_en,price,vol_24h,gains_pct_1d, icon}=coin;
+    var {currency, onPress} = this.props;
+    var {chartWidth, chartHeight, coin, data,} = this.state;
+    var {code, name_cn, name_en, price, vol_24h, gains_pct_1d, icon} = coin;
+    if (icon.path) {
+      icon = coin['icon.small'];
+    }
+    if (coin.price_cny) {
+      price = coin.price_cny;
+    }
     var option = {
       toolbox: {
         show: false,
@@ -108,31 +128,39 @@ export default class MarketItem extends Component {
             <Text numberOfLines={1} style={[styles.text, {fontWeight: 'bold'}]}>{code}</Text>
           </View>
           <View>
-            <Text numberOfLines={1} style={[styles.text, {color: 'gray'}]}>{name_cn?name_cn:name_en}</Text>
+            <Text numberOfLines={1} style={[styles.text, {color: 'gray'}]}>{name_cn ? name_cn : name_en}</Text>
           </View>
         </View>
         <View style={styles.rightView}>
           <View>
-            <Text numberOfLines={1} style={[styles.text,{fontSize:16,fontWeight: 'bold',color: gains_pct_1d?gains_pct_1d*1>0?'rgb(228,36,38)':'rgb(65,158,40)':'gray'}]}>{currency}{price?(price*1).toFixed(2):''}</Text>
+            <Text numberOfLines={1} style={[styles.text, {
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: gains_pct_1d ? gains_pct_1d * 1 > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)' : 'gray'
+            }]}>{currency}{price ? (price * 1).toFixed(2) : ''}</Text>
           </View>
           <View>
-            <Text numberOfLines={1} style={[styles.text, {fontSize:12,color: 'gray'}]}>量(24h):{vol_24h?NumUtils.formatNum(vol_24h):''}</Text>
+            <Text numberOfLines={1} style={[styles.text, {
+              fontSize: 12,
+              color: 'gray'
+            }]}>量(24h):{vol_24h ? NumUtils.formatNum(vol_24h) : ''}</Text>
           </View>
         </View>
         <View>
-          <Text numberOfLines={1} style={[styles.text,styles.pct,{backgroundColor: gains_pct_1d?gains_pct_1d*1>0?'rgb(228,36,38)':'rgb(65,158,40)':'gray'}]}>{gains_pct_1d?(gains_pct_1d*1).toFixed(2)+'%':''}</Text>
+          <Text numberOfLines={1}
+                style={[styles.text, styles.pct, {backgroundColor: gains_pct_1d ? gains_pct_1d * 1 > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)' : 'gray'}]}>{gains_pct_1d ? (gains_pct_1d * 1).toFixed(2) + '%' : ''}</Text>
         </View>
         {/*<View style={styles.chart} onLayout={({nativeEvent}) => {*/}
-          {/*this.setState({*/}
-            {/*chartHeight: nativeEvent.layout.height,*/}
-            {/*chartWidth: nativeEvent.layout.width*/}
-          {/*})*/}
+        {/*this.setState({*/}
+        {/*chartHeight: nativeEvent.layout.height,*/}
+        {/*chartWidth: nativeEvent.layout.width*/}
+        {/*})*/}
         {/*}}>*/}
-          {/*{chartWidth > 0 && chartHeight > 0 ?*/}
-            {/*<Echarts option={option} width={chartWidth} height={chartHeight}/>*/}
-            {/*: null*/}
-          {/*}*/}
-        
+        {/*{chartWidth > 0 && chartHeight > 0 ?*/}
+        {/*<Echarts option={option} width={chartWidth} height={chartHeight}/>*/}
+        {/*: null*/}
+        {/*}*/}
+
         {/*</View>*/}
       </TouchableOpacity>
     )
@@ -164,7 +192,7 @@ const styles = StyleSheet.create({
   image: {
     width: 28,
     height: 28,
-    margin:6
+    margin: 6
   },
   leftView: {
     marginRight: 5,
@@ -172,19 +200,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rightView: {
-    minWidth:50,
+    minWidth: 50,
     marginRight: 15,
     justifyContent: 'center',
     alignItems: 'flex-end'
   },
-  pct:{
-    paddingTop:4,
-    paddingBottom:4,
-    borderRadius:5,
-    marginRight:5,
-    color:'white',
-    minWidth:70,
-    fontWeight:'bold',
-    textAlign:'center'
+  pct: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    borderRadius: 5,
+    marginRight: 5,
+    color: 'white',
+    minWidth: 70,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 })
