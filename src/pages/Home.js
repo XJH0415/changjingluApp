@@ -86,6 +86,20 @@ export default class Home extends Component {
                       )
                     }else {
                       //判断
+                      if (item.icon.path){
+                        item={
+                          coin_id: item.coin_id,
+                          url: item.url,
+                          icon: item['icon.small'],
+                          code: item.code,
+                          name_en: item.name_en,
+                          name_cn: item.name_cn,
+                          price: item.price_cny,
+                          circulation: item.circulation,
+                          vol_24h: item.vol_24h,
+                          gains_pct_1d: item.gains_pct_1d
+                        }
+                      }
                       return(
                         <MarketItem onPress={(coin) => {
                           navigate('CoinDetail', {coin: coin, type: item.type})

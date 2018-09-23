@@ -61,7 +61,6 @@ export default class CoinDetail extends Component {
     isRefreshing:false,
     betData: null,
     selfSelect: false,
-    type: this.props.type,
   }
 
   componentWillMount() {
@@ -145,11 +144,11 @@ export default class CoinDetail extends Component {
 
 
   render() {
-    var {coin, currency, navigation,onNewPress,navigate} = this.props;
+    var {coin, currency, navigation,onNewPress,navigate, type } = this.props;
     if (!navigate){
       navigate = navigation.navigate;
     }
-    var {tickers, data, lines, news, betData, updateTime, selfSelect, type} = this.state;
+    var {tickers, data, lines, news, betData, updateTime, selfSelect} = this.state;
     if (type === '自选'){
       selfSelect = true;
     }

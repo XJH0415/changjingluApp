@@ -59,12 +59,6 @@ export default class MarketItem extends Component {
     var {currency, onPress} = this.props;
     var {chartWidth, chartHeight, coin, data,} = this.state;
     var {code, name_cn, name_en, price, vol_24h, gains_pct_1d, icon} = coin;
-    if (icon.path) {
-      icon = coin['icon.small'];
-    }
-    if (coin.price_cny) {
-      price = coin.price_cny;
-    }
     var option = {
       toolbox: {
         show: false,
