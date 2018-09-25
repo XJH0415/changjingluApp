@@ -7,14 +7,11 @@ import {
   Text, Dimensions,
   TouchableOpacity
 } from 'react-native';
-import { SwipeListView } from 'react-native-swipe-list-view';
-
 import Advert from '../components/Advert';
 import Notice from '../components/Notice';
 import MarketItem from '../components/MarketItem';
 import API from '../lib/dataApi';
 import Separator from '../components/Separator';
-import SwipeRow from "../components/SwipeRow";
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
@@ -130,21 +127,11 @@ export default class Home extends Component {
                         }
                       }
                       return(
-                        <SwipeListView
-                          rightOpenValue={-75}
 
-                          renderHiddenRow={() => (
-                            <TouchableOpacity>
-                              <Text>取消自选</Text>
-                            </TouchableOpacity>
-                          )}
-                          renderRow={()=>
                             <MarketItem onPress={(coin) => {
                               navigate('CoinDetail', {coin: coin})
-                            }}key={index} currency={'￥'} coin={item} />}
-                        >
+                            }}key={index} currency={'￥'} coin={item} />
 
-                        </SwipeListView>
                       )
                     }
                   }}
