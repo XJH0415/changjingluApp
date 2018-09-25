@@ -25,7 +25,7 @@ export default class MarketItem extends Component {
       price: null,
       circulation: null,
       vol_24h: null,
-      gains_pct_1d: null
+      gains_pct_1d: null,
     },
     data: []
   }
@@ -208,5 +208,6 @@ const styles = StyleSheet.create({
     minWidth: 70,
     fontWeight: 'bold',
     textAlign: 'center'
-  }
+  },
+
 })

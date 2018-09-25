@@ -47,7 +47,7 @@ export default class CoinDetail extends Component {
       price: 42915.708802205,
       circulation: null,
       vol_24h: '2158432',
-      gains_pct_1d: '2.6879'
+      gains_pct_1d: '2.6879',
     },
     navigate:null,
     currency: 'cny',
@@ -61,6 +61,7 @@ export default class CoinDetail extends Component {
     isRefreshing:false,
     betData: null,
     selfSelect: false,
+    selfCoins: null,
   }
 
   componentWillMount() {
@@ -77,6 +78,22 @@ export default class CoinDetail extends Component {
     this.getKline(coin.coin_id, currency);
     this.getCoinArticles(coin.coin_id);
     this.getBetActive(coin.coin_id);
+
+  }
+
+  getSelfSelect(){
+    API.getSelfSelect('1', 'va', (selfCoins)=>{
+      this.setState({
+        selfCoins:selfCoins.coins.records,
+      });
+      for (let sc of selfCoins.coins.records) {
+        if (sc.coin_id === this.props.coin.coin_id) {
+          this.setState({
+            selfSelect:true,
+          });
+        }
+      }
+    })
   }
 
   getTickers(coin_id, currency) {
@@ -138,6 +155,21 @@ export default class CoinDetail extends Component {
     }, 5000);
   }
 
+  //千分位逗号隔开
+  fNum(s) {
+    var n=3;
+    n = n > 0 && n <= 20 ? n : 2;
+    s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+    var l = s.split(".")[0].split("").reverse(),
+      r = s.split(".")[1];
+    var t = "";
+    for(var i = 0; i < l.length; i ++ )
+    {
+      t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+    }
+    return t.split("").reverse().join("");
+  }
+
   _Collection(){
 
   }
@@ -148,10 +180,7 @@ export default class CoinDetail extends Component {
     if (!navigate){
       navigate = navigation.navigate;
     }
-    var {tickers, data, lines, news, betData, updateTime, selfSelect} = this.state;
-    if (type === '自选'){
-      selfSelect = true;
-    }
+    var {tickers, data, lines, news, betData, selfSelect} = this.state;
     var {
       syb,//计价符号
       amount,//总发行量
@@ -197,7 +226,6 @@ export default class CoinDetail extends Component {
       color = '#3CB371';
     }
     return (
-      
       <ScrollView
         style={styles.root}
         refreshControl={
@@ -238,7 +266,7 @@ export default class CoinDetail extends Component {
           <View>
             <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}低(24h):{syb}{low ? low : ''}</Text>
             <Text style={styles.detailCenterText}>
-              量(24h): {vol ? vol : '-'},
+              量(24h): {vol ? this.fNum(vol) : '-'},
               额(24h): {syb ? syb : ''}{vol_value ? vol_value : '-'} (第{vol_order ? vol_order : '-'}名)
             </Text>
             <Text style={styles.detailCenterText}>
@@ -333,7 +361,7 @@ export default class CoinDetail extends Component {
                     }else {
                       onNewPress(item)
                     }
-                    
+
                   }} style={styles.newItem}>
                     <Text style={styles.newItemTitle} numberOfLines={1}>{item.title}</Text>
                     <View style={{flexDirection: 'row'}}>
@@ -480,7 +508,7 @@ const styles = StyleSheet.create({
   },
   guessName:{
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 16,
   },
   guessMsg:{
     flexDirection: 'row',

@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   selectTitle: {
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 16,
     paddingLeft: 5,
   },
   selectImg: {

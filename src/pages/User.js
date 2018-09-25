@@ -20,7 +20,7 @@ export default class User extends Component {
     cookiePsd:null,//cookie
     LoginKey: this.props.key,
   }
-  
+
   patchPostMessageFunction = function () {
     function awaitPostMessage() {
       var isReactNativePostMessageReady = !!window.originalPostMessage;
@@ -72,18 +72,18 @@ export default class User extends Component {
 
 
   };
-  
+
   iospatchPostMessageFunction = function () {
     var originalPostMessage = window.postMessage;
-    
+
     var patchedPostMessage = function (message, targetOrigin, transfer) {
       originalPostMessage(message, targetOrigin, transfer);
     };
-    
+
     patchedPostMessage.toString = function () {
       return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
     };
-    
+
     window.postMessage = patchedPostMessage;
     if (window.location['href'] == 'https://changjinglu.pro/app/me') {
       var info = document.getElementById('info').innerHTML;
@@ -123,6 +123,8 @@ export default class User extends Component {
               goback={()=>{
                 API.logOut(()=>{});
                 API.removeMsg('userMsg',()=>{});
+                API.removeMsg('userState',()=>{});
+                API.SaveMsg('userState','0');
                 this.setState({isLogin:false});
               }}
               navigation={navigation}
@@ -150,6 +152,7 @@ export default class User extends Component {
                     if (e.nativeEvent.data) {
                       console.log(e.nativeEvent.data);
                       API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
+                      API.SaveMsg('userState','1');
                       this.setState({
                         isLogin: true,
                         info: JSON.parse(e.nativeEvent.data)
@@ -164,7 +167,7 @@ export default class User extends Component {
       </View>
     );
   }
-  
+
   renderView(width, height) {
     const heightPX = `${height || 400}px`;
     const widthPX = width ? `${width}px` : 'auto';
@@ -174,8 +177,8 @@ export default class User extends Component {
  document.getElementsByClassName('container')[0].style.width = "${widthPX}";
  document.getElementsByClassName('container')[0].style.backgroundColor = "white";`
   }
-  
-  
+
+
   createMeta() {
     return `
  var oMeta = document.createElement('meta');
