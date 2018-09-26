@@ -713,7 +713,18 @@ export default class DataApi {
       callback,errorCallback);
   }
 
-
+  /**
+   * 刷新用户信息
+   * @param callback
+   */
+  static getLogMe(callback){
+    var url = URL + '/app/logMe';
+    SubmitForm(
+      url,
+      bodyToString({
+      }),
+      callback);
+  }
 
   static SaveMsg(key,obj){
     save(key,obj);

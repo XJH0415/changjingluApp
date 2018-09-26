@@ -46,11 +46,11 @@ export default class Home extends Component {
           selfCoins:selfCoins.coins.records,
         })
       })
-      API.getMeTickers('', '',(myTicker)=>{
-        that.setState({
-          myTicker:myTicker,
-        })
-      })
+      // API.getMeTickers('', '',(myTicker)=>{
+      //   that.setState({
+      //     myTicker:myTicker,
+      //   })
+      // })
       API.getMsg('userState', (userState)=>{
         that.setState({
           userState:userState,
@@ -93,7 +93,10 @@ export default class Home extends Component {
       newCoins.push({type: '行情'})
       newSelfCoins.push({type: '自选'})
     }
-
+    if (userState === '0'){
+      newSelfCoins = [];
+      selfCoins = [];
+    }
     let newCoinData = this.mergeArr(newSelfCoins, selfCoins, newCoins, coins);
     return (
       <View style={styles.root}>

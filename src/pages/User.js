@@ -152,6 +152,7 @@ export default class User extends Component {
                     if (e.nativeEvent.data) {
                       console.log(e.nativeEvent.data);
                       API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
+                      API.SaveMsg('points', e.nativeEvent.data.points)
                       API.SaveMsg('userState','1');
                       this.setState({
                         isLogin: true,

@@ -27,7 +27,9 @@
  *
  * 本地部分用户信息 userMsg
  *
- * 用户登录状态 0未登录 1登录
+ * 用户登录状态userState 0未登录 1登录
+ *
+ * 用户points积分
  *
  * 本地用户自选信息 币：selfCoins  交易对: selfTickers
  *

@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   historyLast: {
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 16,
     marginLeft: 5,
   },
 });

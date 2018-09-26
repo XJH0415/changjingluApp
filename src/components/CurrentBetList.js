@@ -25,10 +25,18 @@ export  default class CurrentBetList extends Component {
       <View style={styles.root}>
         <Text style={styles.currentTitle}>最近竞猜记录</Text>
         <View style={[styles.betList,{backgroundColor:'#e2f3ef'}]}>
-          <Text style={styles.bolds}>用户</Text>
-          <Text style={[styles.bolds,{marginRight: 10}]}>涨跌</Text>
-          <Text style={[styles.bolds,{marginRight: 60}]}>CJL</Text>
-          <Text style={styles.bolds}>下注时间</Text>
+          <View style={styles.imgName}>
+            <Text style={styles.bolds}>用户</Text>
+          </View>
+          <View style={styles.types}>
+            <Text style={styles.bolds}>涨跌</Text>
+          </View>
+          <View style={styles.bet}>
+            <Text style={styles.bolds}>CJL</Text>
+          </View>
+          <View style={styles.add_time}>
+            <Text style={styles.bolds}>下注时间</Text>
+          </View>
         </View>
         <FlatList
           keyExtractor={(item, index) => {}}
@@ -39,11 +47,22 @@ export  default class CurrentBetList extends Component {
                 <View style={styles.betList}>
                   <View style={styles.imgName}>
                     <Image source={{uri: item.user.avatar}} style={styles.img}/>
-                    <Text >{item.user.name}</Text>
+                    <Text >{
+                      item.user.name ?
+                        (item.user.name.length > 5 ? item.user.name.substr(0, 5) + "..."
+                          : item.user.name)
+                        : ''}
+                          </Text>
                   </View>
-                  <Text style={{color: item.type === 'up' ? 'rgb(228,36,38)' : 'rgb(65,158,40)'}}>{item.type === 'up' ? '涨' : '跌'}</Text>
-                  <Text >{item.bet}</Text>
-                  <Text>{item.add_time}</Text>
+                  <View style={styles.types}>
+                    <Text style={[{color: item.type === 'up' ? 'rgb(228,36,38)' : 'rgb(65,158,40)'}]}>{item.type === 'up' ? '涨' : '跌'}</Text>
+                  </View>
+                  <View style={styles.bet}>
+                    <Text >{item.bet}</Text>
+                  </View>
+                  <View style={styles.add_time}>
+                    <Text>{item.add_time}</Text>
+                  </View>
                 </View>
               )
             }
@@ -75,13 +94,28 @@ const styles=StyleSheet.create({
   betList:{
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
     marginTop: 2,
     marginBottom: 2,
     paddingLeft: 10,
     paddingRight: 10,
   },
   imgName:{
+    flex: 1,
     flexDirection: 'row'
+  },
+  types:{
+    flex: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  bet:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  add_time:{
+    flex: 2
   },
   bolds:{
     fontWeight: 'bold',

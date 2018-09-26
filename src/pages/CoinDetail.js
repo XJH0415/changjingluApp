@@ -288,13 +288,16 @@ export default class CoinDetail extends Component {
             </View>
           </View>
           <View>
-            <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''}低(24h):{syb}{low ? low : ''}</Text>
+            <Text style={styles.detailCenterText}>高(24h):{syb}{high ? high : ''},低(24h):{syb}{low ? low : ''},</Text>
             <Text style={styles.detailCenterText}>
               量(24h): {vol ? this.fNum(vol) : '-'},
               额(24h): {syb ? syb : ''}{vol_value ? vol_value : '-'} (第{vol_order ? vol_order : '-'}名)
             </Text>
             <Text style={styles.detailCenterText}>
-              总发行量: {amount ? amount : ''},流通量: {circulation ? circulation : ''},流通市值: {syb ? syb : ''}{circulation_value},占全球总市值: {value_pct ? value_pct + '%' : '-'} (第{value_order ? value_order : '-'}名)
+              总发行量: {amount ? amount : ''},流通量: {circulation ? circulation : ''},
+            </Text>
+            <Text style={styles.detailCenterText}>
+              流通市值: {syb ? syb : ''}{circulation_value},占全球总市值: {value_pct ? value_pct + '%' : '-'} (第{value_order ? value_order : '-'}名)
             </Text>
           </View>
           <View style={styles.detailBottom}>
@@ -315,7 +318,7 @@ export default class CoinDetail extends Component {
               navigate('GuessRiseFall',{
                 coin:coin,
                 betData: betData,
-                key: this.props.key})}}>
+                key: this.props.key})}} >
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>
                   <Text style={styles.guessName}>{name}</Text>

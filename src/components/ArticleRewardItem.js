@@ -30,7 +30,7 @@ export default class ArticleRewardItem extends Component {
 
   getUserMsg(){
     var that = this;
-    API.getMsg('userMsg',(userMsg)=>{
+    API.getLogMe((userMsg)=>{
       that.setState({
         points: userMsg.points
       })

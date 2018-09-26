@@ -38,6 +38,7 @@ export default class Comment extends Component{
     star: [1,2,3,4,5],
     stars: 0,
     discuss: null,
+    userState: '0',
   }
 
   getComment(page,sort,callback){
@@ -98,46 +99,60 @@ export default class Comment extends Component{
         })
   }
 
+  componentDidMount(){
+    API.getMsg('userState', (userState)=>{
+      this.setState({
+        userState: userState,
+      })
+    })
+  }
 
   render(){
-    var {star, stars} = this.state;
+    var {star, stars, userState} = this.state;
     return(
       <View style={styles.root}>
-        <View style={styles.inputView}>
-          <Text style={styles.disTxt}>发布评论</Text>
-          <TextInput
-            style={styles.input}
-            placeholder={'评论内容'}
-            multiline={true}
-            underlineColorAndroid={'transparent'}
-            onChangeText={(discuss)=>{this._onDiscussText(discuss)}}
-            maxLength={1000}
-          />
-          <View style={styles.disStarView}>
-            <View style={styles.disStar}>
-              <Text>评分</Text>
-              <View style={styles.star}>
-                {
-                  star.map((item, index)=>{
-                    var source=require('../resource/star1.png');
-                    if (index < stars){
-                      source=require('../resource/star.png');
+        {
+          userState === '1' ?
+            <View style={styles.inputView}>
+              <Text style={styles.disTxt}>发布评论</Text>
+              <TextInput
+                style={styles.input}
+                placeholder={'评论内容'}
+                multiline={true}
+                underlineColorAndroid={'transparent'}
+                onChangeText={(discuss)=>{this._onDiscussText(discuss)}}
+                maxLength={1000}
+              />
+              <View style={styles.disStarView}>
+                <View style={styles.disStar}>
+                  <Text>评分</Text>
+                  <View style={styles.star}>
+                    {
+                      star.map((item, index)=>{
+                        var source=require('../resource/star1.png');
+                        if (index < stars){
+                          source=require('../resource/star.png');
+                        }
+                        return(
+                          <TouchableWithoutFeedback onPress={()=>{this._onStarBtn(index)}}>
+                            <Image style={styles.starImage} source={source} />
+                          </TouchableWithoutFeedback>
+                        )
+                      })
                     }
-                    return(
-                      <TouchableWithoutFeedback onPress={()=>{this._onStarBtn(index)}}>
-                        <Image style={styles.starImage} source={source} />
-                      </TouchableWithoutFeedback>
-                    )
-                  })
-                }
-              </View>
+                  </View>
 
+                </View>
+                <TouchableOpacity onPress={()=>{this._discussBtn()}}>
+                  <Text style={styles.discussBtn}>点评</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity onPress={()=>{this._discussBtn()}}>
-              <Text style={styles.discussBtn}>点评</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+            :
+            <View style={styles.unLogCom}>
+              <Text style={styles.unLogComText}>登录后您可以发布评论</Text>
+            </View>
+        }
         <RefreshList
           // ref = {(ref)=>{this.refs.RefreshList=ref}}
           ref = 'RefreshList'
@@ -201,4 +216,18 @@ const styles=StyleSheet.create({
     paddingRight: 10,
     borderRadius: 5,
   },
+  unLogCom:{
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  unLogComText:{
+    backgroundColor: '#75C1AF',
+    color: '#fff',
+    borderRadius: 5,
+    padding: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+
 })

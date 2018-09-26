@@ -18,7 +18,8 @@ const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 export default class CommentItem extends Component {
   static defaultProps = {
     record: {},
-    refresh: ()=>{}
+    refresh: () => {
+    }
   }
 
   _renderStar(star) {
@@ -33,127 +34,121 @@ export default class CommentItem extends Component {
     return attr;
   }
 
-  state={
+  state = {
     reply: false,
     reward: false,
     points: null,
     data: null,
-    rewardNum:[5,10,20,50],
+    rewardNum: [5, 10, 20, 50],
     replyText: null,
     userMsg: null,
+    userState: '0'
   }
 
   componentDidMount() {
-    let that = this;
-    API.getMsg('userMsg',(data)=>{
-      if (data){
-        that.setState({
-          data: data,
-        })
-      }else{
-        Alert.alert('','亲，未登录')
-      }
-    })
     this.getUserMsg();
   }
 
-  getUserMsg(){
+  getUserMsg() {
     var that = this;
-    API.getMsg('userMsg', (userMsg)=>{
-      if(userMsg){
+    API.getMsg('userState', (userState) => {
+      if (userState) {
         that.setState({
-          userMsg:userMsg
+          userState: userState
+        })
+      }
+    })
+    API.getLogMe((userMsg) => {
+      if (userMsg) {
+        that.setState({
+          userMsg: userMsg,
         })
       }
     })
   }
 
-  _ReplyBtn(){
+  _ReplyBtn() {
     var {reply} = this.state;
     var that = this;
     reply === false ? that.setState({reply: true}) : that.setState({reply: false})
   }
 
-  _RewardBtn(){
+  _RewardBtn() {
     var {reward} = this.state;
     var that = this;
     reward === false ? that.setState({reward: true}) : that.setState({reward: false})
   }
 
-  _ReplyInputText(replyText){
+  _ReplyInputText(replyText) {
     this.setState({
       replyText: replyText,
     })
   }
 
-  _onPressReward(val){
+  _onPressReward(val) {
     var that = this;
-    var {comment_id}=this.props.record;
-    API.getMsg('userMsg' , (msg)=>{
-      msg ?
-        API.CommentTips(comment_id, val, (result)=>{
-        result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : Alert.alert('','亲，打赏失败')
-      },(errorMsg)=>{
-        errorMsg === 'same user' ? Alert.alert('','亲，不能给自己打赏') :  Alert.alert('',errorMsg)
+    var {comment_id} = this.props.record;
+    var {userState} = this.state;
+    userState === '1' ?
+      API.CommentTips(comment_id, val, (result) => {
+        result ? (that.props.refresh(), that.setState({reward: false, reply: false})) : Alert.alert('', '亲，打赏失败')
+      }, (errorMsg) => {
+        errorMsg === 'same user' ? Alert.alert('', '亲，不能给自己打赏') : Alert.alert('', errorMsg)
       })
-        :
-        Alert.alert('','亲，未登录')
-    })
-
+      :
+      Alert.alert('', '亲，未登录')
   }
 
-  _onPressReply(){
+  _onPressReply() {
     var that = this;
     var {replyText} = this.state;
-    var {comment_id}=this.props.record;
-    API.getMsg('userMsg' , (msg)=>{
-      msg ?
-        !replyText ? Alert.alert('','亲，请输入回复内容')
+    var {comment_id} = this.props.record;
+    var {userState} = this.state;
+    userState === '1' ?
+      !replyText ? Alert.alert('', '亲，请输入回复内容')
         :
-        API.CommentReply(comment_id, replyText, (result)=>{
-          result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : alert('亲，回复失败')
+        API.CommentReply(comment_id, replyText, (result) => {
+          result ? (that.props.refresh(), that.setState({reward: false, reply: false})) : alert('亲，回复失败')
         })
-        :
-        Alert.alert('','亲，未登录')
-    })
+      :
+      Alert.alert('', '亲，未登录')
   }
 
-  _onPressLike(){
+  _onPressLike() {
     var that = this;
-    var {comment_id}=this.props.record;
-    API.getMsg('userMsg' , (msg)=>{
-      msg ?
-        API.CommentLike(comment_id, (result)=>{
-          result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : Alert.alert('','亲，点赞失败')
-        }, (errorMsg)=>{
-          errorMsg === 'already voted' ? Alert.alert('','亲，您已表过态了') : Alert.alert('',errorMsg)
-        })
-        :
-        Alert.alert('','亲，未登录')
-    })
+    var {comment_id} = this.props.record;
+    var {userState} = this.state;
+    userState === '1' ?
+      API.CommentLike(comment_id, (result) => {
+        result ? (that.props.refresh(), that.setState({reward: false, reply: false})) : Alert.alert('', '亲，点赞失败')
+      }, (errorMsg) => {
+        errorMsg === 'already voted' ? Alert.alert('', '亲，您已表过态了') : Alert.alert('', errorMsg)
+      })
+      :
+      Alert.alert('', '亲，未登录')
   }
 
-  _onPressDisLike(){
+  _onPressDisLike() {
     var that = this;
-    var {comment_id}=this.props.record;
-    API.getMsg('userMsg' , (msg)=>{
-      msg ?
-        API.CommentDisLike(comment_id, (result)=>{
-          result ? (that.props.refresh(), that.setState({reward: false,reply: false})) : alert('亲，胡扯失败')
-        }, (errorMsg)=>{
-          errorMsg === 'already voted' ? Alert.alert('','亲，您已表过态了') : Alert.alert('',errorMsg)
-        })
-        :
-        Alert.alert('','亲，未登录')
-    })
+    var {comment_id} = this.props.record;
+    var {userState} = this.state;
+    userState === '1' ?
+      API.CommentDisLike(comment_id, (result) => {
+        result ? (that.props.refresh(), that.setState({reward: false, reply: false})) : alert('亲，胡扯失败')
+      }, (errorMsg) => {
+        errorMsg === 'already voted' ? Alert.alert('', '亲，您已表过态了') : Alert.alert('', errorMsg)
+      })
+      :
+      Alert.alert('', '亲，未登录')
+
   }
 
   render() {
-    var {reply, reward, data, rewardNum, userMsg} = this.state;
+    var {reply, reward, userState, rewardNum, userMsg} = this.state;
     var {add_time, content, dislikes, likes, stars, tips, replies, user: {name, avatar}} = this.props.record;
-    avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
+    avatar = avatar.indexOf('http') === -1 ? 'https://changjinglu.pro' + avatar : avatar;
     var points = null;
-    if (userMsg){
+    if (userMsg) {
       points = userMsg.points;
     }
     return (
@@ -161,9 +156,11 @@ export default class CommentItem extends Component {
         <View style={styles.topView}>
           <View style={styles.titleView}>
             <Image style={styles.image} source={{uri: avatar}}/>
-            <Text style={[styles.nameText,{flex:1}]}>{name}</Text>
+            <Text style={[styles.nameText, {flex: 1}]}>{name}</Text>
             <TouchableOpacity
-              onPress={()=>{this._ReplyBtn()}}
+              onPress={() => {
+                this._ReplyBtn()
+              }}
               style={{flexDirection: 'row'}}
             >
               <View style={styles.star}>
@@ -177,7 +174,9 @@ export default class CommentItem extends Component {
           <Text style={styles.text}>{content}</Text>
           <View style={styles.btnsView}>
             <Text style={styles.timeText}>{add_time}</Text>
-            <TouchableOpacity onPress={()=>{this._RewardBtn()}}>
+            <TouchableOpacity onPress={() => {
+              this._RewardBtn()
+            }}>
               <Text style={styles.btnText}>打赏({tips})</Text>
             </TouchableOpacity>
             <Modal
@@ -187,8 +186,8 @@ export default class CommentItem extends Component {
             >
               <View style={styles.modalView}>
                 <TouchableWithoutFeedback
-                  onPress={()=>this.setState({reward:false})}>
-                  <View style={{position: 'absolute',left: 0,right: 0,top: 0,bottom: 0,width: null,}}/>
+                  onPress={() => this.setState({reward: false})}>
+                  <View style={{position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: null,}}/>
                 </TouchableWithoutFeedback>
                 <View style={styles.rewardView}>
                   <View>
@@ -196,9 +195,11 @@ export default class CommentItem extends Component {
                   </View>
                   <View style={styles.rewardTxt}>
                     {
-                      rewardNum.map((val)=>{
-                        return(
-                          <TouchableOpacity onPress={()=>{this._onPressReward(val)}}>
+                      rewardNum.map((val) => {
+                        return (
+                          <TouchableOpacity onPress={() => {
+                            this._onPressReward(val)
+                          }}>
                             <Text style={styles.rewardText}>打赏{val}个CJL</Text>
                           </TouchableOpacity>
                         )
@@ -208,22 +209,26 @@ export default class CommentItem extends Component {
                 </View>
               </View>
             </Modal>
-            <TouchableOpacity onPress={()=>{this._onPressLike()}}>
+            <TouchableOpacity onPress={() => {
+              this._onPressLike()
+            }}>
               <Text style={styles.btnText}>点赞({likes})</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{this._onPressDisLike()}}>
+            <TouchableOpacity onPress={() => {
+              this._onPressDisLike()
+            }}>
               <Text style={styles.btnText}>胡扯({dislikes})</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bottomView}>
           {
-            replies.map((item,index)=>{
-              var {content,user:{avatar,name}}=item;
-              avatar=avatar.indexOf('http')===-1?'https://changjinglu.pro'+avatar:avatar;
+            replies.map((item, index) => {
+              var {content, user: {avatar, name}} = item;
+              avatar = avatar.indexOf('http') === -1 ? 'https://changjinglu.pro' + avatar : avatar;
               return (
                 <View style={styles.replieItem} key={index}>
-                  <Image style={[styles.image,{}]} source={{uri: avatar}}/>
+                  <Image style={[styles.image, {}]} source={{uri: avatar}}/>
                   <Text style={styles.nameText}>{name}:</Text>
                   <Text style={styles.replieText}>{content}</Text>
                 </View>
@@ -241,98 +246,100 @@ export default class CommentItem extends Component {
                 placeholderTextColor={'#888888'}
                 placeholder={'请输入回复内容'}
                 selectionColor={'rgb(65,158,40)'}
-                onChangeText={(replyText)=>{this._ReplyInputText(replyText)}}
+                onChangeText={(replyText) => {
+                  this._ReplyInputText(replyText)
+                }}
               />
-              <TouchableOpacity style={styles.replyBtnTxt} onPress={()=>{this._onPressReply()}}>
+              <TouchableOpacity style={styles.replyBtnTxt} onPress={() => {
+                this._onPressReply()
+              }}>
                 <Text style={{color: '#fff',}}>回复</Text>
               </TouchableOpacity>
             </View>
             :
-            <View />
+            <View/>
         }
       </View>
     )
   }
 }
 
-const styles=StyleSheet.create({
-  root:{
-    padding:5,
+const styles = StyleSheet.create({
+  root: {
+    padding: 5,
   },
-  topView:{
-
+  topView: {},
+  titleView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 5
   },
-  titleView:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
-    marginTop:5,
-    marginBottom:5
-  },
-  bottomView:{
+  bottomView: {
     backgroundColor: 'rgb(238,238,238)',
-    marginLeft:30,
-    marginRight:5
+    marginLeft: 30,
+    marginRight: 5
   },
-  image:{
-    height:30,
-    width:30,
-    borderRadius:15,
-    marginRight:5
+  image: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    marginRight: 5
   },
-  btnsView:{
-    flexDirection:'row',
-    marginLeft:35,
-    justifyContent:'space-between',
-    alignItems:'center',
-    marginTop:5,
-    marginBottom:5
+  btnsView: {
+    flexDirection: 'row',
+    marginLeft: 35,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 5
   },
-  star:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
+  star: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  text:{
-    color:'black',
-    marginLeft:35,
-    flex:1
+  text: {
+    color: 'black',
+    marginLeft: 35,
+    flex: 1
   },
-  nameText:{
-    fontWeight:'bold',
-    color:'black',
+  nameText: {
+    fontWeight: 'bold',
+    color: 'black',
   },
-  btnText:{
+  btnText: {
     color: '#75C1AF',
-    marginLeft:5,
-    fontSize:12
+    marginLeft: 5,
+    fontSize: 12
   },
-  timeText:{
-    flex:1,
-    color:'gray',
-    fontSize:12
+  timeText: {
+    flex: 1,
+    color: 'gray',
+    fontSize: 12
   },
-  starImage:{
-    height:20,
-    width:20
+  starImage: {
+    height: 20,
+    width: 20
   },
-  replieItem:{
-    flexDirection:'row',
-    justifyContent:'flex-start',
-    alignItems:'center',
-    margin:3
+  replieItem: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    margin: 3
   },
-  replieText:{
-    color:'black',
-    flex:1,
+  replieText: {
+    color: 'black',
+    flex: 1,
   },
-  replyBtn:{
+  replyBtn: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  replyInput:{
+  replyInput: {
     margin: 0,
     padding: 0,
     flex: 1,
@@ -341,39 +348,39 @@ const styles=StyleSheet.create({
     borderWidth: 1,
     borderColor: '#888888'
   },
-  replyBtnTxt:{
+  replyBtnTxt: {
     marginRight: 5,
     marginLeft: 5,
     padding: 2,
     backgroundColor: '#75C1AF',
     borderRadius: 5,
   },
-  modalView:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:'rgba(0, 0, 0, 0.3)',
+  modalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
-  rewardView:{
+  rewardView: {
     backgroundColor: '#333333',
     borderRadius: 5,
     padding: 10,
   },
-  pointsText:{
+  pointsText: {
     fontWeight: 'bold',
     color: '#fff',
     marginLeft: 5,
     marginRight: 5,
   },
-  rewardTxt:{
-    justifyContent:'center',
+  rewardTxt: {
+    justifyContent: 'center',
   },
-  rewardText:{
+  rewardText: {
     width: 90,
     backgroundColor: '#000',
     color: '#75C1AF',
     padding: 3,
-    margin:5,
+    margin: 5,
     borderRadius: 3,
   },
 

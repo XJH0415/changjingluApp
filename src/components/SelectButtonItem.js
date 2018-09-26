@@ -15,13 +15,18 @@ import {
 import API from '../lib/dataApi';
 
 export default class SelectButtonItem extends Component {
+
+  static defaultProps = {
+    onSubBtn: (coin_bet_id, type, betNum)=>{},
+  }
+
   //0默认，1选中
   state = {
     fall: 0,
     rise: 0,
     betNum: 0,//猜的数值
     array: [],
-    userMsg: null,
+    userMsg: this.props.userMsg,
   };
 
   _onRiseBtn() {
@@ -51,7 +56,8 @@ export default class SelectButtonItem extends Component {
   _InputNum(betNum) {
     this.setState({
       betNum: betNum,
-    })
+    });
+    this.refs.textInput.blur();
   }
 
   _AddBet() {
@@ -75,30 +81,12 @@ export default class SelectButtonItem extends Component {
       return;
     }
     // alert(coin_bet_id+','+type+','+betNum)
-    API.AddBet(coin_bet_id, type, betNum, (result) => {
-      Alert.alert(' ' + '竞猜成功！')
-    }, (error) => {
-      Alert.alert('2' + '亲，数据出错了')
-    })
-  }
-
-  componentDidMount() {
-    let that = this;
-    API.getMsg('userMsg', (userMsg) => {
-      if (userMsg) {
-        that.setState({
-          userMsg: userMsg
-        })
-      }
-    })
+    this.props.onSubBtn(coin_bet_id, type, betNum)
   }
 
   render() {
-    var {fall, rise, userMsg} = this.state;
-    var points = null;
-    if (userMsg) {
-      points = userMsg.points;
-    }
+    var {points} = this.props;
+    var {fall, rise} = this.state;
     return (
       <View style={styles.root}>
         <Text style={styles.selectTitle}>我要竞猜</Text>
@@ -129,6 +117,7 @@ export default class SelectButtonItem extends Component {
         </View>
         <View style={styles.inputView}>
           <TextInput
+            ref='textInput'
             style={styles.input}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'#888888'}
@@ -136,7 +125,7 @@ export default class SelectButtonItem extends Component {
             onChangeText={this._InputNum.bind(this)}
           />
           <TouchableOpacity style={styles.myGuessBtn} onPress={() => {
-            this._AddBet()
+            this._AddBet();
           }}>
             <Text style={styles.myGuessText}>我猜</Text>
           </TouchableOpacity>

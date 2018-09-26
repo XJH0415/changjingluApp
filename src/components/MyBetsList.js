@@ -19,24 +19,39 @@ export  default class MyBetsList extends Component {
     if (CurrentData) {
       bets = CurrentData.me.bets;
     }
+    if (bets.length > 10){
+      bets = bets.slice(bets.length-10, bets.length)
+    }
     return (
       <View style={styles.root}>
         <Text style={styles.myTitle}>我的竞猜记录</Text>
-        <View style={[styles.betList, {backgroundColor:'#e2f3ef', paddingRight: 50}]}>
-          <Text style={styles.bolds}>涨跌</Text>
-          <Text style={styles.bolds}>CJL</Text>
-          <Text style={styles.bolds}>下注时间</Text>
+        <View style={[styles.betList, {backgroundColor:'#e2f3ef'}]}>
+          <View style={{flex: 1}}>
+            <Text style={styles.bolds}>涨跌</Text>
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.bolds}>CJL</Text>
+          </View>
+          <View style={{flex: 2}}>
+            <Text style={styles.bolds}>下注时间</Text>
+          </View>
         </View>
         <FlatList
-          keyExtractor={(item, index) => {index}}
-          data={bets}
+          keyExtractor={(item, index) => index+item.bet}
+          data={bets.reverse()}
           renderItem={({item, index})=>{
             if (index < 10){
               return(
                 <View style={styles.betList} >
-                  <Text style={{color: item.type === 'up' ? 'rgb(228,36,38)' : 'rgb(65,158,40)'}}>{item.type === 'up' ? '涨' : '跌'}</Text>
-                  <Text style={{marginLeft: 20}}>{item.bet}</Text>
-                  <Text>{item.add_time}</Text>
+                  <View style={{flex: 1}}>
+                    <Text style={{color: item.type === 'up' ? 'rgb(228,36,38)' : 'rgb(65,158,40)'}}>{item.type === 'up' ? '涨' : '跌'}</Text>
+                  </View >
+                  <View style={{flex: 1}}>
+                    <Text >{item.bet}</Text>
+                  </View>
+                  <View style={{flex: 2}}>
+                    <Text>{item.add_time}</Text>
+                  </View>
                 </View>
               )
             }

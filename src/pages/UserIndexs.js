@@ -27,6 +27,17 @@ export default class UserIndexs extends Component {
     result: null,
     oldAvatar : this.props.data.avatar,
     avatarSource : this.props.data.avatar,
+    userMsg : null,
+  }
+
+  componentDidMount(){
+    API.getLogMe((userMsg)=>{
+      if (userMsg){
+        this.setState({
+          userMsg: userMsg,
+        })
+      }
+    })
   }
 
   selectPhotoTapped() {
@@ -87,11 +98,13 @@ export default class UserIndexs extends Component {
   render() {
     var {navigate} = this.props.navigation;
     var {goback, GuessRecord} = this.props;
-    var {data, avatarSource, result} = this.state;
-    console.log('result:'+result)
+    var {data, avatarSource, result, userMsg} = this.state;
+    var points = null;
+    if (userMsg){
+      points = userMsg.points;
+    }
     return (
       <View style={styles.roots}>
-
         <View style={styles.nameImg}>
           <TouchableOpacity onPress={()=>{this.selectPhotoTapped()}}>
             <Image
@@ -105,7 +118,7 @@ export default class UserIndexs extends Component {
             <Text style={styles.phone}>{data.phone}</Text>
           </View>
           <View style={styles.totalNumView}>
-            <Text style={styles.totalNum}>{data.points}CJL</Text>
+            <Text style={styles.totalNum}>{points}CJL</Text>
           </View>
         </View>
 
@@ -114,17 +127,6 @@ export default class UserIndexs extends Component {
         {/*}}>*/}
           {/*<View style={styles.totalImgTxt}>*/}
             {/*<Text style={styles.totalText}>测试</Text>*/}
-          {/*</View>*/}
-          {/*<View>*/}
-            {/*<Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>*/}
-          {/*</View>*/}
-        {/*</TouchableOpacity>*/}
-
-        {/*<TouchableOpacity style={styles.total} onPress={() => {*/}
-          {/*navigate('MyLike', {data: data})*/}
-        {/*}}>*/}
-          {/*<View style={styles.totalImgTxt}>*/}
-            {/*<Text style={styles.totalText}>我的自选</Text>*/}
           {/*</View>*/}
           {/*<View>*/}
             {/*<Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>*/}

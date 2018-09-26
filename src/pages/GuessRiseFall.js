@@ -8,7 +8,7 @@ import {
   ScrollView,
   Picker,
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback, Alert,
 } from 'react-native';
 import DateUtils from '../utils/DateUtils';
 import API from '../lib/dataApi';
@@ -50,31 +50,44 @@ export default class GuessRiseFall extends Component {
     historyBets: null,
     CurrentData: null, //当前用户猜涨跌数据以及所有参与本次猜涨跌的记录
     userMsg: null,//用户在本地的部分数据
-    userState: '0'
+    userState: '0',
   }
 
   componentDidMount() {
-    this.getUserState();
     var {coin, betData} = this.state;
     var {start_time, freeze_time, end_time, bet_status} = betData;
     bet_status === '0' ? this.countDown(start_time) :
       bet_status === '1' ? this.countDown(freeze_time) :
         this.countDown(end_time);
+    this.refresh();
+  }
+
+  refresh(){
+    this.getUserState();
     this.getHistoryBets();
     this.getCurrentBets();
     this.getUserMsg();
   }
 
-  getUserMsg() {
+  AddBet(coin_bet_id, type, betNum){
     let that = this;
-    API.getMsg('userMsg', (userMsg) => {
-      if (userMsg) {
-        that.setState({
-          userMsg: userMsg
-        })
-      }
+    API.AddBet(coin_bet_id, type, betNum, (result) => {
+      that.refresh();
+      Alert.alert('' + '竞猜成功,祝您旗开得胜!')
+    }, (error) => {
+      Alert.alert('' + '亲，数据出错了,再来一次吧')
     })
   }
+
+  getUserMsg() {
+    let that = this;
+    API.getLogMe((userMsg) => {
+      that.setState({
+        userMsg: userMsg
+      })
+    })
+  }
+
   getUserState() {
     let that = this;
     API.getMsg('userState', (userState) => {
@@ -167,7 +180,11 @@ export default class GuessRiseFall extends Component {
   }
 
   render() {
-    var {coin, betData, updateTime, historyBets, CurrentData, userMsg, userState} = this.state;
+    var {coin, betData, updateTime, historyBets, CurrentData, userState, userMsg} = this.state;
+    var points = null;
+    if (userMsg){
+      points = userMsg.points;
+    }
     var {navigate} = this.props.navigation;
     if (betData) {
       var {
@@ -277,7 +294,10 @@ export default class GuessRiseFall extends Component {
                 {
                   userState === '1' ?
                     <View>
-                      <SelectButtonItem betData={betData}/>
+                      <SelectButtonItem
+                        betData={betData}
+                        points={points}
+                        onSubBtn={(coin_bet_id, type, betNum)=>{this.AddBet(coin_bet_id, type, betNum)}}/>
                       <MyBetsList CurrentData={CurrentData}/>
                     </View>
                     :
