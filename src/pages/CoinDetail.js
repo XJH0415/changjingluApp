@@ -63,6 +63,7 @@ export default class CoinDetail extends Component {
     betData: null,
     selfSelect: false,
     selfCoins: null,
+    userState: '0',
   }
 
   componentWillMount() {
@@ -80,8 +81,16 @@ export default class CoinDetail extends Component {
     this.getCoinArticles(coin.coin_id);
     this.getBetActive(coin.coin_id);
     this.getSelfSelect();
+    this.getUserState();
   }
 
+  getUserState(){
+    API.getMsg('userState', (userState)=>{
+      this.setState({
+        userState: userState
+      })
+    })
+  }
   getSelfSelect(){
     API.getSelfSelect('1', 'va', (selfCoins)=>{
       this.setState({
@@ -173,7 +182,10 @@ export default class CoinDetail extends Component {
 
   _CoinWatch(){
     var {coin} = this.props;
-    var {selfSelect} = this.state;
+    var {selfSelect, userState} = this.state;
+    if (userState === '0'){
+      return Alert.alert('', '亲，请先登录')
+    }
     let that = this;
     if (selfSelect){
       API.RemoveCoinWatch(coin.coin_id, (result)=>{
@@ -192,19 +204,17 @@ export default class CoinDetail extends Component {
         }
       })
     }
-
-      // :
-
   }
-
 
   render() {
     var {coin, currency, navigation,onNewPress,navigate } = this.props;
     if (!navigate){
       navigate = navigation.navigate;
     }
-
-    var {tickers, data, lines, news, betData, selfSelect} = this.state;
+    var {tickers, data, lines, news, betData, selfSelect, userState} = this.state;
+    if (userState === '0'){
+      selfSelect = false;
+    }
     var {
       syb,//计价符号
       amount,//总发行量

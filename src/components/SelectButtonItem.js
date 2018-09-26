@@ -57,7 +57,6 @@ export default class SelectButtonItem extends Component {
     this.setState({
       betNum: betNum,
     });
-    this.refs.textInput.blur();
   }
 
   _AddBet() {
@@ -123,6 +122,7 @@ export default class SelectButtonItem extends Component {
             placeholderTextColor={'#888888'}
             placeholder={'请输入数值'}
             onChangeText={this._InputNum.bind(this)}
+            onEndEditing={()=>{this.refs.textInput.blur();}}
           />
           <TouchableOpacity style={styles.myGuessBtn} onPress={() => {
             this._AddBet();

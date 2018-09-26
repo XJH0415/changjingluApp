@@ -95,11 +95,12 @@ export default class SwipeRow extends Component {
     }
     let nowLeft = this._previousLeft + gestureState.dx / 0.5;
     //右滑最大距离为0（边界值）
-    alert(nowLeft)
-    nowLeft = Math.max(nowLeft, -100);
-    this.state.currentLeft.setValue(
-      nowLeft,
-    );
+    if (nowLeft<0) {
+      nowLeft = Math.max(nowLeft, -100);
+      this.state.currentLeft.setValue(
+        nowLeft,
+      );
+    }
   }
 
   /**
