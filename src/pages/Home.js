@@ -5,7 +5,7 @@ import {
   FlatList,
   Alert,
   Text, Dimensions,
-  TouchableOpacity
+  TouchableOpacity, ScrollView,
 } from 'react-native';
 import Advert from '../components/Advert';
 import Notice from '../components/Notice';
@@ -127,11 +127,9 @@ export default class Home extends Component {
                         }
                       }
                       return(
-
-                            <MarketItem onPress={(coin) => {
-                              navigate('CoinDetail', {coin: coin})
-                            }}key={index} currency={'￥'} coin={item} />
-
+                          <MarketItem onPress={(coin) => {
+                            navigate('CoinDetail', {coin: coin})
+                          }}key={index} currency={'￥'} coin={item} />
                       )
                     }
                   }}

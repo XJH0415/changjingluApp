@@ -4,11 +4,13 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native';
 import Echarts from '../echarts';
 import NumUtils from '../utils/NumUtils';
 import API from '../lib/dataApi';
+import SwipeRow from "./SwipeRow";
 
 export default class MarketItem extends Component {
   static defaultProps = {
@@ -26,6 +28,7 @@ export default class MarketItem extends Component {
       circulation: null,
       vol_24h: null,
       gains_pct_1d: null,
+      type: null,
     },
     data: []
   }
@@ -53,6 +56,13 @@ export default class MarketItem extends Component {
       data: props.data,
       coin: props.coin
     })
+  }
+
+  _RemoveCoinWatch(){
+    var {coin,} = this.state;
+   API.RemoveCoinWatch(coin.coin_id, (result)=>{
+     alert(result)
+   })
   }
 
   render() {
@@ -111,52 +121,70 @@ export default class MarketItem extends Component {
       animation: true
     }
     return (
-      <TouchableOpacity onPress={() => {
-        onPress(coin)
-      }} style={styles.root}>
-        <View style={styles.imageView}>
-          <Image style={styles.image} source={{uri: icon}}/>
-        </View>
-        <View style={styles.leftView}>
-          <View>
-            <Text numberOfLines={1} style={[styles.text, {fontWeight: 'bold'}]}>{code}</Text>
+      <SwipeRow>
+        {
+          coin.type === 1 ?
+            <View>
+              <View style={styles.swipeActions}>
+                <TouchableOpacity
+                  style={styles.delTextContainer}
+                  onPress={()=>{this._RemoveCoinWatch()}}
+                >
+                  <Text>取消自选</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            :
+            <View />
+        }
+        <TouchableOpacity
+          onPress={() => {onPress(coin)}}
+          style={styles.root}
+        >
+          <View style={styles.imageView}>
+            <Image style={styles.image} source={{uri: icon}}/>
+          </View>
+          <View style={styles.leftView}>
+            <View>
+              <Text numberOfLines={1} style={[styles.text, {fontWeight: 'bold'}]}>{code}</Text>
+            </View>
+            <View>
+              <Text numberOfLines={1} style={[styles.text, {color: 'gray'}]}>{name_cn ? name_cn : name_en}</Text>
+            </View>
+          </View>
+          <View style={styles.rightView}>
+            <View>
+              <Text numberOfLines={1} style={[styles.text, {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: gains_pct_1d ? gains_pct_1d * 1 > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)' : 'gray'
+              }]}>{currency}{price ? (price * 1).toFixed(2) : ''}</Text>
+            </View>
+            <View>
+              <Text numberOfLines={1} style={[styles.text, {
+                fontSize: 12,
+                color: 'gray'
+              }]}>量(24h):{vol_24h ? NumUtils.formatNum(vol_24h) : ''}</Text>
+            </View>
           </View>
           <View>
-            <Text numberOfLines={1} style={[styles.text, {color: 'gray'}]}>{name_cn ? name_cn : name_en}</Text>
+            <Text numberOfLines={1}
+                  style={[styles.text, styles.pct, {backgroundColor: gains_pct_1d ? gains_pct_1d * 1 > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)' : 'gray'}]}>{gains_pct_1d ? (gains_pct_1d * 1).toFixed(2) + '%' : ''}</Text>
           </View>
-        </View>
-        <View style={styles.rightView}>
-          <View>
-            <Text numberOfLines={1} style={[styles.text, {
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: gains_pct_1d ? gains_pct_1d * 1 > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)' : 'gray'
-            }]}>{currency}{price ? (price * 1).toFixed(2) : ''}</Text>
-          </View>
-          <View>
-            <Text numberOfLines={1} style={[styles.text, {
-              fontSize: 12,
-              color: 'gray'
-            }]}>量(24h):{vol_24h ? NumUtils.formatNum(vol_24h) : ''}</Text>
-          </View>
-        </View>
-        <View>
-          <Text numberOfLines={1}
-                style={[styles.text, styles.pct, {backgroundColor: gains_pct_1d ? gains_pct_1d * 1 > 0 ? 'rgb(228,36,38)' : 'rgb(65,158,40)' : 'gray'}]}>{gains_pct_1d ? (gains_pct_1d * 1).toFixed(2) + '%' : ''}</Text>
-        </View>
-        {/*<View style={styles.chart} onLayout={({nativeEvent}) => {*/}
-        {/*this.setState({*/}
-        {/*chartHeight: nativeEvent.layout.height,*/}
-        {/*chartWidth: nativeEvent.layout.width*/}
-        {/*})*/}
-        {/*}}>*/}
-        {/*{chartWidth > 0 && chartHeight > 0 ?*/}
-        {/*<Echarts option={option} width={chartWidth} height={chartHeight}/>*/}
-        {/*: null*/}
-        {/*}*/}
+          {/*<View style={styles.chart} onLayout={({nativeEvent}) => {*/}
+          {/*this.setState({*/}
+          {/*chartHeight: nativeEvent.layout.height,*/}
+          {/*chartWidth: nativeEvent.layout.width*/}
+          {/*})*/}
+          {/*}}>*/}
+          {/*{chartWidth > 0 && chartHeight > 0 ?*/}
+          {/*<Echarts option={option} width={chartWidth} height={chartHeight}/>*/}
+          {/*: null*/}
+          {/*}*/}
 
-        {/*</View>*/}
-      </TouchableOpacity>
+          {/*</View>*/}
+        </TouchableOpacity>
+      </SwipeRow>
     )
   }
 }
@@ -209,5 +237,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
-
+  swipeActions:{
+    overflow:'hidden',
+    ...StyleSheet.absoluteFillObject,
+    flexDirection:'row',
+    justifyContent:'flex-end'
+  },
+  delTextContainer:{
+    width:100,
+    backgroundColor:'red',
+    alignItems:'center',
+    justifyContent:'center'
+  },
 })

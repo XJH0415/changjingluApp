@@ -48,6 +48,7 @@ export default class CoinDetail extends Component {
       circulation: null,
       vol_24h: '2158432',
       gains_pct_1d: '2.6879',
+      type: null,
     },
     navigate:null,
     currency: 'cny',
@@ -78,7 +79,7 @@ export default class CoinDetail extends Component {
     this.getKline(coin.coin_id, currency);
     this.getCoinArticles(coin.coin_id);
     this.getBetActive(coin.coin_id);
-
+    this.getSelfSelect();
   }
 
   getSelfSelect(){
@@ -170,16 +171,39 @@ export default class CoinDetail extends Component {
     return t.split("").reverse().join("");
   }
 
-  _Collection(){
+  _CoinWatch(){
+    var {coin} = this.props;
+    var {selfSelect} = this.state;
+    let that = this;
+    if (selfSelect){
+      API.RemoveCoinWatch(coin.coin_id, (result)=>{
+        if (result===true){
+          that.setState({
+            selfSelect: false,
+          })
+        }
+      })
+    }else {
+      API.AddCoinWatch(coin.coin_id, (result)=>{
+        if (result===true){
+          that.setState({
+            selfSelect: true,
+          })
+        }
+      })
+    }
+
+      // :
 
   }
 
 
   render() {
-    var {coin, currency, navigation,onNewPress,navigate, type } = this.props;
+    var {coin, currency, navigation,onNewPress,navigate } = this.props;
     if (!navigate){
       navigate = navigation.navigate;
     }
+
     var {tickers, data, lines, news, betData, selfSelect} = this.state;
     var {
       syb,//计价符号
@@ -245,7 +269,7 @@ export default class CoinDetail extends Component {
               {gains_pct ? gains_pct : '-'}
             </Text>
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
-              <TouchableOpacity  onPress={()=>{this._Collection()}}>
+              <TouchableOpacity  onPress={()=>{this._CoinWatch()}}>
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 5}}>
                   <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
                 </View>

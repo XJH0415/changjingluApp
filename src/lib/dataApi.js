@@ -652,7 +652,7 @@ export default class DataApi {
    */
   static getSelfSelect(page, sort, callback, errorCallback){
     var url = URL + '/app/selfSelect';
-    getData(
+    SubmitForm(
       url,
       bodyToString({
         page: page,
@@ -670,7 +670,7 @@ export default class DataApi {
    */
   static getMeTickers(page, sort, callback, errorCallback){
     var url = URL + '/me/tickers';
-    getData(
+    SubmitForm(
       url,
       bodyToString({
         page: page,
@@ -679,7 +679,39 @@ export default class DataApi {
       callback,errorCallback);
   }
 
+  /**
+   * 加入自选
+   * @param coin_id
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static AddCoinWatch(coin_id, callback, errorCallback){
+    var url = URL + '/coin/watch';
+    SubmitForm(
+      url,
+      bodyToString({
+        coin_id: coin_id
+      }),
+      callback,errorCallback);
+  }
 
+  /**
+   * 取消自选
+   * @param coin_id
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static RemoveCoinWatch(coin_id, callback, errorCallback){
+    var url = URL + '/coin/unwatch';
+    SubmitForm(
+      url,
+      bodyToString({
+        coin_id: coin_id
+      }),
+      callback,errorCallback);
+  }
 
 
 
@@ -784,14 +816,14 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
       },
       body: bodyString
     })
-    // .then((response) => response.json())
+    .then((response) => response.json())
     .then((responseJson) => {
-      alert(JSON.stringify(responseJson))
+      // alert(JSON.stringify(responseJson))
       if (responseJson.no === 0) {
-        callback(responseJson);
+        callback(responseJson.data);
       } else {
         if (errorCallback){
-          errorCallback(responseJson)
+          errorCallback(responseJson.msg)
         }
       }
     }).catch((error) => {

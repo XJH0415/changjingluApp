@@ -50,9 +50,11 @@ export default class GuessRiseFall extends Component {
     historyBets: null,
     CurrentData: null, //当前用户猜涨跌数据以及所有参与本次猜涨跌的记录
     userMsg: null,//用户在本地的部分数据
+    userState: '0'
   }
 
   componentDidMount() {
+    this.getUserState();
     var {coin, betData} = this.state;
     var {start_time, freeze_time, end_time, bet_status} = betData;
     bet_status === '0' ? this.countDown(start_time) :
@@ -69,6 +71,16 @@ export default class GuessRiseFall extends Component {
       if (userMsg) {
         that.setState({
           userMsg: userMsg
+        })
+      }
+    })
+  }
+  getUserState() {
+    let that = this;
+    API.getMsg('userState', (userState) => {
+      if (userState) {
+        that.setState({
+          userState: userState
         })
       }
     })
@@ -155,7 +167,7 @@ export default class GuessRiseFall extends Component {
   }
 
   render() {
-    var {coin, betData, updateTime, historyBets, CurrentData, userMsg} = this.state;
+    var {coin, betData, updateTime, historyBets, CurrentData, userMsg, userState} = this.state;
     var {navigate} = this.props.navigation;
     if (betData) {
       var {
@@ -263,7 +275,7 @@ export default class GuessRiseFall extends Component {
             bet_status === '1' ?
               <View style={styles.myBetsView}>
                 {
-                  userMsg ?
+                  userState === '1' ?
                     <View>
                       <SelectButtonItem betData={betData}/>
                       <MyBetsList CurrentData={CurrentData}/>
