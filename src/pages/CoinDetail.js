@@ -63,7 +63,12 @@ export default class CoinDetail extends Component {
     betData: null,
     selfSelect: false,
     selfCoins: null,
-    userState: '0',
+    userState: '',
+  }
+
+  componentDidMount(){
+    this.getUserState();
+
   }
 
   componentWillMount() {
@@ -75,13 +80,12 @@ export default class CoinDetail extends Component {
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
+    this.getUserState();
     this.getTickers(coin.coin_id, currency);
     this.getBasic(coin.coin_id, currency);
     this.getKline(coin.coin_id, currency);
     this.getCoinArticles(coin.coin_id);
     this.getBetActive(coin.coin_id);
-    this.getSelfSelect();
-    this.getUserState();
   }
 
   getUserState(){
@@ -89,25 +93,28 @@ export default class CoinDetail extends Component {
       if (userState){
         this.setState({
           userState: userState
-        })
+        });
+        this.getSelfSelect();
       }
-    })
+    });
   }
   getSelfSelect(){
-    API.getSelfSelect('1', 'va', (selfCoins)=>{
-      if (selfCoins){
-        this.setState({
-          selfCoins:selfCoins.coins.records,
-        });
-        for (let sc of selfCoins.coins.records) {
-          if (sc.coin_id === this.props.coin.coin_id) {
-            this.setState({
-              selfSelect:true,
-            });
+    if (this.state.userState === '1'){
+      API.getSelfSelect('1', 'va', (selfCoins)=>{
+        if (selfCoins){
+          this.setState({
+            selfCoins:selfCoins.coins.records,
+          });
+          for (let sc of selfCoins.coins.records) {
+            if (sc.coin_id === this.props.coin.coin_id) {
+              this.setState({
+                selfSelect:true,
+              });
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
 
   getTickers(coin_id, currency) {
@@ -148,6 +155,7 @@ export default class CoinDetail extends Component {
       })
     })
   }
+
   getBetActive(coin_id){
     var that=this;
     API.getBetActive((data)=>{
@@ -193,38 +201,47 @@ export default class CoinDetail extends Component {
   _CoinWatch(){
     var {coin} = this.props;
     var {selfSelect, userState} = this.state;
-    if (userState === '0'){
+    this.getUserState();
+    let that = this;
+    if (userState === '0' || userState === ''){
       return Alert.alert('', '亲，请先登录')
     }
-    let that = this;
-    if (selfSelect){
-      API.RemoveCoinWatch(coin.coin_id, (result)=>{
-        if (result===true){
-          that.setState({
-            selfSelect: false,
-          })
-        }
-      })
-    }else {
-      API.AddCoinWatch(coin.coin_id, (result)=>{
-        if (result===true){
-          that.setState({
-            selfSelect: true,
-          })
-        }
-      })
+    if (userState === '1'){
+      if (selfSelect){
+        API.RemoveCoinWatch(coin.coin_id, (result)=>{
+          if (result===true){
+            that.setState({
+              selfSelect: false,
+            })
+          }
+        })
+      }else if(!selfSelect){
+        API.AddCoinWatch(coin.coin_id, (result)=>{
+          if (result===true){
+            that.setState({
+              selfSelect: true,
+            })
+          }
+        })
+      }
     }
   }
 
   render() {
-    var {coin, currency, navigation,onNewPress,navigate } = this.props;
+    var {coin, currency, navigation,onNewPress,navigate,} = this.props;
     if (!navigate){
       navigate = navigation.navigate;
     }
     var {tickers, data, lines, news, betData, selfSelect, userState} = this.state;
-    if (userState === '0'){
-      selfSelect = false;
+
+    if (this.props.navigation){
+      if (this.props.navigation.state.params.type === 1){
+        selfSelect = true;
+      }
     }
+    // if (userState === '0' || userState === ''){
+    //   selfSelect = false;
+    // }
     var {
       syb,//计价符号
       amount,//总发行量
@@ -275,7 +292,7 @@ export default class CoinDetail extends Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={()=>this._onRefresh}
+            onRefresh={()=>this._onRefresh()}
           />}
       >
         <View style={[styles.view, styles.detail]}>
@@ -291,7 +308,7 @@ export default class CoinDetail extends Component {
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
               <TouchableOpacity  onPress={()=>{this._CoinWatch()}}>
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 5}}>
-                  <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
+                  <Text style={styles.detailTopBtn}>{selfSelect ? '取消自选' :selfSelect === '' ? '-' :  !selfSelect ? '加入自选' : '取消自选'}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity  onPress={()=>{
@@ -337,8 +354,7 @@ export default class CoinDetail extends Component {
             <TouchableOpacity style={styles.guessView} onPress={()=>{
               navigate('GuessRiseFall',{
                 coin:coin,
-                betData: betData,
-                key: this.props.key})}} >
+                betData: betData,})}} >
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>
                   <Text style={styles.guessName}>{name}</Text>

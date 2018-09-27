@@ -122,7 +122,7 @@ export default class NewDetail extends Component {
                           };
                           img.src = url;
                         });
-                        // window.onload=function(){window.location.hash = 1;document.title = document.getElementById('main').offsetHeight;}
+                        window.onload=function(){window.location.hash = 1;document.title = document.getElementById('main').offsetHeight;}
                         var wrapper = document.createElement("div");
                         wrapper.id = "height-wrapper";
                         while (document.body.firstChild) {

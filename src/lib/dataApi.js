@@ -660,14 +660,14 @@ export default class DataApi {
       }),
       callback,errorCallback);
   }
-
-  /**
-   * 我的自选---交易所
-   * @param page
-   * @param sort
-   * @param callback
-   * @param errorCallback
-   */
+  //
+  // /**
+  //  * 我的自选---交易所
+  //  * @param page
+  //  * @param sort
+  //  * @param callback
+  //  * @param errorCallback
+  //  */
   // static getMeTickers(page, sort, callback, errorCallback){
   //   var url = URL + '/me/tickers';
   //   SubmitForm(

@@ -22,7 +22,7 @@ export default class Home extends Component {
     lines:{},
     selfCoins: [],
     myTicker:[],
-    userState: '0',
+    userState: '',
   }
 
   componentDidMount(){
@@ -43,13 +43,15 @@ export default class Home extends Component {
           })
         }
       })
-      API.getSelfSelect('1', 'va', (selfCoins)=>{
-        if (selfCoins){
-          that.setState({
-            selfCoins:selfCoins.coins.records,
-          })
-        }
-      })
+      if (that.state.userState === '1'){
+        API.getSelfSelect('1', 'va', (selfCoins)=>{
+          if (selfCoins){
+            that.setState({
+              selfCoins:selfCoins.coins.records,
+            })
+          }
+        })
+      }
       // API.getMeTickers('', '',(myTicker)=>{
       //   that.setState({
       //     myTicker:myTicker,
@@ -99,7 +101,7 @@ export default class Home extends Component {
       newCoins.push({type: '行情'})
       newSelfCoins.push({type: '自选'})
     }
-    if (userState === '0'){
+    if (userState !== '1'){
       newSelfCoins = [];
       selfCoins = [];
     }
@@ -137,7 +139,7 @@ export default class Home extends Component {
                       }
                       return(
                           <MarketItem onPress={(coin) => {
-                            navigate('CoinDetail', {coin: coin})
+                            navigate('CoinDetail', {coin: coin, type:item.type ? item.type : 0})
                           }}key={index} currency={'￥'} coin={item} />
                       )
                     }
