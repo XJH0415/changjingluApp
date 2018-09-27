@@ -31,7 +31,7 @@ export default class App extends Component {
           }}
           scalesPageToFit={false}
           source={source}
-          onMessage={event => this.props.onPress ? this.props.onPress(JSON.parse(event.nativeEvent.data)) : null}
+          // onMessage={event => this.props.onPress ? this.props.onPress(JSON.parse(event.nativeEvent.data)) : null}
         />
       </View>
     );

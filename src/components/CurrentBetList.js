@@ -46,10 +46,10 @@ export  default class CurrentBetList extends Component {
               return(
                 <View style={styles.betList}>
                   <View style={styles.imgName}>
-                    <Image source={{uri: item.user.avatar}} style={styles.img}/>
+                    <Image source={{uri: item.user && item.user.avatar ? item.user.avatar : ''}} style={styles.img}/>
                     <Text >{
-                      item.user.name ?
-                        (item.user.name.length > 5 ? item.user.name.substr(0, 5) + "..."
+                      item.user && item.user.name ?
+                        (item.user.name.length > 4 ? item.user.name.substr(0, 4) + "..."
                           : item.user.name)
                         : ''}
                           </Text>

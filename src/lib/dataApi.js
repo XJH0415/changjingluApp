@@ -668,16 +668,16 @@ export default class DataApi {
    * @param callback
    * @param errorCallback
    */
-  static getMeTickers(page, sort, callback, errorCallback){
-    var url = URL + '/me/tickers';
-    SubmitForm(
-      url,
-      bodyToString({
-        page: page,
-        sort: sort
-      }),
-      callback,errorCallback);
-  }
+  // static getMeTickers(page, sort, callback, errorCallback){
+  //   var url = URL + '/me/tickers';
+  //   SubmitForm(
+  //     url,
+  //     bodyToString({
+  //       page: page,
+  //       sort: sort
+  //     }),
+  //     callback,errorCallback);
+  // }
 
   /**
    * 加入自选
@@ -768,11 +768,15 @@ function getData(URL, bodyString, callback, errorCallback) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
         },
         body: bodyString
       })
       .then((response) => response.json())
       .then((responseJson) => {
+        // if (JSON.stringify(responseJson).indexOf('<')!==-1){
+        //   console.log(URL)
+        // }
         if (responseJson.no === 0) {
           callback(responseJson.data);
           save(key,responseJson.data)
@@ -823,12 +827,16 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
       },
       body: bodyString
     })
     .then((response) => response.json())
     .then((responseJson) => {
+      // if (JSON.stringify(responseJson).indexOf('<')!==-1){
+      //   console.log(URL)
+      // }
       // alert(JSON.stringify(responseJson))
       if (responseJson.no === 0) {
         callback(responseJson.data);
@@ -841,3 +849,4 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
     console.error(error);
   });
 }
+

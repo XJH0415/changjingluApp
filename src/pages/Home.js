@@ -37,14 +37,18 @@ export default class Home extends Component {
     var that=this;
     function init(){
       API.getCoins(1,'va','cny',(data)=>{
-        that.setState({
-          coins:data.coins,
-        })
+        if(data){
+          that.setState({
+            coins:data.coins,
+          })
+        }
       })
       API.getSelfSelect('1', 'va', (selfCoins)=>{
-        that.setState({
-          selfCoins:selfCoins.coins.records,
-        })
+        if (selfCoins){
+          that.setState({
+            selfCoins:selfCoins.coins.records,
+          })
+        }
       })
       // API.getMeTickers('', '',(myTicker)=>{
       //   that.setState({
@@ -52,9 +56,11 @@ export default class Home extends Component {
       //   })
       // })
       API.getMsg('userState', (userState)=>{
-        that.setState({
-          userState:userState,
-        })
+        if (userState){
+          that.setState({
+            userState:userState,
+          })
+        }
       })
     }
     init();

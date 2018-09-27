@@ -50,7 +50,7 @@ export default class Notice extends Component {
           {
             records.map((item,index)=>{
               return (
-                <TouchableOpacity style={styles.textView} onPress={()=>{navigate('NewDetail',{data:item})}}>
+                <TouchableOpacity style={styles.textView} key={index} onPress={()=>{navigate('NewDetail',{data:item})}}>
                   <Text numberOfLines={1} style={styles.bannerText}>{item.title}</Text>
                 </TouchableOpacity>
               )

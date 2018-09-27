@@ -86,21 +86,25 @@ export default class CoinDetail extends Component {
 
   getUserState(){
     API.getMsg('userState', (userState)=>{
-      this.setState({
-        userState: userState
-      })
+      if (userState){
+        this.setState({
+          userState: userState
+        })
+      }
     })
   }
   getSelfSelect(){
     API.getSelfSelect('1', 'va', (selfCoins)=>{
-      this.setState({
-        selfCoins:selfCoins.coins.records,
-      });
-      for (let sc of selfCoins.coins.records) {
-        if (sc.coin_id === this.props.coin.coin_id) {
-          this.setState({
-            selfSelect:true,
-          });
+      if (selfCoins){
+        this.setState({
+          selfCoins:selfCoins.coins.records,
+        });
+        for (let sc of selfCoins.coins.records) {
+          if (sc.coin_id === this.props.coin.coin_id) {
+            this.setState({
+              selfSelect:true,
+            });
+          }
         }
       }
     })
@@ -109,18 +113,22 @@ export default class CoinDetail extends Component {
   getTickers(coin_id, currency) {
     var that = this;
     API.getCoinTicker(coin_id, currency, (data) => {
-      that.setState({
-        tickers: data.tickers
-      })
+      if (data){
+        that.setState({
+          tickers: data.tickers
+        })
+      }
     })
   }
 
   getBasic(coin_id, currency) {
     var that = this;
     API.getCoinBasic(coin_id, currency, (data) => {
-      that.setState({
-        data: data
-      })
+      if (data){
+        that.setState({
+          data: data
+        })
+      }
     });
   }
 
@@ -143,12 +151,14 @@ export default class CoinDetail extends Component {
   getBetActive(coin_id){
     var that=this;
     API.getBetActive((data)=>{
-      for(var betData of data){
-        if (coin_id === betData.coin_id) {
-          that.setState({
-            betData:betData
-          });
-          break;
+      if (data){
+        for(var betData of data){
+          if (coin_id === betData.coin_id) {
+            that.setState({
+              betData:betData
+            });
+            break;
+          }
         }
       }
     })
@@ -426,7 +436,7 @@ export default class CoinDetail extends Component {
             style={{flex: 1}}
             data={tickers}
             ItemSeparatorComponent={() => <Separator/>}
-            renderItem={({item, index}) => <PairItem ticker={item}/>}
+            renderItem={({item, index}) => <PairItem ticker={item} />}
           />
         </View>
       </ScrollView>

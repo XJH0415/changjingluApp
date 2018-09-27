@@ -82,9 +82,11 @@ export default class GuessRiseFall extends Component {
   getUserMsg() {
     let that = this;
     API.getLogMe((userMsg) => {
-      that.setState({
-        userMsg: userMsg
-      })
+      if (userMsg){
+        that.setState({
+          userMsg: userMsg
+        })
+      }
     })
   }
 
@@ -142,12 +144,14 @@ export default class GuessRiseFall extends Component {
   getBetActive(coin_id){
     var that=this;
     API.getBetActive((data)=>{
-      for(var betData of data){
-        if (coin_id === betData.coin_id) {
-          that.setState({
-            betData:betData
-          });
-          break;
+      if (data){
+        for(var betData of data){
+          if (coin_id === betData.coin_id) {
+            that.setState({
+              betData:betData
+            });
+            break;
+          }
         }
       }
     })
@@ -169,9 +173,11 @@ export default class GuessRiseFall extends Component {
     let that = this;
     var {betData} = this.props.navigation.state.params;
     API.getCurrentBets(betData.coin_bet_id, (CurrentData) => {
-      that.setState({
-        CurrentData: CurrentData,
-      })
+      if (CurrentData){
+        that.setState({
+          CurrentData: CurrentData,
+        })
+      }
     })
   }
 
