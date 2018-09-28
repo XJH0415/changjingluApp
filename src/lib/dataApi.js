@@ -725,10 +725,6 @@ export default class DataApi {
       }),
       callback);
   }
-
-  static SaveMsg(key,obj){
-    save(key,obj);
-  }
   static getMsg(key,callback){
     readData(key, callback,()=>{});
   }
@@ -805,11 +801,13 @@ function readData(key, callback, fetch) {
 }
 
 function save(key, value) {
-  AsyncStorage.setItem(key, JSON.stringify(value), (error) => {
-    if (error) {
-      console.log('save:' + error)
-    }
-  })
+  if(key&&value){
+    AsyncStorage.setItem(key, JSON.stringify(value), (error) => {
+      if (error) {
+        console.log('save:' + error)
+      }
+    })
+  }
 }
 
 function removeData(key, callback) {

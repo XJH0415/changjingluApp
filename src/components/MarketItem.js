@@ -40,18 +40,6 @@ export default class MarketItem extends Component {
     chartHeight: 0
   }
 
-  componentDidMount() {
-    this.SaveSelfCoins();
-  }
-
-
-  SaveSelfCoins() {
-    var {selfCoins} = this.state;
-    if (selfCoins !== []) {
-      API.SaveMsg('selfCoins', selfCoins)
-    }
-  }
-
   componentWillReceiveProps(props) {
     this.setState({
       data: props.data,
