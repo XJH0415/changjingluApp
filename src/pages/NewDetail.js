@@ -38,10 +38,12 @@ export default class NewDetail extends Component {
   state={
     height:0,
     userMsg: null,
+    userState: '',
   }
 
   componentDidMount(){
     this.getUserMsg();
+    this.getUserState();
   }
 
   getUserMsg(){
@@ -53,10 +55,18 @@ export default class NewDetail extends Component {
     })
   }
 
-
+  getUserState(){
+    var that = this;
+    API.getUserState('userState',(userState)=>{
+      that.setState({
+        userState: userState
+      })
+    })
+  }
 
   render() {
     var userMsg = this.state.userMsg;
+    var userState = this.state.userState;
     var {navigation} = this.props;
     console.log(navigation)
     var {navigate} = navigation;
@@ -163,7 +173,7 @@ export default class NewDetail extends Component {
         </View>
 
         {
-          userMsg ?
+          userState === '1' ?
             <View>
               <CollectionRewardItem data={data} />
               <Comment data={data} type={'article'}/>

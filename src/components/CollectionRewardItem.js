@@ -16,7 +16,8 @@ import ArticleRewardItem from "./ArticleRewardItem";
 export  default class CollectionRewardItem extends Component {
 
   state = {
-    collect: false
+    collect: false,
+    userState: '',
   }
 
   ArticleLike(){
@@ -30,8 +31,10 @@ export  default class CollectionRewardItem extends Component {
       alert(JSON.stringify(data))
       API.ArticleLike(data.article_id, (result)=>{
         // alert(JSON.stringify(result))
+        if (result){
+          Alert.alert('', '收藏成功！');
+        }
       })
-      Alert.alert('', '收藏成功！');
     }
   }
 
