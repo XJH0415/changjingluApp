@@ -59,7 +59,7 @@ export default class NewDetail extends Component {
 
   getUserState(){
     var that = this;
-    API.getUserState('userState',(userState)=>{
+    API.getMsg('userState',(userState)=>{
       if (userState){
         that.setState({
           userState: userState

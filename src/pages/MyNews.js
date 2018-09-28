@@ -70,7 +70,7 @@ export default class MyNews extends Component {
         console.log(result)
         callback(da);
       })
-      .catch(error => console.error(error))
+      .catch(error => console.log(error))
   }
 
 }

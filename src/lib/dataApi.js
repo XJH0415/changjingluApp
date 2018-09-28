@@ -313,7 +313,7 @@ export default class DataApi {
         console.log('responseData=', responseData);
       })
       .catch((error)=>{
-        console.error('error=', error)
+        console.log('error=', error)
       });
   }
 
@@ -340,7 +340,7 @@ export default class DataApi {
         console.log('responseData=', responseData);
       })
       .catch((error)=>{
-        console.error('error=', error)
+        console.log('error=', error)
       });
   }
 
@@ -782,7 +782,7 @@ function getData(URL, bodyString, callback, errorCallback) {
           }
         }
       }).catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   })
 }
@@ -830,8 +830,13 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
       },
       body: bodyString
     })
-    .then((response) => response.json())
+    .then((response) =>  {
+      if(response.status!==500){
+        return response.json()
+      }
+    })
     .then((responseJson) => {
+    
       // if (JSON.stringify(responseJson).indexOf('<')!==-1){
       //   console.log(URL)
       // }
@@ -844,7 +849,7 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
         }
       }
     }).catch((error) => {
-    console.error(error);
+    console.log(error);
   });
 }
 

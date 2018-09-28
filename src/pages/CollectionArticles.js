@@ -33,7 +33,7 @@ export default class CollectionArticles extends Component {
       .then(result => that.setState({
         data: result
       }))
-      .catch(error => console.error(error))
+      .catch(error => console.log(error))
   }
 
 
