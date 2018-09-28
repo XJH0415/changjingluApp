@@ -38,16 +38,16 @@ export default class CoinDetail extends Component {
   };
   static defaultProps = {
     coin: {
-      coin_id: '1',
-      url: '/b/bitcoin',
-      icon: 'https://changjinglu.pro/uploads/image/996/76556ef0392f74257be6b42b13303ab2.png',
-      code: 'BTC',
-      name_en: 'Bitcoin',
-      name_cn: '比特币',
-      price: 42915.708802205,
+      coin_id: null,
+      url: null,
+      icon: null,
+      code: null,
+      name_en: null,
+      name_cn: null,
+      price: null,
       circulation: null,
-      vol_24h: '2158432',
-      gains_pct_1d: '2.6879',
+      vol_24h: null,
+      gains_pct_1d: null,
       type: null,
     },
     navigate:null,
@@ -67,8 +67,23 @@ export default class CoinDetail extends Component {
   }
 
   componentDidMount(){
+    var {coin, navigation} = this.props;
+    var {selfCoins} = this.state;
     this.getUserState();
-
+    if (navigation) {
+      // coin = navigation ? navigation.state.params.coin : null
+      if (navigation.state.params.type === '1'){
+        this.setState({
+          selfSelect:true,
+        })
+      }else{
+        this.setState({
+          selfSelect:false,
+        })
+      }
+    }else{
+      this.getSelfSelect();
+    }
   }
 
   componentWillMount() {
@@ -94,21 +109,29 @@ export default class CoinDetail extends Component {
         this.setState({
           userState: userState
         });
+      }
+      if (!this.props.navigation) {
         this.getSelfSelect();
       }
     });
   }
   getSelfSelect(){
+    let that = this;
     if (this.state.userState === '1'){
       API.getSelfSelect('1', 'va', (selfCoins)=>{
         if (selfCoins){
-          this.setState({
+          that.setState({
             selfCoins:selfCoins.coins.records,
           });
-          for (let sc of selfCoins.coins.records) {
-            if (sc.coin_id === this.props.coin.coin_id) {
+          for(let sc of selfCoins.coins.records){
+            if (sc.coin_id === this.props.coin.coin_id){
               this.setState({
-                selfSelect:true,
+                selfSelect: true,
+              });
+              break;
+            } else{
+              this.setState({
+                selfSelect: false,
               });
             }
           }
@@ -127,7 +150,6 @@ export default class CoinDetail extends Component {
       }
     })
   }
-
   getBasic(coin_id, currency) {
     var that = this;
     API.getCoinBasic(coin_id, currency, (data) => {
@@ -138,7 +160,6 @@ export default class CoinDetail extends Component {
       }
     });
   }
-
   getKline(coin_id, currency) {
     var that = this;
     API.getCoinKline(coin_id, currency, (data) => {
@@ -199,7 +220,10 @@ export default class CoinDetail extends Component {
   }
 
   _CoinWatch(){
-    var {coin} = this.props;
+    var {coin, navigation} = this.props;
+    if (navigation) {
+      coin = navigation ? navigation.state.params.coin : null
+    }
     var {selfSelect, userState} = this.state;
     this.getUserState();
     let that = this;
@@ -207,17 +231,17 @@ export default class CoinDetail extends Component {
       return Alert.alert('', '亲，请先登录')
     }
     if (userState === '1'){
-      if (selfSelect){
+      if (selfSelect === true){
         API.RemoveCoinWatch(coin.coin_id, (result)=>{
-          if (result===true){
+          if (result){
             that.setState({
               selfSelect: false,
             })
           }
         })
-      }else if(!selfSelect){
+      }else if(selfSelect === false){
         API.AddCoinWatch(coin.coin_id, (result)=>{
-          if (result===true){
+          if (result){
             that.setState({
               selfSelect: true,
             })
@@ -229,19 +253,10 @@ export default class CoinDetail extends Component {
 
   render() {
     var {coin, currency, navigation,onNewPress,navigate,} = this.props;
+    var {tickers, data, lines, news, betData, selfSelect, userState} = this.state;
     if (!navigate){
       navigate = navigation.navigate;
     }
-    var {tickers, data, lines, news, betData, selfSelect, userState} = this.state;
-
-    if (this.props.navigation){
-      if (this.props.navigation.state.params.type === 1){
-        selfSelect = true;
-      }
-    }
-    // if (userState === '0' || userState === ''){
-    //   selfSelect = false;
-    // }
     var {
       syb,//计价符号
       amount,//总发行量
@@ -308,7 +323,7 @@ export default class CoinDetail extends Component {
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
               <TouchableOpacity  onPress={()=>{this._CoinWatch()}}>
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 5}}>
-                  <Text style={styles.detailTopBtn}>{selfSelect ? '取消自选' :selfSelect === '' ? '-' :  !selfSelect ? '加入自选' : '取消自选'}</Text>
+                  <Text style={styles.detailTopBtn}>{ selfSelect ? '取消自选' :selfSelect === '' ? '-' :  !selfSelect ? '加入自选' : '取消自选'}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity  onPress={()=>{

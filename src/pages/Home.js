@@ -139,8 +139,8 @@ export default class Home extends Component {
                       }
                       return(
                           <MarketItem onPress={(coin) => {
-                            navigate('CoinDetail', {coin: coin, type:item.type ? item.type : 0})
-                          }}key={index} currency={'￥'} coin={item} />
+                            navigate('CoinDetail', {coin: coin, type: item.type ? '1' : ''})
+                          }} key={index} currency={'￥'} coin={item} />
                       )
                     }
                   }}
