@@ -49,18 +49,22 @@ export default class NewDetail extends Component {
   getUserMsg(){
     var that = this;
     API.getMsg('userMsg',(userMsg)=>{
-      that.setState({
-        userMsg: userMsg
-      })
+      if (userMsg){
+        that.setState({
+          userMsg: userMsg
+        })
+      }
     })
   }
 
   getUserState(){
     var that = this;
     API.getUserState('userState',(userState)=>{
-      that.setState({
-        userState: userState
-      })
+      if (userState){
+        that.setState({
+          userState: userState
+        })
+      }
     })
   }
 
