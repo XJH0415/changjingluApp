@@ -55,7 +55,7 @@ export default class Advert extends Component {
     if (data&&data.records){
       records = data.records;
       for (let rec of records){
-        if (rec.key === 'home.top.1') {
+        if (rec.key !== 'home.right.1') {
           newRecords.push(rec);
         }
       }
