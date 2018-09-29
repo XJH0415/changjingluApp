@@ -54,15 +54,15 @@ export default class GuessRiseFall extends Component {
   }
 
   componentDidMount() {
+    this.refresh();
+  }
+
+  refresh(){
     var {coin, betData} = this.state;
     var {start_time, freeze_time, end_time, bet_status} = betData;
     bet_status === '0' ? this.countDown(start_time) :
       bet_status === '1' ? this.countDown(freeze_time) :
         this.countDown(end_time);
-    this.refresh();
-  }
-
-  refresh(){
     this.getUserState();
     this.getHistoryBets();
     this.getCurrentBets();
@@ -70,9 +70,12 @@ export default class GuessRiseFall extends Component {
   }
 
   AddBet(coin_bet_id, type, betNum){
+    var {coin, betData} = this.state;
     let that = this;
     API.AddBet(coin_bet_id, type, betNum, (result) => {
       that.refresh();
+      clearInterval(that.timer);
+      that.getBetActive(coin.coin_id);
       Alert.alert('' + '竞猜成功,祝您旗开得胜!')
     }, (error) => {
       Alert.alert('' + '亲，数据出错了,再来一次吧')

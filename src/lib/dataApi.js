@@ -725,6 +725,25 @@ export default class DataApi {
       }),
       callback);
   }
+
+  /**
+   * 精确获取代币描述
+   * @param coin_id
+   * @param callback
+   * @param errorCallback
+   */
+  static getCoinDetails(coin_id, callback, errorCallback){
+    var url = URL + '/app/coinDetails';
+    getData(
+      url,
+      bodyToString({
+        coin_id: coin_id
+      }),
+      callback,errorCallback);
+  }
+
+
+
   static getMsg(key,callback){
     readData(key, callback,()=>{});
   }

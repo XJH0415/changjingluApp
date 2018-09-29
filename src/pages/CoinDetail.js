@@ -250,7 +250,18 @@ export default class CoinDetail extends Component {
       }
     }
   }
-
+  _SeeDetailBtn(){
+    var {coin, navigation} = this.props;
+    if (navigation) {
+      coin = navigation ? navigation.state.params.coin : null
+    }
+    API.getCoinDetails(coin.coin_id, (result)=>{
+      if (result){
+        // alert(JSON.stringify(result))//description
+        Alert.alert('', result.description)
+      }
+    })
+  }
   render() {
     var {coin, currency, navigation,onNewPress,navigate,} = this.props;
     var {tickers, data, lines, news, betData, selfSelect, userState} = this.state;
@@ -357,7 +368,7 @@ export default class CoinDetail extends Component {
               <CoinLine lines={lines}/>
             </View>
             <View style={styles.detailBottomMore}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{this._SeeDetailBtn()}}>
                 <Text style={styles.detailBottomText}>查看详情></Text>
               </TouchableOpacity>
             </View>
