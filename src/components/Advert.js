@@ -51,15 +51,21 @@ export default class Advert extends Component {
   render() {
     var {data}=this.state;
     var records=[];
+    var newRecords=[];
     if (data&&data.records){
       records = data.records;
-      if (!records||records.length < 3 ){
+      for (let rec of records){
+        if (rec.key === 'home.top.1') {
+          newRecords.push(rec);
+        }
+      }
+      if (!newRecords||newRecords.length < 3 ){
         for (let defaultSrc of data.default.src){
           if (defaultSrc.indexOf('https://')===-1){
             defaultSrc='https://'+defaultSrc;
           }
-          records.push({url: data.default.url, image_large: defaultSrc})
-          if (records.length === 3){
+          newRecords.push({url: data.default.url, image_large: defaultSrc})
+          if (newRecords.length === 3){
             break;
           }
         }
@@ -74,7 +80,7 @@ export default class Advert extends Component {
                 key = {records.length}
         >
           {
-            records.map((item,index)=>{
+            newRecords.map((item,index)=>{
               var source={uri:item.image_large};
               return (
                 <View style={styles.imgView} key={index}>
