@@ -24,10 +24,18 @@ export default class CollectionArticles extends Component {
     };
   };
   state ={
-    data: null
+    data: null,
   }
 
   componentDidMount(){
+    this.refresh();
+  }
+
+  refresh(){
+    this.getCollectionArticles();
+  }
+
+  getCollectionArticles(){
     let that = this;
     API.getCollectionArticles(null)
       .then(result => that.setState({
@@ -36,11 +44,20 @@ export default class CollectionArticles extends Component {
       .catch(error => console.log(error))
   }
 
+  _ArticleDelete(article_id){
+    // alert(article_id);
+    let that = this;
+    API.ArticleUnLike(article_id,(result)=>{
+       that.refresh();
+    })
+  }
 
   _listHeaderComponent(){
     return (
       <View style={styles.titles}>
-        {/*<Text style={styles.titleTxt}>搜索框</Text>*/}
+        <TouchableOpacity >
+
+        </TouchableOpacity>
       </View>
     )
   }
@@ -72,7 +89,10 @@ export default class CollectionArticles extends Component {
                 <Text
                   style={styles.articleTitle}
                   numberOfLines={1}
-                >{item.article.title}</Text>
+                >{item.article && item.article.title ? item.article.title : ''}</Text>
+                <TouchableOpacity style={styles.deleteTouch} onPress={()=>{this._ArticleDelete(item.article_id)}}>
+                  <Image style={styles.deleteImg} source={require('../resource/ArticleDelete.png')}/>
+                </TouchableOpacity>
               </TouchableOpacity>
             }
             keyExtractor={(item,index)=>{}}
@@ -99,8 +119,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     fontSize: 16,
+    color: '#DA7D7E',
   },
   articleTitle:{
+    flex: 1,
     color:'#000',
     fontSize: 16,
     marginLeft: 10,
@@ -108,10 +130,17 @@ const styles = StyleSheet.create({
   },
   records:{
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 10,
     height:30,
-
+  },
+  deleteTouch:{
+    padding: 5,
+    paddingRight: 10,
+  },
+  deleteImg:{
+    height: 20,
+    width: 20,
   },
 })
