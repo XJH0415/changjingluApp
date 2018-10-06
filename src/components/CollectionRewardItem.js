@@ -28,7 +28,7 @@ export  default class CollectionRewardItem extends Component {
       that.setState({
         collect: true,
       });
-      alert(JSON.stringify(data))
+      // alert(JSON.stringify(data))
       API.ArticleLike(data.article_id, (result)=>{
         // alert(JSON.stringify(result))
         if (result){

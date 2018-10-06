@@ -67,7 +67,7 @@ export default class ArticleRewardItem extends Component {
     var data = this.props.data;
     return (
       <View style={styles.root}>
-        <TouchableOpacity style={{width: 50}} onPress={()=>{this._RewardBtn()}}>
+        <TouchableOpacity onPress={()=>{this._RewardBtn()}}>
           <Text style={styles.text}>打赏{tips}</Text>
         </TouchableOpacity>
         <Modal

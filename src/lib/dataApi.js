@@ -660,27 +660,27 @@ export default class DataApi {
       }),
       callback,errorCallback);
   }
-  //
-  // /**
-  //  * 我的自选---交易所
-  //  * @param page
-  //  * @param sort
-  //  * @param callback
-  //  * @param errorCallback
-  //  */
-  // static getMeTickers(page, sort, callback, errorCallback){
-  //   var url = URL + '/me/tickers';
-  //   SubmitForm(
-  //     url,
-  //     bodyToString({
-  //       page: page,
-  //       sort: sort
-  //     }),
-  //     callback,errorCallback);
-  // }
 
   /**
-   * 加入自选
+   * 我的自选---交易所
+   * @param page
+   * @param sort
+   * @param callback
+   * @param errorCallback
+   */
+  static getMeTickers(page, sort, callback, errorCallback){
+    var url = URL + '/me/tickers';
+    SubmitForm(
+      url,
+      bodyToString({
+        page: page,
+        sort: sort
+      }),
+      callback,errorCallback);
+  }
+
+  /**
+   * 单币加入自选
    * @param coin_id
    * @param callback
    * @param errorCallback
@@ -697,7 +697,7 @@ export default class DataApi {
   }
 
   /**
-   * 取消自选
+   * 单币取消自选
    * @param coin_id
    * @param callback
    * @param errorCallback
@@ -709,6 +709,44 @@ export default class DataApi {
       url,
       bodyToString({
         coin_id: coin_id
+      }),
+      callback,errorCallback);
+  }
+
+  /**
+   * 交易对加入自选
+   * @param site_id
+   * @param ticker
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static AddPairsWatch(site_id, ticker, callback, errorCallback){
+    var url = URL + '/ticker/watch';
+    SubmitForm(
+      url,
+      bodyToString({
+        site_id: site_id,
+        ticker: ticker
+      }),
+      callback,errorCallback);
+  }
+
+  /**
+   * 交易对取消自选
+   * @param site_id
+   * @param ticker
+   * @param callback
+   * @param errorCallback
+   * @constructor
+   */
+  static RemovePairsWatch(site_id, ticker, callback, errorCallback){
+    var url = URL + '/ticker/unwatch';
+    SubmitForm(
+      url,
+      bodyToString({
+        site_id: site_id,
+        ticker: ticker
       }),
       callback,errorCallback);
   }

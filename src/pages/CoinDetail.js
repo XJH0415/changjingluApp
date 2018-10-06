@@ -64,6 +64,7 @@ export default class CoinDetail extends Component {
     selfSelect: false,
     selfCoins: null,
     userState: '',
+    myTicker: []
   }
 
   componentDidMount(){
@@ -135,6 +136,17 @@ export default class CoinDetail extends Component {
               });
             }
           }
+        }
+      })
+      var myTic = {};
+      API.getMeTickers('', '',(myTicker)=>{
+        if (myTicker.length > 0){
+          for (let tic of myTicker){
+            myTic[tic.code + '_' + tic.site_id] = tic;
+          }
+          that.setState({
+            myTicker:myTic,
+          })
         }
       })
     }
@@ -264,7 +276,7 @@ export default class CoinDetail extends Component {
   }
   render() {
     var {coin, currency, navigation,onNewPress,navigate,} = this.props;
-    var {tickers, data, lines, news, betData, selfSelect, userState} = this.state;
+    var {tickers, data, lines, news, betData, selfSelect, userState, myTicker} = this.state;
     if (!navigate){
       navigate = navigation.navigate;
     }
@@ -380,7 +392,8 @@ export default class CoinDetail extends Component {
             <TouchableOpacity style={styles.guessView} onPress={()=>{
               navigate('GuessRiseFall',{
                 coin:coin,
-                betData: betData,})}} >
+                betData: betData,
+                userState: userState })}} >
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>
                   <Text style={styles.guessName}>{name}</Text>
@@ -478,12 +491,15 @@ export default class CoinDetail extends Component {
             style={{flex: 1}}
             data={tickers}
             ItemSeparatorComponent={() => <Separator/>}
-            renderItem={({item, index}) => <PairItem ticker={item} />}
+            renderItem={({item, index}) =>
+              <PairItem ticker={item}
+                        userState={userState}
+                        type={myTicker[item.code+'_'+item.site_id]? '1' : '0'}
+              />}
           />
         </View>
       </ScrollView>
-    )
-      ;
+    );
   }
 }
 

@@ -4,14 +4,17 @@ import {
   View,
   FlatList,
   Alert,
-  Text, Dimensions,
-  TouchableOpacity, ScrollView,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import Advert from '../components/Advert';
 import Notice from '../components/Notice';
 import MarketItem from '../components/MarketItem';
 import API from '../lib/dataApi';
 import Separator from '../components/Separator';
+import PairItem from "../components/PairItem";
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
@@ -19,93 +22,125 @@ const deviceHeight = Dimensions.get('window').height;    //设备的高度
 export default class Home extends Component {
   state = {
     coins: [],
-    lines:{},
+    lines: {},
     selfCoins: [],
-    myTicker:[],
+    myTicker: [],
     userState: '',
   }
 
-  componentDidMount(){
-    API.getMsg('userState', (userState)=>{
+  componentDidMount() {
+    API.getMsg('userState', (userState) => {
       this.setState({
-        userState:userState,
+        userState: userState,
       })
     })
   }
 
   componentWillMount() {
-    var that=this;
-    function init(){
-      API.getCoins(1,'va','cny',(data)=>{
-        if(data){
+    var that = this;
+
+    function init() {
+      API.getCoins(1, 'va', 'cny', (data) => {
+        if (data) {
           that.setState({
-            coins:data.coins,
+            coins: data.coins,
           })
         }
       })
-      if (that.state.userState === '1'){
-        API.getSelfSelect('1', 'va', (selfCoins)=>{
-          if (selfCoins){
+      if (that.state.userState === '1') {
+        API.getSelfSelect('1', 'va', (selfCoins) => {
+          if (selfCoins) {
             that.setState({
-              selfCoins:selfCoins.coins.records,
+              selfCoins: selfCoins.coins.records,
+            })
+          }
+        })
+        API.getMeTickers('', '', (myTicker) => {
+          if (myTicker) {
+            that.setState({
+              myTicker: myTicker,
             })
           }
         })
       }
-      // API.getMeTickers('', '',(myTicker)=>{
-      //   that.setState({
-      //     myTicker:myTicker,
-      //   })
-      // })
-      API.getMsg('userState', (userState)=>{
-        if (userState){
+      API.getMsg('userState', (userState) => {
+        if (userState) {
           that.setState({
-            userState:userState,
+            userState: userState,
           })
         }
       })
     }
+
     init();
-    that.Interval=setInterval(()=>{
+    that.Interval = setInterval(() => {
       init();
-    },5000)
+    }, 5000)
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.Interval);
   }
 
-  mergeArr(Arr1, Arr2, Arr3, Arr4){
+  mergeArr(Arr1, Arr2, Arr3, Arr4, Arr5, Arr6) {
     var newArr = [];
-    for (let arr1 of Arr1){
+    for (let arr1 of Arr1) {
       newArr.push(arr1)
     }
-    for (let arr2 of Arr2){
+    for (let arr2 of Arr2) {
       newArr.push(arr2)
     }
-    for (let arr3 of Arr3){
+    for (let arr3 of Arr3) {
       newArr.push(arr3)
     }
-    for (let arr4 of Arr4){
+    for (let arr4 of Arr4) {
       newArr.push(arr4)
+    }
+    for (let arr5 of Arr5) {
+      newArr.push(arr5)
+    }
+    for (let arr6 of Arr6) {
+      newArr.push(arr6)
     }
     return newArr;
   }
 
+  _onSelfCoinBtn(selfBtn, item) {
+    var {userState} = this.state;
+    userState === '1' ?
+      selfBtn === '1' ?
+        API.RemoveCoinWatch(item.coin_id, (result) => {
+          if (result) {
+            // alert('1'+result)
+          }
+        })
+        :
+        API.AddCoinWatch(item.coin_id, (result) => {
+          if (result) {
+            // alert('2'+result)
+          }
+        })
+      :
+      Alert.alert('', '亲，请先登录')
+  }
+
   render() {
     const {navigate} = this.props.navigation;
-    let {coins,lines,selfCoins, userState} = this.state;
-    let newSelfCoins=[]
-    let newCoins=[]
-    if (userState === '1'&& selfCoins.length>0){
+    let {coins, lines, selfCoins, userState, myTicker} = this.state;
+    let newSelfCoins = []
+    let newCoins = []
+    let newPairs = []
+    if (userState === '1' && selfCoins.length > 0) {
       newCoins.push({type: '行情'})
-      newSelfCoins.push({type: '自选'})
+      newSelfCoins.push({type: '自选币'})
+      newPairs.push({type: '自选交易对'})
     }
-    if (userState !== '1'){
+    if (userState !== '1') {
       newSelfCoins = [];
       selfCoins = [];
+      myTicker = [];
     }
-    let newCoinData = this.mergeArr(newSelfCoins, selfCoins, newCoins, coins);
+    let newCoinData = this.mergeArr(newSelfCoins, selfCoins, newPairs, myTicker, newCoins, coins);
     return (
       <View style={styles.root}>
         <Advert navigate={navigate}/>
@@ -114,16 +149,21 @@ export default class Home extends Component {
         <FlatList style={{flex: 1}}
                   data={newCoinData}
                   ItemSeparatorComponent={() => <Separator/>}
-                  keyExtractor={(item,index) => (item.coin_id ? item.coin_id : item.type)+index}
+                  keyExtractor={(item, index) =>
+                    (item.coin_id ? item.coin_id : item.site_id ? item.code + item.site_id : item.type) + index}
                   renderItem={({item, index}) => {
                     if (item.type) {
-                      return(
+                      return (
                         <Text style={styles.typeTitle}>{item.type}</Text>
                       )
-                    }else {
+                    } else {
                       //判断
-                      if (item.icon.path){
-                        item={
+                      var source = null;
+                      var selfBtn = null;
+                      selfBtn = '0';
+                      source = require('../resource/star1.png');
+                      if (item.icon && item.icon.path) {
+                        item = {
                           coin_id: item.coin_id,
                           url: item.url,
                           icon: item['icon.small'],
@@ -135,18 +175,41 @@ export default class Home extends Component {
                           vol_24h: item.vol_24h,
                           gains_pct_1d: item.gains_pct_1d,
                           type: 1
-                        }
+                        };
+                        source = require('../resource/star.png');
+                        selfBtn = '1';
                       }
-                      return(
-                          <MarketItem onPress={(coin) => {
-                            navigate('CoinDetail', {coin: coin, type: item.type ? '1' : ''})
-                          }} key={index} currency={'￥'} coin={item} />
+                      return (
+                        !item.site ?
+                          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flex: 1}}>
+                              <MarketItem onPress={(coin) => {
+                                navigate('CoinDetail', {coin: coin, type: item.type ? '1' : ''})
+                              }} key={index} currency={'￥'} coin={item}/>
+                            </View>
+                            <TouchableOpacity
+                              onPress={() => {
+                                this._onSelfCoinBtn(selfBtn, item)
+                              }}
+                              style={{
+                                flex: 0.1,
+                                height: 50,
+                                padding: 5,
+                                backgroundColor: '#fff',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                              }}>
+                              <Image style={{width: 30, height: 30,}} source={source}/>
+                            </TouchableOpacity>
+                          </View>
+                          :
+                          <PairItem ticker={item} type={'1'} userState={userState}/>
                       )
                     }
                   }}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -154,19 +217,20 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
-  goToGuess:{
+  goToGuess: {
     width: 200,
-    color:'#ffffff',
+    color: '#ffffff',
     backgroundColor: 'red',
     fontSize: 20,
     textAlign: 'center',
     margin: 5,
     borderRadius: 8,
   },
-  typeTitle:{
+  typeTitle: {
     marginLeft: 5,
     backgroundColor: '#e2f3ef',
     fontSize: 16,
     color: '#000',
   },
+
 });
