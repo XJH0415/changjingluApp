@@ -12,6 +12,7 @@
   "dependencies": {
     "babel-preset-react-native": "^4.0.0",
     "echarts": "3.2.3",
+    "prop-types": "^15.6.2",
     "react": "16.3.1",
     "react-native": "^0.55.4",
     "react-native-code-push": "^5.4.2",

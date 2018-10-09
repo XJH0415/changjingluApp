@@ -18,6 +18,7 @@ import CoinLine from '../components/CoinLine';
 import API from '../lib/dataApi';
 import DateUtils from '../utils/DateUtils';
 import RegularData from '../utils/RegularData';
+import PropTypes from "prop-types";
 
 const GuessImg = RegularData.GuessImg;
 
@@ -36,6 +37,18 @@ export default class CoinDetail extends Component {
       headerTitle: headerTitle
     }
   };
+
+  static contextTypes={
+    userState: PropTypes.string,
+    coin: PropTypes.array,
+    selfCoins: PropTypes.array,
+    selfCoinsString: PropTypes.string,
+    myTicker: PropTypes.array,
+    myTickerString: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
   static defaultProps = {
     coin: {
       coin_id: null,
@@ -61,30 +74,13 @@ export default class CoinDetail extends Component {
     news: [],
     isRefreshing:false,
     betData: null,
-    selfSelect: false,
-    selfCoins: null,
-    userState: '',
-    myTicker: []
+    selfSelect: this.getSelfSelect(),
   }
 
-  componentDidMount(){
-    var {coin, navigation} = this.props;
-    var {selfCoins} = this.state;
-    this.getUserState();
-    if (navigation) {
-      // coin = navigation ? navigation.state.params.coin : null
-      if (navigation.state.params.type === '1'){
-        this.setState({
-          selfSelect:true,
-        })
-      }else{
-        this.setState({
-          selfSelect:false,
-        })
-      }
-    }else{
-      this.getSelfSelect();
-    }
+  getSelfSelect(){
+    return this.context.getContextState().selfCoinsString[
+      this.props.navigation ? this.props.navigation.state.params.coin.coin_id : this.props.coin.coin_id
+      ] ? true : false
   }
 
   componentWillMount() {
@@ -96,60 +92,11 @@ export default class CoinDetail extends Component {
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
-    this.getUserState();
     this.getTickers(coin.coin_id, currency);
     this.getBasic(coin.coin_id, currency);
     this.getKline(coin.coin_id, currency);
     this.getCoinArticles(coin.coin_id);
     this.getBetActive(coin.coin_id);
-  }
-
-  getUserState(){
-    API.getMsg('userState', (userState)=>{
-      if (userState){
-        this.setState({
-          userState: userState
-        });
-      }
-      if (!this.props.navigation) {
-        this.getSelfSelect();
-      }
-    });
-  }
-  getSelfSelect(){
-    let that = this;
-    if (this.state.userState === '1'){
-      API.getSelfSelect('1', 'va', (selfCoins)=>{
-        if (selfCoins){
-          that.setState({
-            selfCoins:selfCoins.coins.records,
-          });
-          for(let sc of selfCoins.coins.records){
-            if (sc.coin_id === this.props.coin.coin_id){
-              this.setState({
-                selfSelect: true,
-              });
-              break;
-            } else{
-              this.setState({
-                selfSelect: false,
-              });
-            }
-          }
-        }
-      })
-      var myTic = {};
-      API.getMeTickers('', '',(myTicker)=>{
-        if (myTicker.length > 0){
-          for (let tic of myTicker){
-            myTic[tic.code + '_' + tic.site_id] = tic;
-          }
-          that.setState({
-            myTicker:myTic,
-          })
-        }
-      })
-    }
   }
 
   getTickers(coin_id, currency) {
@@ -231,32 +178,54 @@ export default class CoinDetail extends Component {
     return t.split("").reverse().join("");
   }
 
+  getSelfCoin(){
+    let that = this;
+    var mySelf = {};
+    API.getSelfSelect('1', 'va', (selfCoins) => {
+      if (selfCoins) {
+        if (selfCoins.coins.records.length > 0){
+          for (let self of selfCoins.coins.records){
+            mySelf[self.coin_id] = self;
+          }
+        }
+        that.context.setContextState({
+          selfCoins: selfCoins.coins.records,
+          selfCoinsString: mySelf,
+        })
+      }
+    })
+  }
+
   _CoinWatch(){
     var {coin, navigation} = this.props;
     if (navigation) {
       coin = navigation ? navigation.state.params.coin : null
     }
-    var {selfSelect, userState} = this.state;
-    this.getUserState();
+    var {selfSelect} = this.state;
+    let {userState, selfCoinsString} = this.context.getContextState();
+    selfCoinsString[coin.coin_id] ? selfSelect = true : selfSelect = false
     let that = this;
     if (userState === '0' || userState === ''){
       return Alert.alert('', '亲，请先登录')
     }
     if (userState === '1'){
-      if (selfSelect === true){
+      if (selfSelect){
         API.RemoveCoinWatch(coin.coin_id, (result)=>{
           if (result){
             that.setState({
               selfSelect: false,
             })
+            that.getSelfCoin();
           }
         })
-      }else if(selfSelect === false){
+      }else{
         API.AddCoinWatch(coin.coin_id, (result)=>{
           if (result){
             that.setState({
               selfSelect: true,
             })
+            // that.context.setContextState({selfCoins: that.context.getContextState().selfCoins.push(coin)})
+            that.getSelfCoin();
           }
         })
       }
@@ -276,10 +245,11 @@ export default class CoinDetail extends Component {
   }
   render() {
     var {coin, currency, navigation,onNewPress,navigate,} = this.props;
-    var {tickers, data, lines, news, betData, selfSelect, userState, myTicker} = this.state;
+    var {tickers, data, lines, news, betData, selfSelect} = this.state;
     if (!navigate){
       navigate = navigation.navigate;
     }
+    var {userState, coins, selfCoins, selfCoinsString, myTicker, myTickerString} = this.context.getContextState();
     var {
       syb,//计价符号
       amount,//总发行量
@@ -334,6 +304,7 @@ export default class CoinDetail extends Component {
           />}
       >
         <View style={[styles.view, styles.detail]}>
+          {/*<Text>{JSON.stringify(selfCoinsString)}</Text>*/}
           <View style={styles.detailTop}>
             <Image style={styles.image} source={source}/>
             <Text style={[styles.detailTopPrice, {color: color}]}>
@@ -346,7 +317,7 @@ export default class CoinDetail extends Component {
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
               <TouchableOpacity  onPress={()=>{this._CoinWatch()}}>
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 5}}>
-                  <Text style={styles.detailTopBtn}>{ selfSelect ? '取消自选' :selfSelect === '' ? '-' :  !selfSelect ? '加入自选' : '取消自选'}</Text>
+                  <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity  onPress={()=>{
@@ -453,7 +424,7 @@ export default class CoinDetail extends Component {
                 <Text style={styles.newTopTitle}>专栏资讯</Text>
               </View>
               <FlatList
-                keyExtractor={(item,index) => index}
+                keyExtractor={(item,index) => item.article_id+''}
                 data={news.slice(0,5)}
                 ItemSeparatorComponent={() => <Separator/>}
                 renderItem={({item, index}) => (
@@ -487,7 +458,7 @@ export default class CoinDetail extends Component {
             <Text style={styles.newTopTitle}>行情</Text>
           </View>
           <FlatList
-            keyExtractor={(item,index) => index}
+            keyExtractor={(item,index) => item.code+'_'+item.site_id}
             style={{flex: 1}}
             data={tickers}
             ItemSeparatorComponent={() => <Separator/>}

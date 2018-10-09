@@ -18,6 +18,8 @@ import {
   switchVersionLater,
   markSuccess,
 } from 'react-native-update';
+import PropTypes from 'prop-types';
+
 import _updateConfig from './update.json';
 const {appKey} = _updateConfig[Platform.OS];
 
@@ -35,6 +37,7 @@ import CollectionArticles from "./src/pages/CollectionArticles";
 import ChangePassword from "./src/pages/ChangePassword";
 import HistoryBets from "./src/pages/HistoryBets";
 import MyLike from "./src/pages/MyLike";
+import API from "./src/lib/dataApi";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -124,7 +127,146 @@ const StackNavigator = createStackNavigator({
 
 })
 export default class App extends Component {
+
+  static childContextTypes = {
+    userState: PropTypes.string,
+    userMsg: PropTypes.string,
+    coins: PropTypes.array,
+    selfCoins: PropTypes.array,
+    selfCoinsString: PropTypes.string,
+    myTicker: PropTypes.array,
+    myTickerString: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
+  state={
+    userState: '0',
+    userMsg: null,
+    coins: [],
+    selfCoins: [],
+    selfCoinsString: {},
+    myTicker: [],
+    myTickerString: {},
+    getContextState: ()=>{return this.state},
+    setContextState: (state)=> {
+      if (state.setContextState){
+        delete state['setContextState'];
+      }
+      this.setState(state)
+    }
+  }
+
+  getChildContext () {
+    return {
+      userState: this.state.userState,
+      userMsg: this.state.userMsg,
+      coins: this.state.coins,
+      selfCoins: this.state.selfCoins,
+      selfCoinsString: this.state.selfCoinsString,
+      myTicker: this.state.myTicker,
+      myTickerString: this.state.myTickerString,
+      getContextState: this.state.getContextState.bind(this),
+      setContextState: this.state.setContextState.bind(this),
+    }
+  }
+
+  refresh(){
+    this.getUserMsg();
+    this.getUserState();
+    this.getCoin();
+    this.getSelfCoin();
+    this.getMeTickers();
+    this.TimeInit();
+  }
+
+  TimeInit(){
+    var that = this;
+    function init() {
+      that.getCoin();
+      that.getSelfCoin();
+      that.getMeTickers();
+    }
+    that.Interval = setInterval(() => {
+      init();
+    }, 1000)
+  }
+
+//获取用户状态
+  getUserState(){
+    let that = this;
+    API.getMsg('userState', (userState)=>{
+      if (userState){
+        that.setState({
+          userState: userState
+        });
+      }
+    });
+  }
+//获取用户最新信息
+  getUserMsg() {
+    let that = this;
+    API.getLogMe((userMsg) => {
+      if (userMsg){
+        that.setState({
+          userMsg: userMsg
+        })
+      }
+    })
+  }
+
+  getCoin(){
+    let that = this;
+    API.getCoins(1, 'va', 'cny', (data) => {
+      if (data) {
+        that.setState({
+          coins: data.coins,
+        })
+      }
+    })
+  }
+  //获取用户自选币
+  getSelfCoin(){
+    let that = this;
+    var mySelf = {};
+    API.getSelfSelect('1', 'va', (selfCoins) => {
+      if (selfCoins) {
+        that.setState({
+          selfCoins: selfCoins.coins.records,
+        })
+        if (selfCoins.coins.records.length > 0){
+          for (let self of selfCoins.coins.records){
+            mySelf[self.coin_id] = self;
+          }
+          that.setState({
+            selfCoinsString:mySelf,//{code: msg,code2: msg2}
+          })
+        }
+      }
+    })
+  }
+  //获取用户自选交易对
+  getMeTickers(){
+    let that = this;
+    var myTic = {};
+    API.getMeTickers('', '',(myTicker)=>{
+      if (myTicker.length > 0){
+        that.setState({
+          myTicker:myTicker,
+        })
+        for (let tic of myTicker){
+          myTic[tic.code + '_' + tic.site_id] = tic;
+        }
+        that.setState({
+          myTickerString:myTic,
+        })
+      }
+    })
+  }
+
+
   componentWillMount(){
+    this.refresh();
     if (isFirstTime) {
       if (markSuccess) {
         markSuccess();
@@ -185,6 +327,7 @@ export default class App extends Component {
     if (markSuccess) {
       markSuccess();
     }
+    clearInterval(this.Interval);
   }
   render() {
     return (
@@ -193,6 +336,7 @@ export default class App extends Component {
   }
 
 }
+
 const styles=StyleSheet.create({
   tabIcon:{
     width:50,
@@ -201,4 +345,3 @@ const styles=StyleSheet.create({
     paddingLeft: 0,
   }
 })
-

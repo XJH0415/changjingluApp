@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import Advert from '../components/Advert';
 import Notice from '../components/Notice';
 import MarketItem from '../components/MarketItem';
@@ -16,29 +17,30 @@ import API from '../lib/dataApi';
 import Separator from '../components/Separator';
 import PairItem from "../components/PairItem";
 
-const deviceWidth = Dimensions.get('window').width;      //设备的宽度
-const deviceHeight = Dimensions.get('window').height;    //设备的高度
 
 export default class Home extends Component {
+
+  static contextTypes={
+    userState: PropTypes.string,
+    coins: PropTypes.array,
+    selfCoins: PropTypes.array,
+    selfCoinsString: PropTypes.string,
+    myTicker: PropTypes.array,
+    myTickerString: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
   state = {
     coins: [],
     lines: {},
     selfCoins: [],
     myTicker: [],
-    userState: '',
-  }
-
-  componentDidMount() {
-    API.getMsg('userState', (userState) => {
-      this.setState({
-        userState: userState,
-      })
-    })
+    userState: '0',
   }
 
   componentWillMount() {
     var that = this;
-
     function init() {
       API.getCoins(1, 'va', 'cny', (data) => {
         if (data) {
@@ -47,31 +49,7 @@ export default class Home extends Component {
           })
         }
       })
-      if (that.state.userState === '1') {
-        API.getSelfSelect('1', 'va', (selfCoins) => {
-          if (selfCoins) {
-            that.setState({
-              selfCoins: selfCoins.coins.records,
-            })
-          }
-        })
-        API.getMeTickers('', '', (myTicker) => {
-          if (myTicker) {
-            that.setState({
-              myTicker: myTicker,
-            })
-          }
-        })
-      }
-      API.getMsg('userState', (userState) => {
-        if (userState) {
-          that.setState({
-            userState: userState,
-          })
-        }
-      })
     }
-
     init();
     that.Interval = setInterval(() => {
       init();
@@ -105,19 +83,26 @@ export default class Home extends Component {
     return newArr;
   }
 
-  _onSelfCoinBtn(selfBtn, item) {
-    var {userState} = this.state;
+  _onSelfCoinBtn(selfBtn, item, myCoins) {
+    var that = this;
+    let {userState, coins, selfCoins, selfCoinsString, myTicker} = this.context.getContextState();
     userState === '1' ?
       selfBtn === '1' ?
         API.RemoveCoinWatch(item.coin_id, (result) => {
           if (result) {
             // alert('1'+result)
+            if (myCoins.length>0){
+              that.context.setContextState({selfCoins: selfCoins.delete(myCoins)})
+            }
           }
         })
         :
         API.AddCoinWatch(item.coin_id, (result) => {
           if (result) {
             // alert('2'+result)
+            if (myCoins.length>0) {
+              that.context.setContextState({selfCoins: selfCoins.push(myCoins)})
+            }
           }
         })
       :
@@ -126,11 +111,11 @@ export default class Home extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-    let {coins, lines, selfCoins, userState, myTicker} = this.state;
+    let {userState, coins, selfCoins, selfCoinsString, myTicker} = this.context.getContextState();
     let newSelfCoins = []
     let newCoins = []
     let newPairs = []
-    if (userState === '1' && selfCoins.length > 0) {
+    if (userState === '1' && selfCoins.length !== 0) {
       newCoins.push({type: '行情'})
       newSelfCoins.push({type: '自选币'})
       newPairs.push({type: '自选交易对'})
@@ -145,6 +130,7 @@ export default class Home extends Component {
       <View style={styles.root}>
         <Advert navigate={navigate}/>
         <Notice navigate={navigate}/>
+        {/*<Text>{JSON.stringify(this.context.getContextState())}</Text>*/}
         <Separator/>
         <FlatList style={{flex: 1}}
                   data={newCoinData}
@@ -162,7 +148,9 @@ export default class Home extends Component {
                       var selfBtn = null;
                       selfBtn = '0';
                       source = require('../resource/star1.png');
+                      var myCoins= [];
                       if (item.icon && item.icon.path) {
+                        myCoins = item;
                         item = {
                           coin_id: item.coin_id,
                           url: item.url,
@@ -184,23 +172,28 @@ export default class Home extends Component {
                           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <View style={{flex: 1}}>
                               <MarketItem onPress={(coin) => {
-                                navigate('CoinDetail', {coin: coin, type: item.type ? '1' : ''})
+                                navigate('CoinDetail', {coin: coin})
                               }} key={index} currency={'￥'} coin={item}/>
                             </View>
-                            <TouchableOpacity
-                              onPress={() => {
-                                this._onSelfCoinBtn(selfBtn, item)
-                              }}
-                              style={{
-                                flex: 0.1,
-                                height: 50,
-                                padding: 5,
-                                backgroundColor: '#fff',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                              }}>
-                              <Image style={{width: 30, height: 30,}} source={source}/>
-                            </TouchableOpacity>
+                            {
+                              selfBtn === '1' ?
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    this._onSelfCoinBtn(selfBtn, item, myCoins)
+                                  }}
+                                  style={{
+                                    flex: 0.1,
+                                    height: 50,
+                                    padding: 5,
+                                    backgroundColor: '#fff',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                  }}>
+                                  <Image style={{width: 30, height: 30,}} source={source}/>
+                                </TouchableOpacity>
+                                :
+                                <View/>
+                            }
                           </View>
                           :
                           <PairItem ticker={item} type={'1'} userState={userState}/>

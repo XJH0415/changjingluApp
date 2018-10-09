@@ -17,6 +17,7 @@ import API from '../lib/dataApi';
 import CommentItem from '../components/CommentItem';
 import Comment from "./Comment";
 import CollectionRewardItem from "../components/CollectionRewardItem";
+import PropTypes from "prop-types";
 
 
 
@@ -35,42 +36,26 @@ export default class NewDetail extends Component {
       headerTitle: headerTitle
     }
   };
+
+  static contextTypes={
+    userState: PropTypes.string,
+    userMsg: PropTypes.string,
+    coins: PropTypes.array,
+    selfCoins: PropTypes.array,
+    selfCoinsString: PropTypes.string,
+    myTicker: PropTypes.array,
+    myTickerString: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
   state={
     height:0,
-    userMsg: null,
-    userState: '',
-  }
-
-  componentDidMount(){
-    this.getUserMsg();
-    this.getUserState();
-  }
-
-  getUserMsg(){
-    var that = this;
-    API.getMsg('userMsg',(userMsg)=>{
-      if (userMsg){
-        that.setState({
-          userMsg: userMsg
-        })
-      }
-    })
-  }
-
-  getUserState(){
-    var that = this;
-    API.getMsg('userState',(userState)=>{
-      if (userState){
-        that.setState({
-          userState: userState
-        })
-      }
-    })
+    userMsg: this.context.getContextState().userMsg,
+    userState: this.context.getContextState().userState,
   }
 
   render() {
-    var userMsg = this.state.userMsg;
-    var userState = this.state.userState;
     var {navigation} = this.props;
     console.log(navigation)
     var {navigate} = navigation;
@@ -177,7 +162,7 @@ export default class NewDetail extends Component {
         </View>
 
         {
-          userState === '1' ?
+          this.context.getContextState().userState === '1' ?
             <View>
               <CollectionRewardItem data={data} />
               <Comment data={data} type={'article'}/>

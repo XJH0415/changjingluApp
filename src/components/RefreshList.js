@@ -48,7 +48,7 @@ export default class RefreshList extends Component {
                   onEndReached={() => this.refreshMore(!this.data[this.sort]?1:this.data[this.sort].page + 1)}
                   onEndReachedThreshold={1}
                   data={lists}
-                  keyExtractor={(item,index) => index}
+                  keyExtractor={(item,index) => index+''}
                   renderItem={({item, index}) => {return renderItem(item,index)}}
         />
 

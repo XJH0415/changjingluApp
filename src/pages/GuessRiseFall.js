@@ -18,6 +18,7 @@ import RegularData from '../utils/RegularData';
 import SelectButtonItem from "../components/SelectButtonItem";
 import MyBetsList from "../components/MyBetsList";
 import HistoryList from "../components/HistoryList";
+import PropTypes from "prop-types";
 
 const GuessImg = RegularData.GuessImg;
 
@@ -37,6 +38,19 @@ export default class GuessRiseFall extends Component {
     };
   };
 
+  static contextTypes={
+    userState: PropTypes.string,
+    userMsg: PropTypes.string,
+    coins: PropTypes.array,
+    selfCoins: PropTypes.array,
+    selfCoinsString: PropTypes.string,
+    myTicker: PropTypes.array,
+    myTickerString: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
+
   static defaultProps = {
     coin: null,
     betData: null,
@@ -49,11 +63,11 @@ export default class GuessRiseFall extends Component {
     updateTime: '',
     historyBets: null,
     CurrentData: null, //当前用户猜涨跌数据以及所有参与本次猜涨跌的记录
-    userMsg: null,//用户在本地的部分数据
-    userState: this.props.navigation.state.params.userState,
+    userMsg: this.context.getContextState().userMsg,//用户在本地的部分数据
+    userState: this.context.getContextState().userState,
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.refresh();
   }
 
@@ -65,7 +79,6 @@ export default class GuessRiseFall extends Component {
         this.countDown(end_time);
     this.getHistoryBets();
     this.getCurrentBets();
-    this.getUserMsg();
   }
 
   AddBet(coin_bet_id, type, betNum){
@@ -78,17 +91,6 @@ export default class GuessRiseFall extends Component {
       Alert.alert('' + '竞猜成功,祝您旗开得胜!')
     }, (error) => {
       Alert.alert('' + '亲，数据出错了,再来一次吧')
-    })
-  }
-
-  getUserMsg() {
-    let that = this;
-    API.getLogMe((userMsg) => {
-      if (userMsg){
-        that.setState({
-          userMsg: userMsg
-        })
-      }
     })
   }
 
@@ -289,13 +291,14 @@ export default class GuessRiseFall extends Component {
             bet_status === '1' ?
               <View style={styles.myBetsView}>
                 {
-                  userState === '1' ?
+                  this.context.getContextState().userState === '1' ?
                     <View>
                       <SelectButtonItem
                         betData={betData}
                         points={points}
                         onSubBtn={(coin_bet_id, type, betNum)=>{this.AddBet(coin_bet_id, type, betNum)}}/>
-                      <MyBetsList CurrentData={CurrentData}/>
+                      {/*<Text>{JSON.stringify(CurrentData)}</Text>*/}
+                      <MyBetsList CurrentData={CurrentData ? CurrentData : {}}/>
                     </View>
                     :
                     <View

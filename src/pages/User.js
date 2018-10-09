@@ -3,14 +3,21 @@ import {
   StyleSheet,
   View,
   WebView,
-  Platform, AsyncStorage
+  Platform,
+  AsyncStorage
 } from 'react-native';
+import PropTypes from 'prop-types';
+
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
-import LocalStorage from '../utils/LocalStorage';
 import API from '../lib/dataApi';
 
 export default class User extends Component {
+
+  static contextTypes={
+    userState: PropTypes.string,
+    setContextState: PropTypes.func,
+  }
 
   state = {
     width: 0,
@@ -124,6 +131,7 @@ export default class User extends Component {
                 API.logOut(()=>{});
                 API.removeMsg('userMsg',()=>{});
                 API.removeMsg('userState',()=>{});
+                this.context.setContextState({userState: '0'})
                 API.SaveMsg('userState','0');
                 this.setState({isLogin:false});
               }}
@@ -151,7 +159,7 @@ export default class User extends Component {
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
                       console.log('user',e.nativeEvent.data);
-
+                      this.context.setContextState({userState: '1'})
                       API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
                       API.SaveMsg('points', e.nativeEvent.data.points)
                       API.SaveMsg('userState','1');

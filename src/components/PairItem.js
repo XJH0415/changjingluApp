@@ -7,9 +7,22 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native';
+import PropTypes from 'prop-types';
 import API from '../lib/dataApi';
 
 export default class PairItem extends Component {
+
+  static contextTypes={
+    userState: PropTypes.string,
+    coins: PropTypes.array,
+    selfCoins: PropTypes.array,
+    selfCoinsString: PropTypes.string,
+    myTicker: PropTypes.array,
+    myTickerString: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
   static defaultProps = {
     ticker: {
       code: "1st_btc",
@@ -30,17 +43,40 @@ export default class PairItem extends Component {
     type: '0',
   }
 
+  state = {
+    selfCoins: []
+  }
+
+  getMeTickers(){
+    let that = this;
+    var myTic = {};
+    API.getMeTickers('', '',(myTicker)=>{
+      if (myTicker.length > 0){
+        for (let tic of myTicker){
+          myTic[tic.code + '_' + tic.site_id] = tic;
+        }
+        that.context.setContextState({
+          myTicker: myTicker,
+          myTickerString: myTic
+        })
+        // alert(JSON.stringify(this.context.getContextState().myTickerString))
+      }
+    })
+  }
+
   _onPairsBtn() {
-    var {ticker: {site_id,code}, type, userState} = this.props;
+    var {ticker, ticker: {site_id,code}, type} = this.props;
+    let {userState, myTicker, myTickerString} = this.context.getContextState();
     var that =this;
     userState === '1' ?
-      type === '0' ?
+      !myTickerString[code + '_' + site_id] ?
         API.AddPairsWatch(site_id, code, (result) => {
           if (result){
             that.setState({
               type: '1',
             })
             Alert.alert('','已加入自选')
+            that.getMeTickers();
           }
         })
         :
@@ -50,6 +86,7 @@ export default class PairItem extends Component {
               type: '0',
             })
             Alert.alert('','已取消自选')
+            that.getMeTickers();
           }
         })
       :
@@ -57,13 +94,9 @@ export default class PairItem extends Component {
   }
 
   render() {
-    var {ticker: {code, site: {icon, name}, price, vol, pct, update_time}, type} = this.props;
-    var source = null;
-    if (type === '1') {
-      source = require('../resource/star.png');
-    } else {
-      source = require('../resource/star1.png');
-    }
+    var {ticker: {code, site: {icon, name}, site_id, price, vol, pct, update_time}, type} = this.props;
+    let {userState, coins, selfCoins, selfCoinsString, myTicker, myTickerString} = this.context.getContextState();
+
     return (
       <View style={styles.root}>
         <View>
@@ -101,7 +134,7 @@ export default class PairItem extends Component {
           <Text style={[styles.text, styles.grayText]}>{update_time.trim()}</Text>
         </View>
         <TouchableOpacity onPress={() => {this._onPairsBtn()}}>
-          <Image style={styles.selectImg} source={source}/>
+          <Image style={styles.selectImg} source={ myTickerString[code + '_' + site_id]  ? require('../resource/star.png'): require('../resource/star1.png')}/>
         </TouchableOpacity>
       </View>
     );
