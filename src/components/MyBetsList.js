@@ -16,7 +16,7 @@ export  default class MyBetsList extends Component {
   render() {
     var CurrentData= this.props.CurrentData;
     var bets = [];
-    if (CurrentData.length> 0) {
+    if (CurrentData.me) {
       bets = CurrentData.me.bets;
     }
     if (bets.length > 10){

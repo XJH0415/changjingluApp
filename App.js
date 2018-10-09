@@ -189,7 +189,7 @@ export default class App extends Component {
     }
     that.Interval = setInterval(() => {
       init();
-    }, 1000)
+    }, 5000)
   }
 
 //获取用户状态
