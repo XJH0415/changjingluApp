@@ -40,11 +40,11 @@ export default class PairItem extends Component {
       vol_val: "543.48",
       watching: false
     },
-    type: '0',
   }
 
   state = {
-    selfCoins: []
+    selfCoins: [],
+    type: this.context.getContextState().myTickerString[this.props.ticker.code + '_' + this.props.ticker.site_id] ? '1': '0',
   }
 
   getMeTickers(){
@@ -65,11 +65,12 @@ export default class PairItem extends Component {
   }
 
   _onPairsBtn() {
-    var {ticker, ticker: {site_id,code}, type} = this.props;
+    var {ticker, ticker: {site_id,code}, } = this.props;
+    var type =this.state.type;
     let {userState, myTicker, myTickerString} = this.context.getContextState();
     var that =this;
     userState === '1' ?
-      !myTickerString[code + '_' + site_id] ?
+      type === '0' ?
         API.AddPairsWatch(site_id, code, (result) => {
           if (result){
             that.setState({
@@ -94,9 +95,9 @@ export default class PairItem extends Component {
   }
 
   render() {
-    var {ticker: {code, site: {icon, name}, site_id, price, vol, pct, update_time}, type} = this.props;
+    var {ticker: {code, site: {icon, name}, site_id, price, vol, pct, update_time}} = this.props;
     let {userState, coins, selfCoins, selfCoinsString, myTicker, myTickerString} = this.context.getContextState();
-
+    var type =this.state.type;
     return (
       <View style={styles.root}>
         <View>
@@ -134,7 +135,7 @@ export default class PairItem extends Component {
           <Text style={[styles.text, styles.grayText]}>{update_time.trim()}</Text>
         </View>
         <TouchableOpacity onPress={() => {this._onPairsBtn()}}>
-          <Image style={styles.selectImg} source={ myTickerString[code + '_' + site_id]  ? require('../resource/star.png'): require('../resource/star1.png')}/>
+          <Image style={styles.selectImg} source={ type === '1'? require('../resource/star.png'): require('../resource/star1.png')}/>
         </TouchableOpacity>
       </View>
     );

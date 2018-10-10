@@ -177,6 +177,11 @@ export default class UserIndexs extends Component {
           </View>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.total} >
+          <View style={styles.totalImgTxt}>
+            <Text style={styles.totalText}>当前版本 1.0.1</Text>
+          </View>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.gobackView} onPress={() => {goback()}}>
           <View style={styles.goBack}>
