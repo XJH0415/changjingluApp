@@ -79,8 +79,19 @@ export default class GuessRiseFall extends Component {
         this.countDown(end_time);
     this.getHistoryBets();
     this.getCurrentBets();
+    this.getUserMsg();
   }
 
+  getUserMsg() {
+    let that = this;
+    API.getLogMe((userMsg) => {
+      if (userMsg){
+        that.setState({
+          userMsg: userMsg
+        })
+      }
+    })
+  }
   AddBet(coin_bet_id, type, betNum){
     var {coin, betData} = this.state;
     let that = this;
@@ -143,6 +154,7 @@ export default class GuessRiseFall extends Component {
             that.setState({
               betData:betData
             });
+            that.props.navigation.state.params.UpdateBetData(betData);
             break;
           }
         }

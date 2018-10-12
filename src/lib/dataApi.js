@@ -780,6 +780,32 @@ export default class DataApi {
       callback,errorCallback);
   }
 
+  /**
+   * KYC身份验证
+   * @param image
+   */
+  static Authentication(image,imageName){
+    return new Promise(function (resolve, reject) {
+      var url = 'https://api-cn.faceplusplus.com/cardpp/v1/ocridcard';
+      let formData = new FormData();
+      let file = {uri: image, type: 'multipart/form-data', name: imageName};
+      formData.append("image_file", file);
+      formData.append("image_url", '');
+      formData.append("image_base64", '');
+      formData.append("api_key", "sqMkoDhSaMAjyz8Z3nG3eOog_J7h_pGZ");
+      formData.append("api_secret", "AOGcYO53kQoy6OPcEyh0MsCQpg1aY2wr");
+      formData.append("legality", "1");
+      fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-Type':"multipart/form-data;charset=UTF-8",
+        },
+        body:formData,
+      }).then((response) => response.json())
+        .then((responseData)=> resolve(responseData))
+        .catch((err)=> reject(err));
+    })
+  }
 
 
   static getMsg(key,callback){

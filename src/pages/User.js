@@ -131,8 +131,10 @@ export default class User extends Component {
                 API.logOut(()=>{});
                 API.removeMsg('userMsg',()=>{});
                 API.removeMsg('userState',()=>{});
-                this.context.setContextState({userState: '0'})
+                API.removeMsg('userKYCState',()=>{});
+                this.context.setContextState({userState: '0', userKYCState: '0'})
                 API.SaveMsg('userState','0');
+                API.SaveMsg('userKYCState','0');
                 this.setState({isLogin:false});
               }}
               navigation={navigation}

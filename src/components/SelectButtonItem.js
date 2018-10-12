@@ -13,8 +13,16 @@ import {
   Alert,
 } from 'react-native';
 import API from '../lib/dataApi';
+import PropTypes from "prop-types";
 
 export default class SelectButtonItem extends Component {
+
+  static contextTypes={
+    userState: PropTypes.string,
+    userKYCState: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
 
   static defaultProps = {
     onSubBtn: (coin_bet_id, type, betNum)=>{},
@@ -63,6 +71,9 @@ export default class SelectButtonItem extends Component {
     var {rise, fall, betNum, array} = this.state;
     var {coin_bet_id} = this.props.betData;
     let type = '';
+    if (this.context.getContextState().userKYCState !== '1'){
+      return Alert.alert('', '亲，请先进行实名认证');
+    }
     if (rise === 1) {
       type = 'up';
     } else if (fall === 1) {

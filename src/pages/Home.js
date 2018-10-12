@@ -22,6 +22,7 @@ export default class Home extends Component {
 
   static contextTypes={
     userState: PropTypes.string,
+    userKYCState: PropTypes.string,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
     selfCoinsString: PropTypes.string,
@@ -83,31 +84,31 @@ export default class Home extends Component {
     return newArr;
   }
 
-  _onSelfCoinBtn(selfBtn, item, myCoins) {
-    var that = this;
-    let {userState, coins, selfCoins, selfCoinsString, myTicker} = this.context.getContextState();
-    userState === '1' ?
-      selfBtn === '1' ?
-        API.RemoveCoinWatch(item.coin_id, (result) => {
-          if (result) {
-            // alert('1'+result)
-            if (myCoins.length>0){
-              that.context.setContextState({selfCoins: selfCoins.delete(myCoins)})
-            }
-          }
-        })
-        :
-        API.AddCoinWatch(item.coin_id, (result) => {
-          if (result) {
-            // alert('2'+result)
-            if (myCoins.length>0) {
-              that.context.setContextState({selfCoins: selfCoins.push(myCoins)})
-            }
-          }
-        })
-      :
-      Alert.alert('', '亲，请先登录')
-  }
+  // _onSelfCoinBtn(selfBtn, item, myCoins) {
+  //   var that = this;
+  //   let {userState, coins, selfCoins, selfCoinsString, myTicker} = this.context.getContextState();
+  //   userState === '1' ?
+  //     selfBtn === '1' ?
+  //       API.RemoveCoinWatch(item.coin_id, (result) => {
+  //         if (result) {
+  //           // alert('1'+result)
+  //           if (myCoins.length>0){
+  //             that.context.setContextState({selfCoins: selfCoins.delete(myCoins)})
+  //           }
+  //         }
+  //       })
+  //       :
+  //       API.AddCoinWatch(item.coin_id, (result) => {
+  //         if (result) {
+  //           // alert('2'+result)
+  //           if (myCoins.length>0) {
+  //             that.context.setContextState({selfCoins: selfCoins.push(myCoins)})
+  //           }
+  //         }
+  //       })
+  //     :
+  //     Alert.alert('', '亲，请先登录')
+  // }
 
   render() {
     const {navigate} = this.props.navigation;
@@ -175,28 +176,28 @@ export default class Home extends Component {
                                 navigate('CoinDetail', {coin: coin})
                               }} key={index} currency={'￥'} coin={item}/>
                             </View>
-                            {
-                              selfBtn === '1' ?
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    this._onSelfCoinBtn(selfBtn, item, myCoins)
-                                  }}
-                                  style={{
-                                    flex: 0.1,
-                                    height: 50,
-                                    padding: 5,
-                                    backgroundColor: '#fff',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                  }}>
-                                  <Image style={{width: 30, height: 30,}} source={source}/>
-                                </TouchableOpacity>
-                                :
-                                <View/>
-                            }
+                            {/*{*/}
+                              {/*selfBtn === '1' ?*/}
+                                {/*<TouchableOpacity*/}
+                                  {/*onPress={() => {*/}
+                                    {/*this._onSelfCoinBtn(selfBtn, item, myCoins)*/}
+                                  {/*}}*/}
+                                  {/*style={{*/}
+                                    {/*flex: 0.1,*/}
+                                    {/*height: 50,*/}
+                                    {/*padding: 5,*/}
+                                    {/*backgroundColor: '#fff',*/}
+                                    {/*justifyContent: 'center',*/}
+                                    {/*alignItems: 'center'*/}
+                                  {/*}}>*/}
+                                  {/*<Image style={{width: 30, height: 30,}} source={source}/>*/}
+                                {/*</TouchableOpacity>*/}
+                                {/*:*/}
+                                {/*<View/>*/}
+                            {/*}*/}
                           </View>
                           :
-                          <PairItem ticker={item} type={'1'} userState={userState}/>
+                          <PairItem ticker={item} userState={userState}/>
                       )
                     }
                   }}

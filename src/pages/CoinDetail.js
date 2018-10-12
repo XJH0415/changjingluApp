@@ -74,6 +74,7 @@ export default class CoinDetail extends Component {
     news: [],
     isRefreshing:false,
     betData: null,
+    updateBetData: null,
     selfSelect: this.getSelfSelect(),
   }
 
@@ -245,7 +246,7 @@ export default class CoinDetail extends Component {
   }
   render() {
     var {coin, currency, navigation,onNewPress,navigate,} = this.props;
-    var {tickers, data, lines, news, betData, selfSelect} = this.state;
+    var {tickers, data, lines, news, betData, selfSelect, updateBetData} = this.state;
     if (!navigate){
       navigate = navigation.navigate;
     }
@@ -282,7 +283,7 @@ export default class CoinDetail extends Component {
         end_time,//锁仓时间
         bet_status,//状态 0等待中 1下注中 2锁仓中
         //'bet_status.name',//状态名称：等待中 下注中 锁仓中
-      } = betData;
+      } = updateBetData ? updateBetData : betData;
     }
     var circulation_value = data['circulation_' + currency];//流通市值
     var vol_value = data['vol_' + currency];//24成交额
@@ -316,7 +317,7 @@ export default class CoinDetail extends Component {
             </Text>
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
               <TouchableOpacity  onPress={()=>{this._CoinWatch()}}>
-                <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 5}}>
+                <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 1}}>
                   <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
                 </View>
               </TouchableOpacity>
@@ -364,7 +365,9 @@ export default class CoinDetail extends Component {
               navigate('GuessRiseFall',{
                 coin:coin,
                 betData: betData,
-                userState: userState })}} >
+                userState: userState ,
+                UpdateBetData: (updateBetData)=>{this.setState({updateBetData: updateBetData})}
+              })}} >
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>
                   <Text style={styles.guessName}>{name}</Text>
@@ -465,7 +468,6 @@ export default class CoinDetail extends Component {
             renderItem={({item, index}) =>
               <PairItem ticker={item}
                         userState={userState}
-                        type={myTicker[item.code+'_'+item.site_id]? '1' : '0'}
               />}
           />
         </View>
@@ -517,12 +519,12 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   detailCenterText: {
+    height: 14,
     fontSize: 12,
     padding:0,
     margin: 0,
-    lineHeight: 12,
+    lineHeight: 14,
     color: 'gray',
-    marginBottom: 5,
     marginRight: 5,
   },
   detailBottom: {},

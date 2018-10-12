@@ -95,7 +95,7 @@ export default class PairItem extends Component {
   }
 
   render() {
-    var {ticker: {code, site: {icon, name}, site_id, price, vol, pct, update_time}} = this.props;
+    var {ticker: {code, site: {icon, name}, site_id, price, vol, pct, update_time},hide} = this.props;
     let {userState, coins, selfCoins, selfCoinsString, myTicker, myTickerString} = this.context.getContextState();
     var type =this.state.type;
     return (

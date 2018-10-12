@@ -38,6 +38,7 @@ import ChangePassword from "./src/pages/ChangePassword";
 import HistoryBets from "./src/pages/HistoryBets";
 import MyLike from "./src/pages/MyLike";
 import API from "./src/lib/dataApi";
+import KYCIdentification from "./src/pages/KYCIdentification";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -100,6 +101,9 @@ const StackNavigator = createStackNavigator({
   MyLike:{
     screen: MyLike,
   },
+  KYCIdentification:{
+    screen: KYCIdentification
+  }
 }, {
   headerMode:'screen',
   headerTransitionPreset:'fade-in-place',
@@ -130,6 +134,7 @@ export default class App extends Component {
 
   static childContextTypes = {
     userState: PropTypes.string,
+    userKYCState: PropTypes.string,
     userMsg: PropTypes.string,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
@@ -141,13 +146,14 @@ export default class App extends Component {
   }
 
   state={
-    userState: '0',
-    userMsg: null,
-    coins: [],
-    selfCoins: [],
-    selfCoinsString: {},
-    myTicker: [],
-    myTickerString: {},
+    userState: '0',//用户是否登录 0 未登录 1登录
+    userKYCState: '0',//用户是否KYC认证 0 未认证 1认证
+    userMsg: null,//用户信息
+    coins: [],//首页的50个热门币
+    selfCoins: [],//自选币
+    selfCoinsString: {},//自选币 //{coin_id: msg, coin_id2: msg2}
+    myTicker: [],//自选交易对
+    myTickerString: {},//自选交易对 //{code_site_id: msg, code_site_id: msg2}
     getContextState: ()=>{return this.state},
     setContextState: (state)=> {
       if (state.setContextState){
@@ -160,6 +166,7 @@ export default class App extends Component {
   getChildContext () {
     return {
       userState: this.state.userState,
+      userKYCState: this.state.userKYCState,
       userMsg: this.state.userMsg,
       coins: this.state.coins,
       selfCoins: this.state.selfCoins,
@@ -174,6 +181,7 @@ export default class App extends Component {
   refresh(){
     this.getUserMsg();
     this.getUserState();
+    this.getUserKYCState();
     this.getCoin();
     this.getSelfCoin();
     this.getMeTickers();
@@ -183,6 +191,9 @@ export default class App extends Component {
   TimeInit(){
     var that = this;
     function init() {
+      that.getUserMsg();
+      that.getUserState();
+      that.getUserKYCState();
       that.getCoin();
       that.getSelfCoin();
       that.getMeTickers();
@@ -199,6 +210,17 @@ export default class App extends Component {
       if (userState){
         that.setState({
           userState: userState
+        });
+      }
+    });
+  }
+  //获取用户KYC状态
+  getUserKYCState(){
+    let that = this;
+    API.getMsg('userKYCState', (userKYCState)=>{
+      if (userKYCState){
+        that.setState({
+          userKYCState: userKYCState
         });
       }
     });

@@ -6,12 +6,22 @@ import IntegralRecord from "./IntegralRecord";
 import ImagePicker from 'react-native-image-picker';
 
 import API from '../lib/dataApi'
+import PropTypes from "prop-types";
 
 
 const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 const deviceHeight = Dimensions.get('window').height;    //设备的高度
 
 export default class UserIndexs extends Component {
+
+  static contextTypes={
+    userState: PropTypes.string,
+    userKYCState: PropTypes.string,
+    userMsg: PropTypes.string,
+    setContextState: PropTypes.func,
+    getContextState: PropTypes.func,
+  }
+
   static defaultProps = {
     goback: () => {
     },
@@ -19,7 +29,6 @@ export default class UserIndexs extends Component {
     },
     data: null,
     navigation: null,
-
   }
 
   state = {
@@ -28,6 +37,7 @@ export default class UserIndexs extends Component {
     oldAvatar : this.props.data.avatar,
     avatarSource : this.props.data.avatar,
     userMsg : null,
+    kycState : null,
   }
 
   componentDidMount(){
@@ -81,8 +91,6 @@ export default class UserIndexs extends Component {
           avatarSource: source
         });
 
-        var {data} = this.state;
-
         API.uploadImage(source, response.fileName);
       }
     });
@@ -97,12 +105,17 @@ export default class UserIndexs extends Component {
 
   render() {
     var {navigate} = this.props.navigation;
-    var {goback, GuessRecord} = this.props;
-    var {data, avatarSource, result, userMsg} = this.state;
+    var {goback, GuessRecord, } = this.props;
+    var {data, avatarSource, result, userMsg, kycState} = this.state;
     var points = null;
+    if (this.context && this.context.getContextState().userMsg){
+      userMsg = this.context.getContextState().userMsg;
+      avatarSource = userMsg.avatar
+    }
     if (userMsg){
       points = userMsg.points;
     }
+
     return (
       <View style={styles.roots}>
         <View style={styles.nameImg}>
@@ -171,6 +184,19 @@ export default class UserIndexs extends Component {
         }}>
           <View style={styles.totalImgTxt}>
             <Text style={styles.totalText}>修改密码 </Text>
+          </View>
+          <View>
+            <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.total} onPress={() => {
+          navigate('KYCIdentification', {data: data, identityState: (kycState)=>{this.setState({kycState:kycState})}})
+        }}>
+          <View style={styles.totalImgTxt}>
+            <Text style={styles.totalText}>
+              身份实名认证{ this.context.getContextState().userKYCState === '1' || kycState=== '1' ? '(已认证)' : ''}
+            </Text>
           </View>
           <View>
             <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
