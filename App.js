@@ -39,6 +39,9 @@ import HistoryBets from "./src/pages/HistoryBets";
 import MyLike from "./src/pages/MyLike";
 import API from "./src/lib/dataApi";
 import KYCIdentification from "./src/pages/KYCIdentification";
+import BackStageManagement from "./src/BackStage/BackStageManagement";
+import ArticleManagement from "./src/BackStage/ArticleManagement";
+import ReviewManagement from "./src/BackStage/ReviewManagement";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -103,7 +106,16 @@ const StackNavigator = createStackNavigator({
   },
   KYCIdentification:{
     screen: KYCIdentification
-  }
+  },
+  BackStageManagement:{
+    screen: BackStageManagement
+  },
+  ArticleManagement:{
+    screen: ArticleManagement
+  },
+  ReviewManagement:{
+    screen: ReviewManagement
+  },
 }, {
   headerMode:'screen',
   headerTransitionPreset:'fade-in-place',

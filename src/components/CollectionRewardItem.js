@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import API from '../lib/dataApi';
 import ArticleRewardItem from "./ArticleRewardItem";
+import ShareItem from "./ShareItem";
 
 export  default class CollectionRewardItem extends Component {
 
@@ -71,6 +72,7 @@ export  default class CollectionRewardItem extends Component {
             </TouchableOpacity>
         }
         <ArticleRewardItem data={data}/>
+        <ShareItem />
       </View>
     );
   }

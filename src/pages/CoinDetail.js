@@ -366,7 +366,7 @@ export default class CoinDetail extends Component {
                 coin:coin,
                 betData: betData,
                 userState: userState ,
-                UpdateBetData: (updateBetData)=>{this.setState({updateBetData: updateBetData})}
+                UpdateBetData: (updateBetData)=>{this.setState({betData: betData, updateBetData:updateBetData})}
               })}} >
               <View style={styles.guessTitle}>
                 <View style={{flexDirection: 'row',alignItems: 'center'}}>

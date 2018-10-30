@@ -190,24 +190,40 @@ export default class UserIndexs extends Component {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.total} onPress={() => {
-          navigate('KYCIdentification', {data: data, identityState: (kycState)=>{this.setState({kycState:kycState})}})
-        }}>
-          <View style={styles.totalImgTxt}>
-            <Text style={styles.totalText}>
-              身份实名认证{ this.context.getContextState().userKYCState === '1' || kycState=== '1' ? '(已认证)' : ''}
-            </Text>
-          </View>
-          <View>
-            <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
-          </View>
-        </TouchableOpacity>
+        {/*<TouchableOpacity style={styles.total} onPress={() => {*/}
+          {/*navigate('KYCIdentification', {data: data, identityState: (kycState)=>{this.setState({kycState:kycState})}})*/}
+        {/*}}>*/}
+          {/*<View style={styles.totalImgTxt}>*/}
+            {/*<Text style={styles.totalText}>*/}
+              {/*身份实名认证{ this.context.getContextState().userKYCState === '1' || kycState=== '1' ? '(已认证)' : ''}*/}
+            {/*</Text>*/}
+          {/*</View>*/}
+          {/*<View>*/}
+            {/*<Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>*/}
+          {/*</View>*/}
+        {/*</TouchableOpacity>*/}
 
         <TouchableOpacity style={styles.total} >
           <View style={styles.totalImgTxt}>
-            <Text style={styles.totalText}>当前版本 1.0.1</Text>
+            <Text style={styles.totalText}>当前版本 1.1.2</Text>
           </View>
         </TouchableOpacity>
+
+        {
+          userMsg &&userMsg.role === 'admin' ?
+            <TouchableOpacity style={styles.total} onPress={() => {
+              navigate('BackStageManagement', {navigation: navigate})
+            }}>
+              <View style={styles.totalImgTxt}>
+                <Text style={styles.totalText}>后台管理</Text>
+              </View>
+              <View>
+                <Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>
+              </View>
+            </TouchableOpacity>
+            :
+            <View/>
+        }
 
         <TouchableOpacity style={styles.gobackView} onPress={() => {goback()}}>
           <View style={styles.goBack}>
@@ -248,7 +264,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#e2f3ef',
     flexDirection: 'row',
     padding: 10,
-    marginBottom:30,
   },
   image: {
     width: 60,
