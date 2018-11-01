@@ -72,7 +72,7 @@ export  default class CollectionRewardItem extends Component {
             </TouchableOpacity>
         }
         <ArticleRewardItem data={data}/>
-        <ShareItem />
+        <ShareItem data={data}/>
       </View>
     );
   }

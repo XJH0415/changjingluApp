@@ -25,6 +25,7 @@
     "react-native-swipeout": "^2.3.6",
     "react-native-swiper": "^1.5.13",
     "react-native-update": "^5.1.2",
+    "react-native-wechat": "^1.9.10",
     "react-navigation": "^2.4.1"
   },
   "devDependencies": {

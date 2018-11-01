@@ -230,6 +230,24 @@ export default class UserIndexs extends Component {
             <Text style={styles.gobackTxt}>退出登录</Text>
           </View>
         </TouchableOpacity>
+
+
+        {/*{*/}
+          {/*userMsg &&userMsg.role === 'admin' ?*/}
+            {/*<TouchableOpacity style={styles.total} onPress={() => {*/}
+              {/*navigate('Test', {navigation: navigate})*/}
+            {/*}}>*/}
+              {/*<View style={styles.totalImgTxt}>*/}
+                {/*<Text style={styles.totalText}>测试页面</Text>*/}
+              {/*</View>*/}
+              {/*<View>*/}
+                {/*<Image style={styles.totalArrow} source={require('../resource/Arrow.png')}/>*/}
+              {/*</View>*/}
+            {/*</TouchableOpacity>*/}
+            {/*:*/}
+            {/*<View/>*/}
+        {/*}*/}
+
       </View>
     )
   }
