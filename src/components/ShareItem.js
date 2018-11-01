@@ -43,6 +43,7 @@ export default class BetRulesItem extends Component {
           Alert.alert('请安装微信');
         }
       });
+    this.setState({isWeChat: false})
   }
 
   _ShareToWeiChatFriendCircle(data){
@@ -64,7 +65,7 @@ export default class BetRulesItem extends Component {
           Alert.alert('请安装微信');
         }
       });
-
+    this.setState({isWeChat: false})
   }
   render() {
     var {data} = this.props;
