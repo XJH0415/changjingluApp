@@ -42,7 +42,6 @@ import KYCIdentification from "./src/pages/KYCIdentification";
 import BackStageManagement from "./src/BackStage/BackStageManagement";
 import ArticleManagement from "./src/BackStage/ArticleManagement";
 import ReviewManagement from "./src/BackStage/ReviewManagement";
-import Test from "./src/pages/Test";
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -117,9 +116,6 @@ const StackNavigator = createStackNavigator({
   ReviewManagement:{
     screen: ReviewManagement
   },
-  // Test:{
-  //   screen: Test
-  // },
 }, {
   headerMode:'screen',
   headerTransitionPreset:'fade-in-place',
