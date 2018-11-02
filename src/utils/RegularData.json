@@ -1,3 +1,7 @@
 {
-  "GuessImg": 150
+  "GuessImg": 150,
+  "WeiChat":{
+    "AppId":"wxfe22c90996a2f051",
+    "AppSecret":"e3860fedbae78068872e7fccdb22f948"
+  }
 }

@@ -9,6 +9,7 @@ import {
   Image, Alert, Text, TouchableWithoutFeedback, Modal
 } from 'react-native';
 import * as WeChat from 'react-native-wechat'
+import RegularData from '../utils/RegularData'
 
 export default class BetRulesItem extends Component {
 
@@ -19,8 +20,7 @@ export default class BetRulesItem extends Component {
   }
 
   componentDidMount() {
-    WeChat.registerApp('wxfe22c90996a2f051')
-
+    WeChat.registerApp(RegularData.WeiChat.AppId)
   }
 
   _ShareToWeiChatFriend(data) {
@@ -37,7 +37,7 @@ export default class BetRulesItem extends Component {
             webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
           })
             .catch((error) => {
-              Alert.alert(error.message);
+              Alert.alert('分享失败' );
             });
         } else {
           Alert.alert('请安装微信');
