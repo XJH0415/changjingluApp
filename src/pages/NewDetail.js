@@ -97,7 +97,7 @@ export default class NewDetail extends Component {
                             var url = j.attr('src');
                             if (IMG_SIZES[url]) {
                               var w = IMG_SIZES[url].width;
-                              var h = IMG_SIZES[url].height;
+                              var h = IMG_SIZES[url].height+10;
                               if (!w || !h) return;
                               if (w <= ww) {
                                 j.css({width:w, height:h});

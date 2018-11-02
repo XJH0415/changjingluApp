@@ -37,10 +37,10 @@ export default class BetRulesItem extends Component {
             webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
           })
             .catch((error) => {
-              Alert.alert('分享失败' );
+              Alert.alert('', '分享失败' );
             });
         } else {
-          Alert.alert('请安装微信');
+          Alert.alert('', '请安装并登录微信');
         }
       });
     this.setState({isWeChat: false})
@@ -59,10 +59,10 @@ export default class BetRulesItem extends Component {
             webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
           })
             .catch((error) => {
-              Alert.alert(error.message);
+              Alert.alert('', '分享失败');
             });
         } else {
-          Alert.alert('请安装微信');
+          Alert.alert('', '请安装并登录微信');
         }
       });
     this.setState({isWeChat: false})
