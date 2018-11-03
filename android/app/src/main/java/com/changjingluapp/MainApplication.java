@@ -5,6 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.imagepicker.ImagePickerPackage;
 import com.theweflex.react.WeChatPackage;
+import cn.reactnative.modules.qq.QQPackage;
 
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
@@ -36,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new ImagePickerPackage(),
             new UpdatePackage(),
+            new QQPackage(),
             new WeChatPackage()
 
       );

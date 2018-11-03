@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import * as WeChat from 'react-native-wechat'
 import RegularData from '../utils/RegularData'
+import * as QQAPI from 'react-native-qq';
 
 export default class BetRulesItem extends Component {
 
@@ -20,11 +21,11 @@ export default class BetRulesItem extends Component {
   }
 
   componentDidMount() {
-    WeChat.registerApp(RegularData.WeiChat.AppId)
+    WeChat.registerApp(RegularData.WeiChat.AppId);
   }
 
   _ShareToWeiChatFriend(data) {
-    var {title, summary, cover, article_id, content} = data;
+    var {title, summary, cover, article_id, } = data;
     // alert(JSON.stringify(data))
     WeChat.isWXAppInstalled()
       .then((isInstalled) => {
@@ -47,7 +48,7 @@ export default class BetRulesItem extends Component {
   }
 
   _ShareToWeiChatFriendCircle(data){
-    var {title, summary, cover, article_id, content} = data;
+    var {title, summary, cover, article_id, } = data;
     WeChat.isWXAppInstalled()
       .then((isInstalled) => {
         if (isInstalled) {
@@ -67,6 +68,27 @@ export default class BetRulesItem extends Component {
       });
     this.setState({isWeChat: false})
   }
+
+  _ShareToQQ(data){
+    var {title, summary, cover, article_id,} = data;
+    QQAPI.isQQInstalled()
+      .then((isInstalled)=>{
+        if (isInstalled){
+          QQAPI.shareToQQ({
+            title: title,
+            description: summary,
+            imageUrl: cover,
+            type: 'news',
+            webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
+          }).catch((error) => {
+            Alert.alert(error);
+          });
+        } else {
+          Alert.alert('', '请安装并登录QQ');
+        }
+      })
+  }
+
   render() {
     var {data} = this.props;
     var {isWeChat} = this.state;
@@ -76,9 +98,9 @@ export default class BetRulesItem extends Component {
           <TouchableOpacity style={{marginRight: 10,}} onPress={()=>{this.setState({isWeChat: true})}}>
             <Image source={require('../resource/WeiChatShare.png')} style={styles.img}/>
           </TouchableOpacity>
-          {/*<TouchableOpacity>*/}
-            {/*<Image source={require('../resource/QQShare.png')} style={styles.img}/>*/}
-          {/*</TouchableOpacity>*/}
+          <TouchableOpacity onPress={()=>{this._ShareToQQ(data)}}>
+            <Image source={require('../resource/QQShare.png')} style={styles.img}/>
+          </TouchableOpacity>
         </View>
         <Modal
           animationType={"fade"}
@@ -92,20 +114,20 @@ export default class BetRulesItem extends Component {
             </TouchableWithoutFeedback>
             <View style={styles.rewardView}>
               <View style={styles.touch}>
-                <Text>分享到微信</Text>
+                <Text style={{marginTop: 5,marginBottom: 5}}>分享到微信</Text>
               </View>
               <View style={{flexDirection: 'row',}}>
                 <TouchableOpacity
                   style={[styles.touch,{marginRight: 20}]}
                   onPress={()=>{this._ShareToWeiChatFriend(data)}}>
                   <Image source={require('../resource/WeiChatFriend.png')} style={styles.img}/>
-                  <Text>分享到好友</Text>
+                  <Text>好友</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.touch}
                   onPress={()=>{this._ShareToWeiChatFriendCircle(data)}}>
                   <Image source={require('../resource/WeiChatFriendCircle.png')} style={styles.img}/>
-                  <Text>分享到朋友圈</Text>
+                  <Text>朋友圈</Text>
                 </TouchableOpacity>
               </View>
             </View>
