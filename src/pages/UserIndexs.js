@@ -17,7 +17,7 @@ export default class UserIndexs extends Component {
   static contextTypes={
     userState: PropTypes.string,
     userKYCState: PropTypes.string,
-    userMsg: PropTypes.string,
+    userMsg: PropTypes.any,
     setContextState: PropTypes.func,
     getContextState: PropTypes.func,
   }

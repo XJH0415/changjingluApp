@@ -147,7 +147,7 @@ export default class App extends Component {
   static childContextTypes = {
     userState: PropTypes.string,
     userKYCState: PropTypes.string,
-    userMsg: PropTypes.string,
+    userMsg: PropTypes.any,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
     selfCoinsString: PropTypes.any,
@@ -197,23 +197,23 @@ export default class App extends Component {
     this.getCoin();
     this.getSelfCoin();
     this.getMeTickers();
-    this.TimeInit();
+    // this.TimeInit();
   }
 
-  TimeInit(){
-    var that = this;
-    function init() {
-      that.getUserMsg();
-      that.getUserState();
-      that.getUserKYCState();
-      that.getCoin();
-      that.getSelfCoin();
-      that.getMeTickers();
-    }
-    that.Interval = setInterval(() => {
-      init();
-    }, 5000)
-  }
+  // TimeInit(){
+    // var that = this;
+    // function init() {
+    //   that.getUserMsg();
+    //   that.getUserState();
+    //   that.getUserKYCState();
+    //   that.getCoin();
+    //   that.getSelfCoin();
+    //   that.getMeTickers();
+    // }
+    // that.Interval = setInterval(() => {
+    //   init();
+    // }, 5000)
+  // }
 
 //获取用户状态
   getUserState(){
@@ -361,7 +361,7 @@ export default class App extends Component {
     if (markSuccess) {
       markSuccess();
     }
-    clearInterval(this.Interval);
+    // clearInterval(this.Interval);
   }
   render() {
     return (

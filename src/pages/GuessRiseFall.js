@@ -40,7 +40,7 @@ export default class GuessRiseFall extends Component {
 
   static contextTypes={
     userState: PropTypes.string,
-    userMsg: PropTypes.string,
+    userMsg: PropTypes.any,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
     selfCoinsString: PropTypes.any,
