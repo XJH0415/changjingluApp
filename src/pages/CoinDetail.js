@@ -123,17 +123,21 @@ export default class CoinDetail extends Component {
   getKline(coin_id, currency) {
     var that = this;
     API.getCoinKline(coin_id, currency, (data) => {
-      that.setState({
-        lines: data[currency]
-      })
+      if (data){
+        that.setState({
+          lines: data[currency]
+        })
+      }
     });
   }
   getCoinArticles(coin_id){
     var that=this;
     API.getCoinArticles(coin_id,1,(data)=>{
-      that.setState({
-        news:data.article
-      })
+      if(data){
+        that.setState({
+          news:data.article
+        })
+      }
     })
   }
 
