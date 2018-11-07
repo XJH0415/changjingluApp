@@ -113,6 +113,9 @@ export default class Home extends Component {
   render() {
     const {navigate} = this.props.navigation;
     let {userState, coins, selfCoins, selfCoinsString, myTicker} = this.context.getContextState();
+    if (!coins){
+      coins = this.state.coins;
+    }
     let newSelfCoins = []
     let newCoins = []
     let newPairs = []
