@@ -3,6 +3,7 @@ package com.changjingluapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.reactnative.modules.qq.QQPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.theweflex.react.WeChatPackage;
 import cn.reactnative.modules.qq.QQPackage;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new QQPackage(),
             new ImagePickerPackage(),
             new UpdatePackage(),
             new QQPackage(),

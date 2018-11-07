@@ -140,6 +140,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-qq')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-update')
     implementation project(':react-native-wechat')

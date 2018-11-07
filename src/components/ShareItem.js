@@ -6,11 +6,15 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Image, Alert, Text, TouchableWithoutFeedback, Modal
+  Image, Alert, Text, TouchableWithoutFeedback, Modal,Platform
 } from 'react-native';
-import * as WeChat from 'react-native-wechat'
-import RegularData from '../utils/RegularData'
-import * as QQAPI from 'react-native-qq';
+import * as WeChat from 'react-native-wechat';
+import RegularData from '../utils/RegularData';
+var QQAPI = null;
+if(Platform.OS === "android"){
+  QQAPI = require("react-native-qq");
+}
+
 
 export default class BetRulesItem extends Component {
 
@@ -38,10 +42,10 @@ export default class BetRulesItem extends Component {
             webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
           })
             .catch((error) => {
-              Alert.alert('', '分享失败' );
+              Alert.alert('提示', '分享失败' );
             });
         } else {
-          Alert.alert('', '请安装并登录微信');
+          Alert.alert('提示', '请安装并登录微信');
         }
       });
     this.setState({isWeChat: false})
@@ -60,10 +64,10 @@ export default class BetRulesItem extends Component {
             webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
           })
             .catch((error) => {
-              Alert.alert('', '分享失败');
+              Alert.alert('提示', '分享失败');
             });
         } else {
-          Alert.alert('', '请安装并登录微信');
+          Alert.alert('提示', '请安装并登录微信');
         }
       });
     this.setState({isWeChat: false})
@@ -71,22 +75,24 @@ export default class BetRulesItem extends Component {
 
   _ShareToQQ(data){
     var {title, summary, cover, article_id,} = data;
-    QQAPI.isQQInstalled()
-      .then((isInstalled)=>{
-        if (isInstalled){
-          QQAPI.shareToQQ({
-            title: title,
-            description: summary,
-            imageUrl: cover,
-            type: 'news',
-            webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
-          }).catch((error) => {
-            Alert.alert(error);
-          });
-        } else {
-          Alert.alert('', '请安装并登录QQ');
-        }
-      })
+    if(Platform.OS==="android"){
+      QQAPI.isQQInstalled()
+        .then((isInstalled)=>{
+          if (isInstalled){
+            QQAPI.shareToQQ({
+              title: title,
+              description: summary,
+              imageUrl: cover,
+              type: 'news',
+              webpageUrl: 'https://changjinglu.pro/article/view/'+article_id
+            }).catch((error) => {
+              Alert.alert(error);
+            });
+          } else {
+            Alert.alert('', '请安装并登录QQ');
+          }
+        })
+    }
   }
 
   render() {
@@ -98,9 +104,14 @@ export default class BetRulesItem extends Component {
           <TouchableOpacity style={{marginRight: 10,}} onPress={()=>{this.setState({isWeChat: true})}}>
             <Image source={require('../resource/WeiChatShare.png')} style={styles.img}/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{this._ShareToQQ(data)}}>
-            <Image source={require('../resource/QQShare.png')} style={styles.img}/>
-          </TouchableOpacity>
+          {
+            Platform.OS === "android"?
+              <TouchableOpacity onPress={()=>{this._ShareToQQ(data)}}>
+                <Image source={require('../resource/QQShare.png')} style={styles.img}/>
+              </TouchableOpacity>
+              :null
+          }
+          
         </View>
         <Modal
           animationType={"fade"}
