@@ -67,10 +67,11 @@ export default class MyNews extends Component {
         da.pages = Math.ceil(result.data.total/result.data.size);
         da.sort = sort;
         da.list = result.data.records;
-        console.log(result)
         callback(da);
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+
+      })
   }
 
 }

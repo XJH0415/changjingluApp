@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, Image, Text, TouchableWithoutFeedback,Alert,TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Image, Text, Alert,TouchableOpacity} from 'react-native';
 import NumUtils from '../utils/NumUtils';
 
 export default class CoinItem extends Component {

@@ -42,9 +42,9 @@ export default class NewDetail extends Component {
     userMsg: PropTypes.string,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
-    selfCoinsString: PropTypes.string,
+    selfCoinsString: PropTypes.any,
     myTicker: PropTypes.array,
-    myTickerString: PropTypes.string,
+    myTickerString: PropTypes.any,
     setContextState: PropTypes.func,
     getContextState: PropTypes.func,
   }
@@ -57,7 +57,6 @@ export default class NewDetail extends Component {
 
   render() {
     var {navigation} = this.props;
-    console.log(navigation)
     var {navigate} = navigation;
     var data =navigation ? navigation.state.params.data : null
     var {title, summary, add_time, views, content} = data;

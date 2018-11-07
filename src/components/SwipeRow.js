@@ -69,7 +69,6 @@ export default class SwipeRow extends Component {
    */
   _handleMoveShouldSetPanResponderCapture(event: Object, gestureState: Object,): boolean {
     //当垂直滑动的距离<10 水平滑动的距离>10的时候才让捕获事件
-    console.log('_handleMoveShouldSetPanResponderCapture');
     return Math.abs(gestureState.dy) < 10 && Math.abs(gestureState.dx) > 10;
   }
 
@@ -80,7 +79,6 @@ export default class SwipeRow extends Component {
    * @private
    */
   _handlePanResponderGrant(event: Object, gestureState: Object): void {
-    console.log('_handlePanResponderGrant');
   }
 
   /**
@@ -110,7 +108,6 @@ export default class SwipeRow extends Component {
    * @private
    */
   _handlePanResponderEnd(event: Object, gestureState: Object): void {
-    console.log('_handlePanResponderEnd');
     this._previousLeft = null;
   }
 }

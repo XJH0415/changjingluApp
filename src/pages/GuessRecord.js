@@ -170,7 +170,9 @@ export default class MyNews extends Component {
         da.list = result.data.records;
         callback(da);
       })
-      .catch(error => console.log(error))
+      .catch(error => {}
+        // console.log(error)
+      )
   }
 
   getDates(time){

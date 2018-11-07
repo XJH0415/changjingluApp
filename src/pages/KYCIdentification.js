@@ -63,15 +63,14 @@ export default class KYCIdentification extends Component {
 
     ImagePicker.showImagePicker(options, (response) => {
       var that = this;
-      console.log('Response = ', response);
       if (response.didCancel) {
-        console.log('User cancelled photo picker');
+        Alert.alert('提示', '上传图片错误');
       }
       else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        Alert.alert('提示', '上传图片错误');
       }
       else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        Alert.alert('提示', '上传图片错误');
       }
       else {
         let source = response.uri;
@@ -142,12 +141,16 @@ export default class KYCIdentification extends Component {
             }else{
               Alert.alert('', '亲，第二张身份证错误或无效,请重新添加')
             }
-          }).catch(error => console.log(error))
+          }).catch(error => {
+
+          })
         }else {
           Alert.alert('', '亲，第一张身份证错误或无效,请重新添加')
         }
       })
-        .catch(error => console.log(error))
+        .catch(error => {
+
+        })
       //API.Authentication(changeImage2, changeImage2Name)
 
     } else {

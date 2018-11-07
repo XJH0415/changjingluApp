@@ -51,8 +51,6 @@ export default class SiteDetail extends Component {
     var {site_id, desc} = site;
     API.getSiteRich(site_id, (data) => {
       var total = 0;
-      console.log('111' + data)
-      console.log(data)
       var time = parseInt(new Date().getTime() / 1000)
       if (data.prices) {
         for (var price of data.prices) {

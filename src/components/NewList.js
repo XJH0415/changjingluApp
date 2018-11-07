@@ -10,14 +10,13 @@ export default class NewList extends Component {
   static defaultProps = {
     type: '',
     onItemPress:()=>{},
-    key:''
   }
   sort = 'ta'
   
   render() {
-    var {onItemPress,key}=this.props
+    var {onItemPress,}=this.props
     return (
-      <View style={styles.root} key={key}>
+      <View style={styles.root} >
         <RefreshList
           sort={this.sort}
           getList={(page, sort, callback) => {

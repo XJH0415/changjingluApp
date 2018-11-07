@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   Alert, TextInput, Dimensions, Image,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import RefreshList from '../components/RefreshList';
 import API from '../lib/dataApi';
@@ -57,7 +56,6 @@ export default class Comment extends Component{
       id = data.coin_id;
     }
     API.getComment(type,id,page,(data)=>{
-      console.log(data)
       callback({sort:sort,list:data.records})
     })
 
@@ -134,9 +132,9 @@ export default class Comment extends Component{
                           source=require('../resource/star.png');
                         }
                         return(
-                          <TouchableWithoutFeedback onPress={()=>{this._onStarBtn(index)}}>
+                          <TouchableOpacity onPress={()=>{this._onStarBtn(index)}}>
                             <Image style={styles.starImage} source={source} />
-                          </TouchableWithoutFeedback>
+                          </TouchableOpacity>
                         )
                       })
                     }
@@ -161,7 +159,6 @@ export default class Comment extends Component{
             this.getComment(page,sort, callback)
           }}
           renderItem={(item, index) => {
-            console.log(item)
             return (<CommentItem key={index} record={item} refresh={()=>{this.refs.RefreshList.refresh()}} />)
           }}
         />

@@ -150,9 +150,9 @@ export default class App extends Component {
     userMsg: PropTypes.string,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
-    selfCoinsString: PropTypes.string,
+    selfCoinsString: PropTypes.any,
     myTicker: PropTypes.array,
-    myTickerString: PropTypes.string,
+    myTickerString: PropTypes.any,
     setContextState: PropTypes.func,
     getContextState: PropTypes.func,
   }
@@ -327,7 +327,7 @@ export default class App extends Component {
     checkUpdate(appKey).then(info => {
       if (info.expired) {
         if(Platform.OS==='android'){
-          Alert.alert('提示', '您的应用程序已过期，长颈鹿资讯发布了全新的APP，快去下载体验吧！', [
+          Alert.alert('提示', '长颈鹿资讯发布了全新的APP，快去下载体验吧！', [
             {text: '确定',
               onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}
             },

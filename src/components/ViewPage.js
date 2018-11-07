@@ -10,7 +10,6 @@ export default class ViewPage extends Component {
   static defaultProps = {
     data: [],
     renderItem: null,
-    key:''
   }
   state = {
     data: this.props.data
@@ -31,9 +30,9 @@ export default class ViewPage extends Component {
   }
   render() {
     var {data} = this.state;
-    var {renderItem,key} = this.props;
+    var {renderItem,} = this.props;
     return (
-      <View style={[styles.root]} key={key}>
+      <View style={[styles.root]} >
         <ScrollableTabView
           renderTabBar={() => <ScrollableTabBar tabStyle={{paddingLeft: 8, paddingRight: 8}}/>}
           tabBarUnderlineStyle={{backgroundColor: '#75C1AF'}}

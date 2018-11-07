@@ -25,9 +25,9 @@ export default class Home extends Component {
     userKYCState: PropTypes.string,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
-    selfCoinsString: PropTypes.string,
+    selfCoinsString: PropTypes.any,
     myTicker: PropTypes.array,
-    myTickerString: PropTypes.string,
+    myTickerString: PropTypes.any,
     setContextState: PropTypes.func,
     getContextState: PropTypes.func,
   }

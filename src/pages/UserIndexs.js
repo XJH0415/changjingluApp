@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, AsyncStorage} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, Alert} from 'react-native';
 import LocalStorage from "../utils/LocalStorage";
 import GuessRecord from "./GuessRecord";
 import IntegralRecord from "./IntegralRecord";
@@ -73,15 +73,14 @@ export default class UserIndexs extends Component {
 
     ImagePicker.showImagePicker(options, (response) => {
       var that = this;
-      console.log('Response = ', response);
       if (response.didCancel) {
-        console.log('User cancelled photo picker');
+        Alert.alert('提示', '上传图片错误');
       }
       else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        Alert.alert('提示', '上传图片错误');
       }
       else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        Alert.alert('提示', '上传图片错误');
       }
       else {
         let source = response.uri ;

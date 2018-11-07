@@ -234,7 +234,7 @@ export default class DataApi {
       })
       .then((response) => response)
       .then((responseJson) => {
-        console.log(responseJson)
+        // console.log(responseJson)
       });
   }
 
@@ -297,7 +297,6 @@ export default class DataApi {
     formData.append("oldcode", oldcode);
     formData.append("newcode", newcode);
     formData.append("newcode2", newcode);
-    console.log('formData', formData);
     //'oldcode='+oldcode+'&newcode='+newcode+'newcode2='+newcode
     fetch(URL + '/password',{
       method:'POST',
@@ -310,10 +309,9 @@ export default class DataApi {
     // .then((response) => response.json())
       .then((responseData)=>{
         !responseData.url.indexOf('error') ? alert('修改成功') : alert('修改失败')
-        console.log('responseData=', responseData);
       })
       .catch((error)=>{
-        console.log('error=', error)
+        // console.log('error=', error)
       });
   }
 
@@ -321,11 +319,9 @@ export default class DataApi {
    * 更换头像
    */
   static uploadImage(uri, name){
-    console.log('uri', uri);
     let formData = new FormData();
     let file = { uri: uri, type: 'multipart/form-data', name: name};
     formData.append("avatar", file);
-    console.log('formData', formData);
     fetch(URL + '/avatar',{
       method:'POST',
       headers:{
@@ -337,10 +333,10 @@ export default class DataApi {
     // .then((response) => response.json())
       .then((responseData)=>{
         alert('文件上传成功!');
-        console.log('responseData=', responseData);
+        // console.log('responseData=', responseData);
       })
       .catch((error)=>{
-        console.log('error=', error)
+        // console.log('error=', error)
       });
   }
 
@@ -865,7 +861,7 @@ function getData(URL, bodyString, callback, errorCallback) {
           }
         }
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   })
 }
@@ -873,7 +869,7 @@ function getData(URL, bodyString, callback, errorCallback) {
 function readData(key, callback, fetch) {
   AsyncStorage.getItem(key, (error, result) => {
     if (error) {
-      console.log('read:' + error)
+      // console.log('read:' + error)
       alert(error)
     }
     if(result){
@@ -887,7 +883,7 @@ function save(key, value) {
   if(key&&value){
     AsyncStorage.setItem(key, JSON.stringify(value), (error) => {
       if (error) {
-        console.log('save:' + error)
+        // console.log('save:' + error)
       }
     })
   }
@@ -896,7 +892,7 @@ function save(key, value) {
 function removeData(key, callback) {
   AsyncStorage.removeItem(key, (error) => {
     if (error) {
-      console.log('remove:' + error)
+      // console.log('remove:' + error)
     }else {
       callback(true)
     }
@@ -932,7 +928,7 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
         }
       }
     }).catch((error) => {
-    console.log(error);
+    // console.log(error);
   });
 }
 

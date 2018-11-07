@@ -8,7 +8,7 @@ import {
   ScrollView,
   Picker,
   TouchableOpacity,
-  TouchableWithoutFeedback, Alert,
+  Alert,
 } from 'react-native';
 import DateUtils from '../utils/DateUtils';
 import API from '../lib/dataApi';
@@ -43,9 +43,9 @@ export default class GuessRiseFall extends Component {
     userMsg: PropTypes.string,
     coins: PropTypes.array,
     selfCoins: PropTypes.array,
-    selfCoinsString: PropTypes.string,
+    selfCoinsString: PropTypes.any,
     myTicker: PropTypes.array,
-    myTickerString: PropTypes.string,
+    myTickerString: PropTypes.any,
     setContextState: PropTypes.func,
     getContextState: PropTypes.func,
   }

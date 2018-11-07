@@ -160,7 +160,6 @@ export default class User extends Component {
                   javaScriptEnabled={true}
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
-                      console.log('user',e.nativeEvent.data);
                       this.context.setContextState({userState: '1'})
                       API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
                       API.SaveMsg('points', e.nativeEvent.data.points)

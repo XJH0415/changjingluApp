@@ -42,7 +42,6 @@ export default class Header extends Component {
   _search(q){
     var that=this;
     var {searchType}=this.props;
-    console.log(q)
     if(!q){
       that.setState({
         sites:[],
@@ -171,12 +170,12 @@ export default class Header extends Component {
     var {headerSelect} = this.state;
     return (
       <View key={index} style={[styles.titleBtn, headerSelect === index ? {backgroundColor: '#75C1AF'} : {}]}>
-        <TouchableWithoutFeedback onPress={() => {
+        <TouchableOpacity onPress={() => {
           this.setState({headerSelect: index});
           onSelect(index)
         }}>
           <Text style={styles.titleText}>{item}</Text>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </View>
     )
   }
