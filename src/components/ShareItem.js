@@ -9,12 +9,12 @@ import {
   Image, Alert, Text, Modal, Platform
 } from 'react-native';
 import * as WeChat from 'react-native-wechat';
-import * as QQAPI from 'react-native-qq';
+// import * as QQAPI from 'react-native-qq';
 import RegularData from '../utils/RegularData';
-// var QQAPI = null;
-// if(Platform.OS === "android"){
-//   QQAPI = require("react-native-qq");
-// }
+var QQAPI = null;
+if(Platform.OS === "android"){
+  QQAPI = require("react-native-qq");
+}
 
 
 export default class BetRulesItem extends Component {
