@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, FlatList, StyleSheet, Alert} from 'react-native';
+import {View, FlatList, StyleSheet, Alert, InteractionManager} from 'react-native';
 import NewItem from '../components/NewItem';
 import Separator from '../components/Separator';
 import API from '../lib/dataApi';
@@ -45,7 +45,7 @@ export default class NewList extends Component {
       da.sort = data.sort;
       da.pages = data.pages;
       da.list = data.records;
-      callback(da);
+      InteractionManager.runAfterInteractions(callback(da))
     });
   }
 }
