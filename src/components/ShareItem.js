@@ -26,7 +26,7 @@ export default class BetRulesItem extends Component {
   }
 
   componentDidMount() {
-    WeChat.registerApp(RegularData.WeiChat.AppId);
+    WeChat.registerApp(RegularData.WeiChat.android.AppId);
   }
 
   _ShareToWeiChatFriend(data) {
