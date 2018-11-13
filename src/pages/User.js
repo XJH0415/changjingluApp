@@ -7,7 +7,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import PropTypes from 'prop-types';
-
+import Cookie from 'react-native-cookie';
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import API from '../lib/dataApi';

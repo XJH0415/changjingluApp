@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, Alert} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, Alert, ScrollView} from 'react-native';
 import LocalStorage from "../utils/LocalStorage";
 import GuessRecord from "./GuessRecord";
 import IntegralRecord from "./IntegralRecord";
@@ -38,16 +38,21 @@ export default class UserIndexs extends Component {
     avatarSource : this.props.data.avatar,
     userMsg : null,
     kycState : null,
+    userState: '1'
   }
 
-  componentDidMount(){
+  componentWillMount(){
+    var that = this;
     API.getLogMe((userMsg)=>{
       if (userMsg){
-        this.setState({
+        that.setState({
           userMsg: userMsg,
         })
+        API.SaveMsg('userMsg',JSON.parse(userMsg));
+        that.context.setContextState({userState: '1'})
       }
     })
+
   }
 
   selectPhotoTapped() {
@@ -74,13 +79,13 @@ export default class UserIndexs extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       var that = this;
       if (response.didCancel) {
-        Alert.alert('提示', '上传图片错误');
+        Alert.alert('提示', '上传图片失败1');
       }
       else if (response.error) {
-        Alert.alert('提示', '上传图片错误');
+        Alert.alert('提示', '上传图片失败2');
       }
       else if (response.customButton) {
-        Alert.alert('提示', '上传图片错误');
+        Alert.alert('提示', '上传图片失败3');
       }
       else {
         let source = response.uri ;
@@ -121,13 +126,13 @@ export default class UserIndexs extends Component {
           <TouchableOpacity onPress={()=>{this.selectPhotoTapped()}}>
             <Image
               style={styles.image}
-              source={avatarSource ? {uri: avatarSource} : require('../resource/noHeadImage.png')}
+              source={userMsg ? {uri: userMsg.avatar} : require('../resource/noHeadImage.png')}
             />
           </TouchableOpacity>
 
           <View style={styles.namePhone}>
-            <Text style={styles.name}>{data.name}</Text>
-            <Text style={styles.phone}>{data.phone}</Text>
+            <Text style={styles.name}>{userMsg ? userMsg.name : null}</Text>
+            <Text style={styles.phone}>{userMsg ? userMsg.phone : null}</Text>
           </View>
           <View style={styles.totalNumView}>
             <Text style={styles.totalNum}>{points}CJL</Text>
@@ -231,6 +236,10 @@ export default class UserIndexs extends Component {
         </TouchableOpacity>
 
 
+        <ScrollView>
+          <Text>{JSON.stringify(this.state.userMsg)}</Text>
+          <Text>{JSON.stringify(this.context.getContextState().userMsg)}</Text>
+        </ScrollView>
         {/*{*/}
           {/*userMsg &&userMsg.role === 'admin' ?*/}
             {/*<TouchableOpacity style={styles.total} onPress={() => {*/}

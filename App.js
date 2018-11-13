@@ -240,6 +240,13 @@ export default class App extends Component {
 //获取用户最新信息
   getUserMsg() {
     let that = this;
+    API.getMsg('userMsg', (userMsg)=>{
+      if (userMsg){
+        that.setState({
+          userMsg: userMsg
+        });
+      }
+    });
     API.getLogMe((userMsg) => {
       if (userMsg){
         that.setState({
