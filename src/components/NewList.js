@@ -20,7 +20,9 @@ export default class NewList extends Component {
         <RefreshList
           sort={this.sort}
           getList={(page, sort, callback) => {
-            this.getList(page, sort, callback)
+              InteractionManager.runAfterInteractions(()=>{
+                  this.getList(page, sort, callback)
+              })
           }}
           renderItem={(item, index) => {
             return (<NewItem

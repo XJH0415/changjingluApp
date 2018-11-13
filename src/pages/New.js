@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  FlatList,
-  Alert
+    StyleSheet,
+    Text,
+    Image,
+    View,
+    FlatList,
+    Alert, InteractionManager
 } from 'react-native';
 import ViewPage from '../components/ViewPage';
 import Header from '../components/Header';
@@ -63,8 +63,10 @@ export default class New extends Component {
     )
   }
   onItemPress(data){
-    var {navigate} = this.props.navigation;
-    navigate('NewDetail', {data: data})
+    InteractionManager.runAfterInteractions(()=>{
+      var {navigate} = this.props.navigation;
+      navigate('NewDetail', {data: data})
+    })
   }
   
   componentWillMount() {

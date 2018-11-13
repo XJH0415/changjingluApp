@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Alert,
-  RefreshControl,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-  BackHandler,
-  Platform
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Alert,
+    RefreshControl,
+    ScrollView,
+    TouchableOpacity,
+    FlatList,
+    BackHandler,
+    Platform, InteractionManager
 } from 'react-native';
 import PairItem from '../components/PairItem';
 import Separator from '../components/Separator';
@@ -85,7 +85,9 @@ export default class CoinDetail extends Component {
   }
 
   componentWillMount() {
-    this.refresh();
+    InteractionManager.runAfterInteractions(()=>{
+      this.refresh();
+    })
   }
 
   refresh() {

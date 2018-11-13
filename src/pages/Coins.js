@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet,
-  View,
-  Alert
+    StyleSheet,
+    View,
+    Alert,
+    Platform, InteractionManager
 } from 'react-native';
 import Header from '../components/Header';
 import Rank from '../components/Rank';
@@ -26,7 +27,9 @@ export default class Coins extends Component {
   }
   
   componentWillMount() {
-    this.getTabs();
+    InteractionManager.runAfterInteractions(()=>{
+      this.getTabs();
+    })
   }
   
   getTabs() {
@@ -48,6 +51,10 @@ export default class Coins extends Component {
   render() {
     var {selectIndex, tabs, titles} = this.state;
     var {navigate} = this.props.navigation;
+    var scrollWithoutAnimation = true;
+    if (Platform.OS === 'android'){
+        scrollWithoutAnimation = false;
+    }
     return (
       <View style={styles.root}>
         <Header titles={titles} onSelect={this._onSelect} onSearch={(type,data)=>{
@@ -57,8 +64,10 @@ export default class Coins extends Component {
         }} headerSelect={selectIndex} searchType={'coins'}/>
         <ScrollableTabView
           renderTabBar={() => <View style={{height: 0}}/>}
-          locked={false}
+          // locked={true}
           page={selectIndex}
+          // prerenderingSiblingsNumber={0}
+          scrollWithoutAnimation={scrollWithoutAnimation}
           onChangeTab={({i}) => {
             this.setState({
               selectIndex: i

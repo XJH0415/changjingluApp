@@ -206,7 +206,7 @@ export default class App extends Component {
       that.getUserMsg();
       that.getUserState();
       // that.getUserKYCState();
-      // that.getCoin();
+      that.getCoin();
       that.getSelfCoin();
       that.getMeTickers();
     }

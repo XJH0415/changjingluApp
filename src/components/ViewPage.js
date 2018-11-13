@@ -40,7 +40,7 @@ export default class ViewPage extends Component {
           tabBarActiveTextColor='#75C1AF'
           tabBarInactiveTextColor='black'
           tabBarTextStyle={{fontSize: 16}}
-          prerenderingSiblingsNumber={1}
+          prerenderingSiblingsNumber={0}
         >
           {
             data.map((item, index) => {
