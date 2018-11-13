@@ -37,7 +37,8 @@
 		9AB152A120E4CA6800C386A5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB152A020E4CA6800C386A5 /* libz.tbd */; };
 		9AB152A320E4CA7500C386A5 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB152A220E4CA7500C386A5 /* libbz2.1.0.tbd */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		DA5660A62197DE1D0040B5CE /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA5660A52197DE1C0040B5CE /* bundle */; };
+		DA6BBB29219A7616006C83BD /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA6BBB28219A7616006C83BD /* bundle */; };
+		DA6BBB2B219A7A58006C83BD /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6BBB2A219A7A57006C83BD /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -394,7 +395,8 @@
 		9AB152A220E4CA7500C386A5 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		C510108FEC3D484A8211B422 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
-		DA5660A52197DE1C0040B5CE /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
+		DA6BBB28219A7616006C83BD /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
+		DA6BBB2A219A7A57006C83BD /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		DD333BD95A914029B457C945 /* RCTHotUpdate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTHotUpdate.xcodeproj; path = "../node_modules/react-native-update/ios/RCTHotUpdate.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -411,6 +413,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA6BBB2B219A7A58006C83BD /* AssetsLibrary.framework in Frameworks */,
 				1F9B8E152191A1650004913C /* CoreGraphics.framework in Frameworks */,
 				1F9B8E0D21918A7B0004913C /* libsqlite3.tbd in Frameworks */,
 				1F9B8E0B21918A6C0004913C /* libiconv.tbd in Frameworks */,
@@ -524,7 +527,7 @@
 		13B07FAE1A68108700A75B9A /* changjingluApp */ = {
 			isa = PBXGroup;
 			children = (
-				DA5660A52197DE1C0040B5CE /* bundle */,
+				DA6BBB28219A7616006C83BD /* bundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -578,6 +581,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA6BBB2A219A7A57006C83BD /* AssetsLibrary.framework */,
 				1F9B8E142191A1650004913C /* CoreGraphics.framework */,
 				1F9B8E0C21918A7A0004913C /* libsqlite3.tbd */,
 				1F9B8E0A21918A6C0004913C /* libiconv.tbd */,
@@ -1134,7 +1138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				DA5660A62197DE1D0040B5CE /* bundle in Resources */,
+				DA6BBB29219A7616006C83BD /* bundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
