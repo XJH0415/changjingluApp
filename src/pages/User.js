@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import API from '../lib/dataApi';
+import CookieManager from 'react-native-cookies';
 
 var Cookies= null;
 
@@ -169,6 +170,12 @@ export default class User extends Component {
                   injectedJavaScript={this.renderView(width, height)}
                   scrollEnabled={false}
                   javaScriptEnabled={true}
+                  onNavigationStateChange={(e)=>{
+                    var url = e.url;
+                    CookieManager.get(url).then((res) => {
+                      API.SaveMsg('Cookie',res);
+                    });
+                  }}
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
                       var das = JSON.parse(e.nativeEvent.data)
@@ -176,7 +183,6 @@ export default class User extends Component {
                       API.SaveMsg('userMsg',das.infos);
                       // API.SaveMsg('points', e.nativeEvent.data.points)
                       API.SaveMsg('userState','1');
-                      API.SaveMsg('Cookie',das.cookie);
                       this.setState({
                         isLogin: true,
                         info: das.infos
