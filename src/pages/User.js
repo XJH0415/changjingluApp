@@ -7,10 +7,11 @@ import {
   AsyncStorage
 } from 'react-native';
 import PropTypes from 'prop-types';
-import Cookie from 'react-native-cookie';
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import API from '../lib/dataApi';
+
+var Cookies= null;
 
 export default class User extends Component {
 
@@ -63,7 +64,11 @@ export default class User extends Component {
     awaitPostMessage();
     if (window.location['href'] == 'https://changjinglu.pro/app/me' ) {
       var info = document.getElementById('info').innerHTML;
-      window.postMessage(info);
+      var da = {
+        infos: JSON.parse(info),
+        cookie: document.cookie,
+      }
+      window.postMessage(JSON.stringify(da));
       return;
     }
 
@@ -94,7 +99,12 @@ export default class User extends Component {
     window.postMessage = patchedPostMessage;
     if (window.location['href'] == 'https://changjinglu.pro/app/me') {
       var info = document.getElementById('info').innerHTML;
-      window.postMessage(info);
+      Cookies = document.cookie;
+      var da = {
+        infos: JSON.parse(info),
+        cookie: document.cookie,
+      }
+      window.postMessage(JSON.stringify(da));
     }
     setInterval(()=>{
       var Element = document.getElementById('info')
@@ -130,6 +140,7 @@ export default class User extends Component {
               goback={()=>{
                 API.logOut(()=>{});
                 API.removeMsg('userMsg',()=>{});
+                API.removeMsg('Cookie',()=>{});
                 API.removeMsg('userState',()=>{});
                 API.removeMsg('userKYCState',()=>{});
                 this.context.setContextState({userState: '0', userKYCState: '0'})
@@ -160,13 +171,15 @@ export default class User extends Component {
                   javaScriptEnabled={true}
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {
+                      var das = JSON.parse(e.nativeEvent.data)
                       this.context.setContextState({userState: '1'})
-                      API.SaveMsg('userMsg',JSON.parse(e.nativeEvent.data));
-                      API.SaveMsg('points', e.nativeEvent.data.points)
+                      API.SaveMsg('userMsg',das.infos);
+                      // API.SaveMsg('points', e.nativeEvent.data.points)
                       API.SaveMsg('userState','1');
+                      API.SaveMsg('Cookie',das.cookie);
                       this.setState({
                         isLogin: true,
-                        info: JSON.parse(e.nativeEvent.data)
+                        info: das.infos
                       });
                     }
                   }}

@@ -1782,6 +1782,11 @@ convert-source-map@^1.1.0, convert-source-map@^1.4.0, convert-source-map@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
 
+cookie@^0.3.1:
+  version "0.3.1"
+  resolved "http://registry.npm.taobao.org/cookie/download/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
+  integrity sha1-5+Ch+e9DtMi6klxcWpboBtFoc7s=
+
 cookiejar@^2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.2.tgz#dd8a235530752f988f9a0844f3fc589e3111125c"
@@ -4813,6 +4818,13 @@ react-native-code-push@^5.4.2:
     inquirer "1.1.2"
     plist "3.0.1"
     xcode "1.0.0"
+
+react-native-cookie@^0.2.0:
+  version "0.2.0"
+  resolved "http://registry.npm.taobao.org/react-native-cookie/download/react-native-cookie-0.2.0.tgz#e8bb0701faf107aaebc327c60551055e0149839d"
+  integrity sha1-6LsHAfrxB6rrwyfGBVEFXgFJg50=
+  dependencies:
+    cookie "^0.3.1"
 
 react-native-crypto@^2.1.2:
   version "2.1.2"

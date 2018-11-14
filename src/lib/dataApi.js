@@ -761,6 +761,20 @@ export default class DataApi {
   }
 
   /**
+   * 通过cookie
+   * 刷新用户信息
+   * @param callback
+   */
+  static getCookieLogMe(callback){
+    var url = URL + '/app/logMe';
+    getCookieMsg(
+      url,
+      bodyToString({
+      }),
+      callback);
+  }
+
+  /**
    * 精确获取代币描述
    * @param coin_id
    * @param callback
@@ -795,6 +809,7 @@ export default class DataApi {
         method:'POST',
         headers:{
           'Content-Type':"multipart/form-data;charset=UTF-8",
+          // 'Cookie': getCookie(),
         },
         body:formData,
       }).then((response) => response.json())
@@ -813,6 +828,15 @@ export default class DataApi {
   }
 
 }
+
+function getCookie() {
+  DataApi.getMsg('Cookie', (cookie)=>{
+    if (cookie){
+      return cookie;
+    }
+  });
+}
+
 
 function bodyToString(body) {
   var bodyString = '';
@@ -843,7 +867,7 @@ function getData(URL, bodyString, callback, errorCallback) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
         },
         body: bodyString
       })
@@ -905,7 +929,7 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
       },
       body: bodyString
     })
@@ -932,3 +956,40 @@ function SubmitForm(URL, bodyString, callback, errorCallback) {
   });
 }
 
+function getCookieMsg(URL, bodyString, callback, errorCallback) {
+  fetch(URL,
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        // 'Cookie': getCookie(),
+        // 'Connection': 'keep-alive',
+        // 'Upgrade-Insecure-Requests': '1',
+        // 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36',
+      },
+      body: bodyString
+    })
+    .then((response) =>  {
+      if(response.status!==500){
+        return response.json()
+      }
+    })
+    .then((responseJson) => {
+
+      // if (JSON.stringify(responseJson).indexOf('<')!==-1){
+      //   console.log(URL)
+      // }
+      // alert(JSON.stringify(responseJson))
+      if (responseJson.no === 0) {
+        callback(responseJson.data);
+      } else {
+        if (errorCallback){
+          errorCallback(responseJson.msg)
+        }
+      }
+    }).catch((error) => {
+    // console.log(error);
+  });
+}

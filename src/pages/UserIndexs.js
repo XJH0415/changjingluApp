@@ -38,7 +38,9 @@ export default class UserIndexs extends Component {
     avatarSource : this.props.data.avatar,
     userMsg : null,
     kycState : null,
-    userState: '1'
+    userState: '1',
+    cookie: null,
+    CookieUserMsg: null,
   }
 
   componentWillMount(){
@@ -52,7 +54,27 @@ export default class UserIndexs extends Component {
         that.context.setContextState({userState: '1'})
       }
     })
+    // API.getMsg('Cookie', (cookie)=>{
+    //   if (cookie){
+    //     that.setState({
+    //       cookie: cookie,
+    //     })
+    //   }
+    // });
 
+    // if (!this.state.CookieUserMsg){
+    //   setInterval(()=>{
+    //     API.getCookieLogMe((CookieUserMsg)=>{
+    //       if (CookieUserMsg){
+    //         that.setState({
+    //           CookieUserMsg: CookieUserMsg,
+    //         })
+    //         API.SaveMsg('userMsg',JSON.parse(CookieUserMsg));
+    //         that.context.setContextState({userState: '1'})
+    //       }
+    //     })
+    //   },5000)
+    // }
   }
 
   selectPhotoTapped() {
@@ -79,13 +101,12 @@ export default class UserIndexs extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       var that = this;
       if (response.didCancel) {
-        Alert.alert('提示', '上传图片失败1');
       }
       else if (response.error) {
-        Alert.alert('提示', '上传图片失败2');
+        Alert.alert('提示', '上传图片失败');
       }
       else if (response.customButton) {
-        Alert.alert('提示', '上传图片失败3');
+        Alert.alert('提示', '上传图片失败');
       }
       else {
         let source = response.uri ;
@@ -110,7 +131,7 @@ export default class UserIndexs extends Component {
   render() {
     var {navigate} = this.props.navigation;
     var {goback, GuessRecord, } = this.props;
-    var {data, avatarSource, result, userMsg, kycState} = this.state;
+    var {data, avatarSource, result, userMsg, kycState, cookie, CookieUserMsg} = this.state;
     var points = null;
     if (this.context && this.context.getContextState().userMsg){
       userMsg = this.context.getContextState().userMsg;
@@ -236,10 +257,11 @@ export default class UserIndexs extends Component {
         </TouchableOpacity>
 
 
-        <ScrollView>
-          <Text>{JSON.stringify(this.state.userMsg)}</Text>
-          <Text>{JSON.stringify(this.context.getContextState().userMsg)}</Text>
-        </ScrollView>
+        {/*<ScrollView>*/}
+          {/*<Text>{JSON.stringify(cookie)}</Text>*/}
+          {/*<Text>123</Text>*/}
+          {/*<Text>{JSON.stringify(CookieUserMsg)}</Text>*/}
+        {/*</ScrollView>*/}
         {/*{*/}
           {/*userMsg &&userMsg.role === 'admin' ?*/}
             {/*<TouchableOpacity style={styles.total} onPress={() => {*/}
