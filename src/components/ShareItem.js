@@ -6,7 +6,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Image, Alert, Text, Modal, Platform
+  Image, Alert, Text, Modal, Platform, TouchableWithoutFeedback
 } from 'react-native';
 import * as WeChat from 'react-native-wechat';
 // import * as QQAPI from 'react-native-qq';
@@ -125,10 +125,10 @@ export default class BetRulesItem extends Component {
           visible={isWeChat}
         >
           <View style={styles.modalView}>
-            <TouchableOpacity
+            <TouchableWithoutFeedback
               onPress={() => this.setState({isWeChat: false})}>
               <View style={{position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: null,}}/>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
             <View style={styles.rewardView}>
               <View style={styles.touch}>
                 <Text style={{marginTop: 5,marginBottom: 5}}>分享到微信</Text>

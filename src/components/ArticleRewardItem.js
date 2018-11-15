@@ -6,7 +6,7 @@ import {
   View,
   StyleSheet,
   Text,
-  Image, TouchableOpacity, Alert, Modal,
+  Image, TouchableOpacity, Alert, Modal,TouchableWithoutFeedback
 } from 'react-native';
 import Rules from "../utils/Rules";
 import API from "../lib/dataApi";
@@ -76,12 +76,15 @@ export default class ArticleRewardItem extends Component {
           visible={reward}
         >
           <View style={styles.modalView}>
-            <TouchableOpacity
+            <TouchableWithoutFeedback
               onPress={() => this.setState({reward: false})}>
               <View style={{position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: null,}}/>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
             <View style={styles.rewardView}>
               <View>
+                {/*<TouchableOpacity onPress={() => this.setState({reward: false})}>>*/}
+                  {/*<Text>X</Text>*/}
+                {/*</TouchableOpacity>*/}
                 <Text style={styles.pointsText}>您有{points}个CJL</Text>
               </View>
               <View style={styles.rewardTxt}>
@@ -149,4 +152,8 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 3,
   },
+  imgs:{
+    width: 30,
+    height: 30
+  }
 });

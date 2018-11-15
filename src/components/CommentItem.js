@@ -185,10 +185,10 @@ export default class CommentItem extends Component {
               visible={reward}
             >
               <View style={styles.modalView}>
-                <TouchableOpacity
+                <TouchableWithoutFeedback
                   onPress={() => this.setState({reward: false})}>
                   <View style={{position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: null,}}/>
-                </TouchableOpacity>
+                </TouchableWithoutFeedback>
                 <View style={styles.rewardView}>
                   <View>
                     <Text style={styles.pointsText}>您有{points}个CJL</Text>
