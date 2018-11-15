@@ -64,9 +64,9 @@ export default class Coins extends Component {
         }} headerSelect={selectIndex} searchType={'coins'}/>
         <ScrollableTabView
           renderTabBar={() => <View style={{height: 0}}/>}
-          // locked={true}
+          locked={true}
           page={selectIndex}
-          // prerenderingSiblingsNumber={0}
+          prerenderingSiblingsNumber={0}
           scrollWithoutAnimation={scrollWithoutAnimation}
           onChangeTab={({i}) => {
             this.setState({

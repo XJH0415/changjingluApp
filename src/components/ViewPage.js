@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -31,6 +32,10 @@ export default class ViewPage extends Component {
   render() {
     var {data} = this.state;
     var {renderItem,} = this.props;
+    var scrollWithoutAnimation = true;
+    if (Platform.OS === 'android'){
+      scrollWithoutAnimation = false;
+    }
     return (
       <View style={[styles.root]} >
         <ScrollableTabView
@@ -41,6 +46,7 @@ export default class ViewPage extends Component {
           tabBarInactiveTextColor='black'
           tabBarTextStyle={{fontSize: 16}}
           prerenderingSiblingsNumber={0}
+          scrollWithoutAnimation={scrollWithoutAnimation}
         >
           {
             data.map((item, index) => {

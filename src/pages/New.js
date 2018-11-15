@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {
-    StyleSheet,
-    Text,
-    Image,
-    View,
-    FlatList,
-    Alert, InteractionManager
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  FlatList,
+  Alert, InteractionManager, Platform
 } from 'react-native';
 import ViewPage from '../components/ViewPage';
 import Header from '../components/Header';
@@ -27,6 +27,10 @@ export default class New extends Component {
   }
   render() {
     var {selectIndex,tabs1,tabs2, titles} = this.state;
+    var scrollWithoutAnimation = true;
+    if (Platform.OS === 'android'){
+      scrollWithoutAnimation = false;
+    }
     return (
       <View style={styles.root}>
         <Header titles={titles} onSelect={this._onSelect} headerSelect={selectIndex} searchType={'new'}/>
@@ -34,6 +38,7 @@ export default class New extends Component {
           renderTabBar={() => <View style={{height:0}}/>}
           locked={false}
           page={selectIndex}
+          scrollWithoutAnimation={scrollWithoutAnimation}
           onChangeTab={({i}) => {
             this.setState({
               selectIndex:i
