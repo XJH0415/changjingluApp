@@ -43,7 +43,10 @@ import BackStageManagement from "./src/BackStage/BackStageManagement";
 import ArticleManagement from "./src/BackStage/ArticleManagement";
 import ReviewManagement from "./src/BackStage/ReviewManagement";
 
-import CookieManager from 'react-native-cookies';
+var CookieManager = null;
+if(Platform.OS === "ios"){
+  CookieManager = require("react-native-cookies");
+}
 
 const StackNavigator = createStackNavigator({
   Index: {
@@ -357,13 +360,16 @@ export default class App extends Component {
     });
   };
   componentDidMount(){
-    API.getMsg("Cookie",(res)=>{
-      if(res !== {}&&res['PHPSESSID']){
-        CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
-          // alert(JSON.stringify(re))
-        });
-      }
-    })
+    if(Platform.OS === "ios"){
+      API.getMsg("Cookie",(res)=>{
+        if(res !== {}&&res['PHPSESSID']){
+          CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
+            // alert(JSON.stringify(re))
+          });
+        }
+      })
+    }
+
     NetInfo.addEventListener('change',function(reachability){
       if(!reachability){
         Alert.alert('提示','当前网络连接已断开，为确保应用程序正常使用，请确保网络连接通畅！')

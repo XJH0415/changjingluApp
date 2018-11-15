@@ -10,9 +10,10 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import UserIndexs from './UserIndexs';
 import API from '../lib/dataApi';
-import CookieManager from 'react-native-cookies';
-
-var Cookies= null;
+var CookieManager = null;
+if(Platform.OS === "ios"){
+  CookieManager = require("react-native-cookies");
+}
 
 export default class User extends Component {
 
@@ -172,9 +173,11 @@ export default class User extends Component {
                   javaScriptEnabled={true}
                   onNavigationStateChange={(e)=>{
                     var url = e.url;
-                    CookieManager.get(url).then((res) => {
-                      API.SaveMsg('Cookie',res);
-                    });
+                    if(Platform.OS === "ios"){
+                      CookieManager.get(url).then((res) => {
+                        API.SaveMsg('Cookie',res);
+                      });
+                    }
                   }}
                   onMessage={(e) => {
                     if (e.nativeEvent.data) {

@@ -140,8 +140,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-cookies')
-    compile project(':react-native-qq')
+    implementation project(':react-native-cookies')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-update')
     implementation project(':react-native-wechat')

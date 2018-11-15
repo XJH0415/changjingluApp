@@ -7,7 +7,6 @@ import com.psykar.cookiemanager.CookieManagerPackage;
 import cn.reactnative.modules.qq.QQPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.theweflex.react.WeChatPackage;
-import cn.reactnative.modules.qq.QQPackage;
 
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
@@ -41,7 +40,6 @@ public class MainApplication extends Application implements ReactApplication {
             new QQPackage(),
             new ImagePickerPackage(),
             new UpdatePackage(),
-            new QQPackage(),
             new WeChatPackage()
 
       );
