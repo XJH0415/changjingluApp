@@ -142,7 +142,9 @@ export default class Comment extends Component{
 
                 </View>
                 <TouchableOpacity onPress={()=>{this._discussBtn()}}>
-                  <Text style={styles.discussBtn}>点评</Text>
+                  <View style={styles.discussBtnView}>
+                    <Text style={styles.discussBtn}>点评</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -204,14 +206,16 @@ const styles=StyleSheet.create({
     height:20,
     width:20
   },
-  discussBtn:{
+  discussBtnView:{
     backgroundColor: '#75C1AF',
-    color: '#fff',
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 5,
+  },
+  discussBtn:{
+    color: '#fff',
   },
   unLogCom:{
     marginTop: 10,

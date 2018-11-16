@@ -197,9 +197,12 @@ export default class CommentItem extends Component {
                     {
                       rewardNum.map((val) => {
                         return (
-                          <TouchableOpacity onPress={() => {
-                            this._onPressReward(val)
-                          }}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              this._onPressReward(val)
+                            }}
+                            style={styles.touchText}
+                          >
                             <Text style={styles.rewardText}>打赏{val}个CJL</Text>
                           </TouchableOpacity>
                         )
@@ -374,14 +377,15 @@ const styles = StyleSheet.create({
   },
   rewardTxt: {
     justifyContent: 'center',
+    backgroundColor: '#000',
+  },
+  touchText:{
+    borderRadius: 3,
   },
   rewardText: {
-    width: 90,
-    backgroundColor: '#000',
     color: '#75C1AF',
     padding: 3,
     margin: 5,
-    borderRadius: 3,
   },
 
 })

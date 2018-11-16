@@ -324,7 +324,9 @@ export default class CoinDetail extends Component {
             <View style={{flex: 1,flexDirection: 'row', justifyContent: 'flex-end'}}>
               <TouchableOpacity  onPress={()=>{this._CoinWatch()}}>
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center', marginRight: 1}}>
-                  <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
+                  <View style={styles.detailTopBtnView}>
+                    <Text style={styles.detailTopBtn}>{ !selfSelect ? '加入自选' : '取消自选'}</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity  onPress={()=>{
@@ -335,7 +337,9 @@ export default class CoinDetail extends Component {
                 }
               }}>
                 <View style={{height: 50, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={styles.detailTopBtn}>点评</Text>
+                  <View style={styles.detailTopBtnView}>
+                    <Text style={styles.detailTopBtn}>点评</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             </View>
@@ -514,14 +518,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold'
   },
-  detailTopBtn: {
-    backgroundColor: '#75C1AF',
+  detailTopBtnView:{
     borderRadius: 5,
     padding: 6,
     paddingLeft: 15,
     paddingRight: 15,
     margin: 2,
     marginTop: 5,
+    backgroundColor: '#75C1AF',
+  },
+  detailTopBtn: {
     color: '#fff'
   },
   detailCenterText: {
@@ -580,6 +586,7 @@ const styles = StyleSheet.create({
   },
   exchanges: {},
   guessView:{
+    padding: 5,
     margin: 5,
     flex: 1,
     backgroundColor: '#fff',

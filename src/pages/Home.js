@@ -144,7 +144,10 @@ export default class Home extends Component {
                   renderItem={({item, index}) => {
                     if (item.type) {
                       return (
-                        <Text style={styles.typeTitle}>{item.type}</Text>
+                        <View style={styles.titleView}>
+                          <Text style={styles.typeTitle}>{item.type}</Text>
+                        </View>
+
                       )
                     } else {
                       //判断
@@ -223,9 +226,13 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 8,
   },
-  typeTitle: {
+  titleView:{
     marginLeft: 5,
     backgroundColor: '#e2f3ef',
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  typeTitle: {
     fontSize: 16,
     color: '#000',
   },
