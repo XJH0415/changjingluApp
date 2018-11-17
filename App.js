@@ -43,11 +43,11 @@ import BackStageManagement from "./src/BackStage/BackStageManagement";
 import ArticleManagement from "./src/BackStage/ArticleManagement";
 import ReviewManagement from "./src/BackStage/ReviewManagement";
 
-// var CookieManager = null;
-// if(Platform.OS === "ios"){
-//   CookieManager = require("react-native-cookies");
-// }
-import CookieManager from "react-native-cookies";
+var CookieManager = null;
+if(Platform.OS === "ios"){
+  CookieManager = require("react-native-cookies");
+}
+// import CookieManager from "react-native-cookies";
 
 
 const StackNavigator = createStackNavigator({
@@ -362,7 +362,7 @@ export default class App extends Component {
     });
   };
   componentDidMount(){
-    // if(Platform.OS === "ios"){
+     if(Platform.OS === "ios"){
       API.getMsg("Cookie",(res)=>{
         if(res !== {}&&res['PHPSESSID']){
           CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
@@ -370,7 +370,7 @@ export default class App extends Component {
           });
         }
       })
-    // }
+     }
 
     NetInfo.addEventListener('change',function(reachability){
       if(!reachability){

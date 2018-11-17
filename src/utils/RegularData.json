@@ -9,5 +9,7 @@
       "AppId":"wx2c1d909136a59ca3",
       "AppSecret":"de90aae514316f80a6014acb4c0aea97"
     }
-  }
+  },
+  "android_studio":"3.1.2",
+  "xcode": "9.41"
 }
