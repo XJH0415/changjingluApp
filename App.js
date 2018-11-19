@@ -198,6 +198,15 @@ export default class App extends Component {
   }
 
   refresh(){
+    if(Platform.OS === "ios"){
+        API.getMsg("Cookie",(res)=>{
+            if(res !== {}&&res['PHPSESSID']){
+                CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
+                    // alert(JSON.stringify(re+'re'))
+                });
+            }
+        })
+    }
     this.getUserMsg();
     this.getUserState();
     this.getUserKYCState();
@@ -210,12 +219,22 @@ export default class App extends Component {
   TimeInit(){
     var that = this;
     function init() {
+      if(Platform.OS === "ios"){
+          API.getMsg("Cookie",(res)=>{
+              if(res !== {}&&res['PHPSESSID']){
+                  CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
+                      // alert(JSON.stringify(re+'init'))
+                  });
+              }
+          })
+      }
       that.getUserMsg();
       that.getUserState();
       // that.getUserKYCState();
       that.getCoin();
       that.getSelfCoin();
       that.getMeTickers();
+
     }
     that.Interval = setInterval(() => {
       init();
@@ -366,7 +385,7 @@ export default class App extends Component {
       API.getMsg("Cookie",(res)=>{
         if(res !== {}&&res['PHPSESSID']){
           CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
-            // alert(JSON.stringify(re))
+            // alert(JSON.stringify(re+'did'))
           });
         }
       })

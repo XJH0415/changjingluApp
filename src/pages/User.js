@@ -177,7 +177,9 @@ export default class User extends Component {
                     var url = e.url;
                     if(Platform.OS === "ios"){
                       CookieManager.get(url).then((res) => {
+
                         API.SaveMsg('Cookie',res);
+                        // alert(res+ 'url')
                       });
                     }
                   }}
