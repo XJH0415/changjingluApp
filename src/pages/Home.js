@@ -16,6 +16,7 @@ import MarketItem from '../components/MarketItem';
 import API from '../lib/dataApi';
 import Separator from '../components/Separator';
 import PairItem from "../components/PairItem";
+import Loading from "../components/Loading";
 
 
 export default class Home extends Component {
@@ -136,6 +137,7 @@ export default class Home extends Component {
         <Notice navigate={navigate}/>
         {/*<Text>{JSON.stringify(this.context.getContextState())}</Text>*/}
         <Separator/>
+        <Loading coins={coins} userState={userState} selfCoins={selfCoins}/>
         <FlatList style={{flex: 1}}
                   data={newCoinData}
                   ItemSeparatorComponent={() => <Separator/>}

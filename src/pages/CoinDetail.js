@@ -90,6 +90,14 @@ export default class CoinDetail extends Component {
     })
   }
 
+  componentWillReceiveProps(){
+    var {coin, currency, navigation} = this.props;
+    if (navigation) {
+        coin = navigation ? navigation.state.params.coin : null
+    }
+    this.getBetActive(coin.coin_id);
+  }
+
   refresh() {
     var {coin, currency, navigation} = this.props;
     if (navigation) {

@@ -6,7 +6,7 @@
 
 import React, {Component} from 'react';
 import {createStackNavigator} from 'react-navigation';
-import {Image,StyleSheet,Alert,Platform,Linking,NetInfo} from 'react-native';
+import {Image, StyleSheet, Alert, Platform, Linking, NetInfo} from 'react-native';
 import {
   isFirstTime,
   isRolledBack,
@@ -21,6 +21,7 @@ import {
 import PropTypes from 'prop-types';
 
 import _updateConfig from './update.json';
+
 const {appKey} = _updateConfig[Platform.OS];
 
 import BottomTabNavigator from './src/Index';
@@ -44,7 +45,7 @@ import ArticleManagement from "./src/BackStage/ArticleManagement";
 import ReviewManagement from "./src/BackStage/ReviewManagement";
 
 var CookieManager = null;
-if(Platform.OS === "ios"){
+if (Platform.OS === "ios") {
   CookieManager = require("react-native-cookies");
 }
 // import CookieManager from "react-native-cookies";
@@ -53,12 +54,12 @@ if(Platform.OS === "ios"){
 const StackNavigator = createStackNavigator({
   Index: {
     screen: BottomTabNavigator,
-    navigationOptions:(Options)=>{
-      return{
-        headerTitle:'',
-        headerStyle:{
-          height:0,
-          borderBottomWidth:0,
+    navigationOptions: (Options) => {
+      return {
+        headerTitle: '',
+        headerStyle: {
+          height: 0,
+          borderBottomWidth: 0,
         }
       }
     }
@@ -66,85 +67,85 @@ const StackNavigator = createStackNavigator({
   CoinDetail: {
     screen: coinDetailScreen,
   },
-  NewDetail:{
+  NewDetail: {
     screen: newDetailScreen,
   },
-  SiteDetail:{
-    screen:siteDetailScreen,
+  SiteDetail: {
+    screen: siteDetailScreen,
   },
-  Comment:{
-    screen:commentScreen,
+  Comment: {
+    screen: commentScreen,
   },
-  GuessRiseFall:{
-    screen:GuessRiseFall,
+  GuessRiseFall: {
+    screen: GuessRiseFall,
   },
-  MyNews:{
+  MyNews: {
     screen: MyNews,
   },
-  GuessRecord:{
+  GuessRecord: {
     screen: GuessRecord,
   },
-  IntegralRecord:{
+  IntegralRecord: {
     screen: IntegralRecord,
   },
-  CollectionArticles:{
+  CollectionArticles: {
     screen: CollectionArticles,
   },
-  ChangePassword:{
+  ChangePassword: {
     screen: ChangePassword,
   },
-  HistoryBets:{
+  HistoryBets: {
     screen: HistoryBets,
   },
-  Users:{
+  Users: {
     screen: User,
-    navigationOptions:(Options)=>{
-      return{
-        headerTitle:'',
-        headerStyle:{
-          height:0,
-          borderBottomWidth:0,
+    navigationOptions: (Options) => {
+      return {
+        headerTitle: '',
+        headerStyle: {
+          height: 0,
+          borderBottomWidth: 0,
         }
       }
     }
   },
-  MyLike:{
+  MyLike: {
     screen: MyLike,
   },
-  KYCIdentification:{
+  KYCIdentification: {
     screen: KYCIdentification
   },
-  BackStageManagement:{
+  BackStageManagement: {
     screen: BackStageManagement
   },
-  ArticleManagement:{
+  ArticleManagement: {
     screen: ArticleManagement
   },
-  ReviewManagement:{
+  ReviewManagement: {
     screen: ReviewManagement
   },
 }, {
-  headerMode:'screen',
-  headerTransitionPreset:'fade-in-place',
-  mode:'card',
-  cardStyle:{
-    backgroundColor:'#F4F4F4'
+  headerMode: 'screen',
+  headerTransitionPreset: 'fade-in-place',
+  mode: 'card',
+  cardStyle: {
+    backgroundColor: '#F4F4F4'
   },
-  navigationOptions:{
+  navigationOptions: {
     //顶栏栏组件的样式
-    headerBackTitle:null,
-    headerBackImage:()=>(
+    headerBackTitle: null,
+    headerBackImage: () => (
       <Image style={styles.tabIcon} source={require('./src/resource/back.png')}/>
     ),
-    headerStyle:{
-      backgroundColor:'#171B35',
-      height:50
+    headerStyle: {
+      backgroundColor: '#171B35',
+      height: 50
     },
     //顶栏标题文字样式
-    headerTitleStyle:{
-      fontSize:18,
-      fontWeight:'bold',
-      color:'white'
+    headerTitleStyle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: 'white'
     }
   }
 
@@ -164,7 +165,7 @@ export default class App extends Component {
     getContextState: PropTypes.func,
   }
 
-  state={
+  state = {
     userState: '0',//用户是否登录 0 未登录 1登录
     userKYCState: '0',//用户是否KYC认证 0 未认证 1认证
     userMsg: null,//用户信息
@@ -173,16 +174,19 @@ export default class App extends Component {
     selfCoinsString: {},//自选币 //{coin_id: msg, coin_id2: msg2}
     myTicker: [],//自选交易对
     myTickerString: {},//自选交易对 //{code_site_id: msg, code_site_id: msg2}
-    getContextState: ()=>{return this.state},
-    setContextState: (state)=> {
-      if (state.setContextState){
+    cookieState: '0',
+    getContextState: () => {
+      return this.state
+    },
+    setContextState: (state) => {
+      if (state.setContextState) {
         delete state['setContextState'];
       }
       this.setState(state)
     }
   }
 
-  getChildContext () {
+  getChildContext() {
     return {
       userState: this.state.userState,
       userKYCState: this.state.userKYCState,
@@ -197,16 +201,8 @@ export default class App extends Component {
     }
   }
 
-  refresh(){
-    if(Platform.OS === "ios"){
-        API.getMsg("Cookie",(res)=>{
-            if(res !== {}&&res['PHPSESSID']){
-                CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
-                    // alert(JSON.stringify(re+'re'))
-                });
-            }
-        })
-    }
+  refresh() {
+    this,this.getLocalCookie();
     this.getUserMsg();
     this.getUserState();
     this.getUserKYCState();
@@ -216,18 +212,10 @@ export default class App extends Component {
     this.TimeInit();
   }
 
-  TimeInit(){
+  TimeInit() {
     var that = this;
     function init() {
-      if(Platform.OS === "ios"){
-          API.getMsg("Cookie",(res)=>{
-              if(res !== {}&&res['PHPSESSID']){
-                  CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
-                      // alert(JSON.stringify(re+'init'))
-                  });
-              }
-          })
-      }
+      that.getLocalCookie();
       that.getUserMsg();
       that.getUserState();
       // that.getUserKYCState();
@@ -236,45 +224,48 @@ export default class App extends Component {
       that.getMeTickers();
 
     }
+
     that.Interval = setInterval(() => {
       init();
     }, 5000)
   }
 
 //获取用户状态
-  getUserState(){
+  getUserState() {
     let that = this;
-    API.getMsg('userState', (userState)=>{
-      if (userState){
+    API.getMsg('userState', (userState) => {
+      if (userState) {
         that.setState({
           userState: userState
         });
       }
     });
   }
+
   //获取用户KYC状态
-  getUserKYCState(){
+  getUserKYCState() {
     let that = this;
-    API.getMsg('userKYCState', (userKYCState)=>{
-      if (userKYCState){
+    API.getMsg('userKYCState', (userKYCState) => {
+      if (userKYCState) {
         that.setState({
           userKYCState: userKYCState
         });
       }
     });
   }
+
 //获取用户最新信息
   getUserMsg() {
     let that = this;
-    API.getMsg('userMsg', (userMsg)=>{
-      if (userMsg){
+    API.getMsg('userMsg', (userMsg) => {
+      if (userMsg) {
         that.setState({
           userMsg: userMsg
         });
       }
     });
     API.getLogMe((userMsg) => {
-      if (userMsg){
+      if (userMsg) {
         that.setState({
           userMsg: userMsg
         })
@@ -282,7 +273,7 @@ export default class App extends Component {
     })
   }
 
-  getCoin(){
+  getCoin() {
     let that = this;
     API.getCoins(1, 'va', 'cny', (data) => {
       if (data) {
@@ -292,8 +283,9 @@ export default class App extends Component {
       }
     })
   }
+
   //获取用户自选币
-  getSelfCoin(){
+  getSelfCoin() {
     let that = this;
     var mySelf = {};
     API.getSelfSelect('1', 'va', (selfCoins) => {
@@ -301,38 +293,61 @@ export default class App extends Component {
         that.setState({
           selfCoins: selfCoins.coins.records,
         })
-        if (selfCoins.coins.records.length > 0){
-          for (let self of selfCoins.coins.records){
+        if (selfCoins.coins.records.length > 0) {
+          for (let self of selfCoins.coins.records) {
             mySelf[self.coin_id] = self;
           }
           that.setState({
-            selfCoinsString:mySelf,//{code: msg,code2: msg2}
+            selfCoinsString: mySelf,//{code: msg,code2: msg2}
           })
         }
       }
     })
   }
+
   //获取用户自选交易对
-  getMeTickers(){
+  getMeTickers() {
     let that = this;
     var myTic = {};
-    API.getMeTickers('', '',(myTicker)=>{
-      if (myTicker.length > 0){
+    API.getMeTickers('', '', (myTicker) => {
+      if (myTicker.length > 0) {
         that.setState({
-          myTicker:myTicker,
+          myTicker: myTicker,
         })
-        for (let tic of myTicker){
+        for (let tic of myTicker) {
           myTic[tic.code + '_' + tic.site_id] = tic;
         }
         that.setState({
-          myTickerString:myTic,
+          myTickerString: myTic,
         })
       }
     })
   }
 
+  getLocalCookie(){
+    let that = this;
+    if (Platform.OS === "ios" && that.state.cookieState === '0') {
+      API.getMsg("Cookie", (res) => {
+        if (res !== {} && res['PHPSESSID']) {
+          CookieManager.set({
+            name: 'PHPSESSID',
+            value: res['PHPSESSID'],
+            domain: 'changjinglu.pro',
+            path: '/',
+            origin: 'https://changjinglu.pro/',
+            version: '1',
+            expiration: '2099-11-06T02:00:26.000Z'
+          }).then((re) => {
+            that.setState({
+              cookieState: '1'
+            })
+          });
+        }
+      })
+    }
+  }
 
-  componentWillMount(){
+  componentWillMount() {
     this.refresh();
     if (isFirstTime) {
       if (markSuccess) {
@@ -347,65 +362,73 @@ export default class App extends Component {
     downloadUpdate(info).then(hash => {
 
       Alert.alert('提示', '下载完毕,是否重启应用?', [
-        {text: '是', onPress: ()=>{switchVersion(hash);}},
-        {text: '下次启动时', onPress: ()=>{switchVersionLater(hash);}
+        {
+          text: '是', onPress: () => {
+            switchVersion(hash);
+          }
+        },
+        {
+          text: '下次启动时', onPress: () => {
+            switchVersionLater(hash);
+          }
         },
       ]);
 
     }).catch(err => {
-      Alert.alert('提示', '更新出错:'+err);
+      Alert.alert('提示', '更新出错:' + err);
     });
   };
   checkUpdate = (appKey) => {
     checkUpdate(appKey).then(info => {
       if (info.expired) {
-        if(Platform.OS==='android'){
+        if (Platform.OS === 'android') {
           Alert.alert('提示', '长颈鹿资讯发布了全新的APP，快去下载体验吧！', [
-            {text: '确定',
-              onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}
+            {
+              text: '确定',
+              onPress: () => {
+                info.downloadUrl && Linking.openURL(info.downloadUrl)
+              }
             },
           ]);
         }
       } else if (info.upToDate) {
 
       } else {
-        Alert.alert('提示', '检查到新的版本（'+info.name+'）\n'+ info.description, [
-          {text: '更新', onPress: ()=>{this.doUpdate(info)}},
+        Alert.alert('提示', '检查到新的版本（' + info.name + '）\n' + info.description, [
+          {
+            text: '更新', onPress: () => {
+              this.doUpdate(info)
+            }
+          },
           {text: '下次再说',},
         ]);
       }
     }).catch(err => {
-      if(Platform.OS==='android'){
-        Alert.alert('提示', '更新失败：'+err);
+      if (Platform.OS === 'android') {
+        Alert.alert('提示', '更新失败：' + err);
       }
     });
   };
-  componentDidMount(){
-     if(Platform.OS === "ios"){
-      API.getMsg("Cookie",(res)=>{
-        if(res !== {}&&res['PHPSESSID']){
-          CookieManager.set({name:'PHPSESSID',value:res['PHPSESSID'],domain:'changjinglu.pro',path:'/',origin:'https://changjinglu.pro/',version:'1',expiration:'2099-11-06T02:00:26.000Z'}).then((re)=>{
-            // alert(JSON.stringify(re+'did'))
-          });
-        }
-      })
-     }
 
-    NetInfo.addEventListener('change',function(reachability){
-      if(!reachability){
-        Alert.alert('提示','当前网络连接已断开，为确保应用程序正常使用，请确保网络连接通畅！')
+  componentDidMount() {
+    this.getLocalCookie();
+    NetInfo.addEventListener('change', function (reachability) {
+      if (!reachability) {
+        Alert.alert('提示', '当前网络连接已断开，为确保应用程序正常使用，请确保网络连接通畅！')
       }
     });
-    if(!__DEV__){
+    if (!__DEV__) {
       this.checkUpdate(appKey);
     }
   }
-  componentWillUnmount(){
+
+  componentWillUnmount() {
     if (markSuccess) {
       markSuccess();
     }
     clearInterval(this.Interval);
   }
+
   render() {
     return (
       <StackNavigator/>
@@ -414,10 +437,10 @@ export default class App extends Component {
 
 }
 
-const styles=StyleSheet.create({
-  tabIcon:{
-    width:50,
-    height:50,
+const styles = StyleSheet.create({
+  tabIcon: {
+    width: 50,
+    height: 50,
     marginLeft: 0,
     paddingLeft: 0,
   }
