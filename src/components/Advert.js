@@ -36,7 +36,7 @@ export default class Advert extends Component {
       }
     })
   }
-  componentDidMount(){
+  componentWillMount(){
     let that =this;
     API.getAdsInfo((data)=>{
       if (data){
@@ -78,19 +78,26 @@ export default class Advert extends Component {
                 autoplayTimeout={5}
                 showsButtons={false}
                 key = {records.length}
+                removeClippedSubviews={false}
         >
           {
-            newRecords.map((item,index)=>{
-              var source={uri:item.image_large};
-              return (
-                <View style={styles.imgView} key={index}>
-                  <TouchableOpacity onPress={()=>{this._ImageBtn(item)}}>
-                    <Image source={source} resizeMode='stretch' style={styles.bannerImg} />
-                    {/*<Image source={require('../resource/advertLogo.png')} resizeMode='stretch' style={styles.bannerImg} />*/}
-                  </TouchableOpacity>
-                </View>
-              )
-            })
+            newRecords.length === 0 ?
+              <View style={styles.imgView} >
+                <Image source={{uri:'https://changjinglu.pro/uploads/image/637/f12589ba3887f1d52c4415bf766e032d_390x200.jpg'}} resizeMode='stretch' style={styles.bannerImg} />
+                {/*<Image source={require('../resource/advertLogo.png')} resizeMode='stretch' style={styles.bannerImg} />*/}
+              </View>
+              :
+              newRecords.map((item,index)=>{
+                var source={uri:item.image_large};
+                return (
+                  <View style={styles.imgView} key={index}>
+                    <TouchableOpacity onPress={()=>{this._ImageBtn(item)}}>
+                      <Image source={source} resizeMode='stretch' style={styles.bannerImg} />
+                      {/*<Image source={require('../resource/advertLogo.png')} resizeMode='stretch' style={styles.bannerImg} />*/}
+                    </TouchableOpacity>
+                  </View>
+                )
+              })
           }
 
         </Swiper>

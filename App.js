@@ -44,11 +44,11 @@ import BackStageManagement from "./src/BackStage/BackStageManagement";
 import ArticleManagement from "./src/BackStage/ArticleManagement";
 import ReviewManagement from "./src/BackStage/ReviewManagement";
 
-var CookieManager = null;
-if (Platform.OS === "ios") {
-  CookieManager = require("react-native-cookies");
-}
-// import CookieManager from "react-native-cookies";
+// var CookieManager = null;
+// if (Platform.OS === "ios") {
+//   CookieManager = require("react-native-cookies");
+// }
+import CookieManager from "react-native-cookies";
 
 
 const StackNavigator = createStackNavigator({
@@ -326,8 +326,9 @@ export default class App extends Component {
 
   getLocalCookie(){
     let that = this;
-    if (Platform.OS === "ios" && that.state.cookieState === '0') {
+    if (that.state.cookieState === '1') {
       API.getMsg("Cookie", (res) => {
+        // alert(JSON.stringify(res))
         if (res !== {} && res['PHPSESSID']) {
           CookieManager.set({
             name: 'PHPSESSID',
