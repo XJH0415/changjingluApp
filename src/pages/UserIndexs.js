@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, Alert, ScrollView} from 'react-native';
 import LocalStorage from "../utils/LocalStorage";
+import RegularData from "../utils/RegularData";
 import GuessRecord from "./GuessRecord";
 import IntegralRecord from "./IntegralRecord";
 import ImagePicker from 'react-native-image-picker';
@@ -230,7 +231,7 @@ export default class UserIndexs extends Component {
 
         <TouchableOpacity style={styles.total} >
           <View style={styles.totalImgTxt}>
-            <Text style={styles.totalText}>当前版本 1.1.2</Text>
+            <Text style={styles.totalText}>{RegularData.edition}</Text>
           </View>
         </TouchableOpacity>
 

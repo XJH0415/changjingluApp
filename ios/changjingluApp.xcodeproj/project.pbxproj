@@ -22,7 +22,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		1A5A34DD21A8082700ECDD6D /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A5A34DC21A8082700ECDD6D /* bundle */; };
+		1A4099AD21AA88F700B4633B /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A4099AC21AA88F700B4633B /* bundle */; };
 		1AA72DD5219EF54A00CC9A0B /* libRNCookieManagerIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AA72DD4219EF54000CC9A0B /* libRNCookieManagerIOS.a */; };
 		1F9B8DFC219187720004913C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F9B8DFB219187720004913C /* libc++.tbd */; };
 		1F9B8DFE2191878A0004913C /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F9B8DFD2191878A0004913C /* libsqlite3.0.tbd */; };
@@ -385,7 +385,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = changjingluApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = changjingluApp/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		1A5A34DC21A8082700ECDD6D /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
+		1A4099AC21AA88F700B4633B /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
 		1AA72DCF219EF54000CC9A0B /* RNCookieManagerIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCookieManagerIOS.xcodeproj; path = "../node_modules/react-native-cookies/ios/RNCookieManagerIOS.xcodeproj"; sourceTree = "<group>"; };
 		1F9B8DFB219187720004913C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		1F9B8DFD2191878A0004913C /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
@@ -538,7 +538,7 @@
 		13B07FAE1A68108700A75B9A /* changjingluApp */ = {
 			isa = PBXGroup;
 			children = (
-				1A5A34DC21A8082700ECDD6D /* bundle */,
+				1A4099AC21AA88F700B4633B /* bundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -1170,7 +1170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				1A5A34DD21A8082700ECDD6D /* bundle in Resources */,
+				1A4099AD21AA88F700B4633B /* bundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
