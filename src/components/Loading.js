@@ -22,10 +22,7 @@ export default class Loading extends Component {
           userState === '0' && coins.length === 0 ?
               <Text>正在载入。。。</Text>
             :
-            userState === '1' && selfCoins.length === 0 ?
-              <Text>正在载入。。。</Text>
-              :
-              null
+            null
         }
       </View>
     );

@@ -44,11 +44,11 @@ import BackStageManagement from "./src/BackStage/BackStageManagement";
 import ArticleManagement from "./src/BackStage/ArticleManagement";
 import ReviewManagement from "./src/BackStage/ReviewManagement";
 
-// var CookieManager = null;
-// if (Platform.OS === "ios") {
-//   CookieManager = require("react-native-cookies");
-// }
-import CookieManager from "react-native-cookies";
+var CookieManager = null;
+if (Platform.OS === "ios") {
+  CookieManager = require("react-native-cookies");
+}
+// import CookieManager from "react-native-cookies";
 
 
 const StackNavigator = createStackNavigator({
@@ -202,7 +202,7 @@ export default class App extends Component {
   }
 
   refresh() {
-    this,this.getLocalCookie();
+    this.getLocalCookie();
     this.getUserMsg();
     this.getUserState();
     this.getUserKYCState();
@@ -326,26 +326,24 @@ export default class App extends Component {
 
   getLocalCookie(){
     let that = this;
-    if (that.state.cookieState === '1') {
-      API.getMsg("Cookie", (res) => {
-        // alert(JSON.stringify(res))
-        if (res !== {} && res['PHPSESSID']) {
-          CookieManager.set({
-            name: 'PHPSESSID',
-            value: res['PHPSESSID'],
-            domain: 'changjinglu.pro',
-            path: '/',
-            origin: 'https://changjinglu.pro/',
-            version: '1',
-            expiration: '2099-11-06T02:00:26.000Z'
-          }).then((re) => {
-            that.setState({
-              cookieState: '1'
-            })
-          });
-        }
-      })
-    }
+    API.getMsg("Cookie", (res) => {
+      // alert(JSON.stringify(res))
+      if (res !== {} && res['PHPSESSID'] && Platform.OS === 'ios') {
+        CookieManager.set({
+          name: 'PHPSESSID',
+          value: res['PHPSESSID'],
+          domain: 'changjinglu.pro',
+          path: '/',
+          origin: 'https://changjinglu.pro/',
+          version: '1',
+          expiration: '2099-11-06T02:00:26.000Z'
+        }).then((re) => {
+          that.setState({
+            cookieState: '1'
+          })
+        });
+      }
+    })
   }
 
   componentWillMount() {
@@ -413,6 +411,7 @@ export default class App extends Component {
 
   componentDidMount() {
     this.getLocalCookie();
+    setTimeout(()=>{this.getLocalCookie()},1000)
     NetInfo.addEventListener('change', function (reachability) {
       if (!reachability) {
         Alert.alert('提示', '当前网络连接已断开，为确保应用程序正常使用，请确保网络连接通畅！')

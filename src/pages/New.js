@@ -33,7 +33,8 @@ export default class New extends Component {
     }
     return (
       <View style={styles.root}>
-        <Header titles={titles} onSelect={this._onSelect} headerSelect={selectIndex} searchType={'new'}/>
+        {/*<Header titles={titles} onSelect={this._onSelect} headerSelect={selectIndex} searchType={'new'}/>*/}
+        <Header titles={titles} showSearch={false}/>
         <ScrollableTabView
           renderTabBar={() => <View style={{height:0}}/>}
           locked={false}
