@@ -22,8 +22,13 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		1A57872E21ACDC0C0062A8C3 /* index.ios.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A57872B21ACDC0C0062A8C3 /* index.ios.jsbundle */; };
-		1A57872F21ACDC0C0062A8C3 /* index.ios.jsbundle.meta in Resources */ = {isa = PBXBuildFile; fileRef = 1A57872C21ACDC0C0062A8C3 /* index.ios.jsbundle.meta */; };
+		1A1A00F521B12BBF0078A5C8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1A00F421B12BBF0078A5C8 /* QuartzCore.framework */; };
+		1A1A00F721B12BF00078A5C8 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1A00F621B12BF00078A5C8 /* libicucore.tbd */; };
+		1A1A00F921B12C0C0078A5C8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1A00F821B12C0C0078A5C8 /* Security.framework */; };
+		1A1A00FB21B12C1D0078A5C8 /* libz.1.2.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1A00FA21B12C1D0078A5C8 /* libz.1.2.5.tbd */; };
+		1A1A010621B133E90078A5C8 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1A010521B133E90078A5C8 /* libstdc++.tbd */; };
+		1A1A011921B137270078A5C8 /* libRCTQQAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1A011821B137080078A5C8 /* libRCTQQAPI.a */; };
+		1A6EC42221B22599007181CF /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A6EC42121B22598007181CF /* bundle */; };
 		1AA72DD5219EF54A00CC9A0B /* libRNCookieManagerIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AA72DD4219EF54000CC9A0B /* libRNCookieManagerIOS.a */; };
 		1F9B8DFC219187720004913C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F9B8DFB219187720004913C /* libc++.tbd */; };
 		1F9B8DFE2191878A0004913C /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F9B8DFD2191878A0004913C /* libsqlite3.0.tbd */; };
@@ -106,6 +111,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		1A1A011721B137080078A5C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A1A011321B137080078A5C8 /* RCTQQAPI.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9139321C1C232D310085E3BA;
+			remoteInfo = RCTQQAPI;
 		};
 		1AA72DD3219EF54000CC9A0B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -386,8 +398,13 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = changjingluApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = changjingluApp/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		1A57872B21ACDC0C0062A8C3 /* index.ios.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.ios.jsbundle; path = bundle/index.ios.jsbundle; sourceTree = "<group>"; };
-		1A57872C21ACDC0C0062A8C3 /* index.ios.jsbundle.meta */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.ios.jsbundle.meta; path = bundle/index.ios.jsbundle.meta; sourceTree = "<group>"; };
+		1A1A00F421B12BBF0078A5C8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1A1A00F621B12BF00078A5C8 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		1A1A00F821B12C0C0078A5C8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		1A1A00FA21B12C1D0078A5C8 /* libz.1.2.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.5.tbd; path = usr/lib/libz.1.2.5.tbd; sourceTree = SDKROOT; };
+		1A1A010521B133E90078A5C8 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		1A1A011321B137080078A5C8 /* RCTQQAPI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTQQAPI.xcodeproj; path = "../node_modules/react-native-qq/ios/RCTQQAPI.xcodeproj"; sourceTree = "<group>"; };
+		1A6EC42121B22598007181CF /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
 		1AA72DCF219EF54000CC9A0B /* RNCookieManagerIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCookieManagerIOS.xcodeproj; path = "../node_modules/react-native-cookies/ios/RNCookieManagerIOS.xcodeproj"; sourceTree = "<group>"; };
 		1F9B8DFB219187720004913C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		1F9B8DFD2191878A0004913C /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
@@ -425,14 +442,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A1A011921B137270078A5C8 /* libRCTQQAPI.a in Frameworks */,
+				1A1A010621B133E90078A5C8 /* libstdc++.tbd in Frameworks */,
+				1A1A00FB21B12C1D0078A5C8 /* libz.1.2.5.tbd in Frameworks */,
+				1A1A00F921B12C0C0078A5C8 /* Security.framework in Frameworks */,
+				1A1A00F721B12BF00078A5C8 /* libicucore.tbd in Frameworks */,
+				1F9B8E002191879E0004913C /* CoreTelephony.framework in Frameworks */,
+				1F9B8E152191A1650004913C /* CoreGraphics.framework in Frameworks */,
+				1A1A00F521B12BBF0078A5C8 /* QuartzCore.framework in Frameworks */,
 				1AA72DD5219EF54A00CC9A0B /* libRNCookieManagerIOS.a in Frameworks */,
 				DA5B7618219C1316008B3EB5 /* libRCTWeChat.a in Frameworks */,
 				DA6BBB2B219A7A58006C83BD /* AssetsLibrary.framework in Frameworks */,
-				1F9B8E152191A1650004913C /* CoreGraphics.framework in Frameworks */,
 				1F9B8E0D21918A7B0004913C /* libsqlite3.tbd in Frameworks */,
 				1F9B8E0B21918A6C0004913C /* libiconv.tbd in Frameworks */,
 				1F9B8E02219187AA0004913C /* SystemConfiguration.framework in Frameworks */,
-				1F9B8E002191879E0004913C /* CoreTelephony.framework in Frameworks */,
 				1F9B8DFE2191878A0004913C /* libsqlite3.0.tbd in Frameworks */,
 				1F9B8DFC219187720004913C /* libc++.tbd in Frameworks */,
 				1FB2F221215DEC0F00AD4774 /* libRNImagePicker.a in Frameworks */,
@@ -540,8 +563,7 @@
 		13B07FAE1A68108700A75B9A /* changjingluApp */ = {
 			isa = PBXGroup;
 			children = (
-				1A57872B21ACDC0C0062A8C3 /* index.ios.jsbundle */,
-				1A57872C21ACDC0C0062A8C3 /* index.ios.jsbundle.meta */,
+				1A6EC42121B22598007181CF /* bundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -575,6 +597,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1A1A011421B137080078A5C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A1A011821B137080078A5C8 /* libRCTQQAPI.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		1AA72DD0219EF54000CC9A0B /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -594,6 +624,11 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1A1A010521B133E90078A5C8 /* libstdc++.tbd */,
+				1A1A00FA21B12C1D0078A5C8 /* libz.1.2.5.tbd */,
+				1A1A00F821B12C0C0078A5C8 /* Security.framework */,
+				1A1A00F621B12BF00078A5C8 /* libicucore.tbd */,
+				1A1A00F421B12BBF0078A5C8 /* QuartzCore.framework */,
 				DA6BBB2A219A7A57006C83BD /* AssetsLibrary.framework */,
 				1F9B8E142191A1650004913C /* CoreGraphics.framework */,
 				1F9B8E0C21918A7A0004913C /* libsqlite3.tbd */,
@@ -630,6 +665,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				1A1A011321B137080078A5C8 /* RCTQQAPI.xcodeproj */,
 				1AA72DCF219EF54000CC9A0B /* RNCookieManagerIOS.xcodeproj */,
 				DA5B760E219C1307008B3EB5 /* RCTWeChat.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -823,6 +859,10 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
+					ProductGroup = 1A1A011421B137080078A5C8 /* Products */;
+					ProjectRef = 1A1A011321B137080078A5C8 /* RCTQQAPI.xcodeproj */;
+				},
+				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
 					ProjectRef = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
 				},
@@ -918,6 +958,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1A1A011821B137080078A5C8 /* libRCTQQAPI.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTQQAPI.a;
+			remoteRef = 1A1A011721B137080078A5C8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		1AA72DD4219EF54000CC9A0B /* libRNCookieManagerIOS.a */ = {
@@ -1172,10 +1219,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A57872E21ACDC0C0062A8C3 /* index.ios.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				1A6EC42221B22599007181CF /* bundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				1A57872F21ACDC0C0062A8C3 /* index.ios.jsbundle.meta in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1321,6 +1367,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7NUY4T4DL9;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
@@ -1330,10 +1377,16 @@
 				);
 				INFOPLIST_FILE = changjingluApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks $(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI";
+				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-framework",
+					"\"TencentOpenAPI\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pro.changjingluApp;
 				PRODUCT_NAME = changjingluApp;
@@ -1351,6 +1404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7NUY4T4DL9;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
@@ -1360,10 +1414,16 @@
 				);
 				INFOPLIST_FILE = changjingluApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks $(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI";
+				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-framework",
+					"\"TencentOpenAPI\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pro.changjingluApp;
 				PRODUCT_NAME = changjingluApp;
