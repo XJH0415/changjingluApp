@@ -4,7 +4,7 @@ import {
   Text,
   ProgressBarAndroid,
   StyleSheet,
-  Modal,
+  Image,
 } from 'react-native';
 
 export default class Loading extends Component {
@@ -20,9 +20,12 @@ export default class Loading extends Component {
       <View style={styles.root}>
         {
           userState === '0' && coins.length === 0 ?
-              <Text>正在载入。。。</Text>
+              <Image style={styles.img} source={require('../resource/loading.png')}/>
             :
-            null
+            userState === '1' && selfCoins.length === 0 ?
+              <Image style={styles.img} source={require('../resource/loading.png')}/>
+              :
+              null
         }
       </View>
     );
@@ -34,5 +37,9 @@ export default class Loading extends Component {
 const styles = StyleSheet.create({
   root:{
     alignItems: 'center',
+  },
+  img:{
+    width: 30,
+    height: 30,
   }
 });
