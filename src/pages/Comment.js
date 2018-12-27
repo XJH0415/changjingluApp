@@ -93,7 +93,12 @@ export default class Comment extends Component{
     !discuss? Alert.alert('','请输入评论内容') :
       stars === 0 ? Alert.alert('','亲，请评分') :
         API.CommentAdd(type, id, discuss, stars, (result)=>{
-          result ? that.refs.RefreshList.refresh() : Alert.alert('','评论失败')
+          if(result){
+            that.refs.RefreshList.refresh();
+            Alert.alert('','评论成功');
+          }else{
+            Alert.alert('','评论失败')
+          }
         })
   }
 
